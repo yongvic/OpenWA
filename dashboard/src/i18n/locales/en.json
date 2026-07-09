@@ -71,6 +71,7 @@
     "chats": "Chats",
     "webhooks": "Webhooks",
     "templates": "Templates",
+    "campaigns": "Campaigns",
     "apiKeys": "API Keys",
     "messageTester": "Message Tester",
     "infrastructure": "Infrastructure",
@@ -552,6 +553,105 @@
     },
     "sendFailed": "Failed to send message",
     "notOnWhatsApp": "This number is not registered on WhatsApp"
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Send the same message to many contacts in a few clicks",
+    "stepsLabel": "Campaign steps",
+    "steps": {
+      "1": "Contacts",
+      "2": "Message",
+      "3": "Send"
+    },
+    "noSessionTitle": "No WhatsApp account connected",
+    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
+    "goToSessions": "Connect a session",
+    "messageTypes": {
+      "text": "Text",
+      "image": "Image",
+      "video": "Video",
+      "document": "Document",
+      "template": "Saved template"
+    },
+    "mediaSource": {
+      "upload": "Upload a file",
+      "url": "Use a URL"
+    },
+    "fields": {
+      "session": "WhatsApp account",
+      "numbers": "Phone numbers",
+      "numbersPlaceholder": "One number per line\nExample:\n33612345678\n33698765432",
+      "numbersHint": "Use international format without spaces. Numbers are checked automatically.",
+      "message": "Your message",
+      "messagePlaceholder": "Write the message everyone will receive...",
+      "messageHint": "{{count}} / 4096 characters",
+      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "caption": "Caption (optional)",
+      "mediaUrl": "Public link",
+      "mediaUrlHint": "Paste a public link, or upload a file below.",
+      "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
+      "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
+      "template": "Choose a template",
+      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "uploadImage": "Upload an image",
+      "uploadVideo": "Upload a video",
+      "uploadDocument": "Upload a document",
+      "fileSelected": "Selected: {{name}}"
+    },
+    "sources": {
+      "paste": "Paste numbers",
+      "file": "Import file",
+      "whatsapp": "My WhatsApp contacts"
+    },
+    "file": {
+      "dropHint": "Import a CSV or TXT file with one phone number per line",
+      "choose": "Choose a file"
+    },
+    "wa": {
+      "load": "Load my contacts",
+      "loading": "Loading contacts...",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "selected": "{{count}} of {{total}} selected"
+    },
+    "validating": "Checking numbers… {{done}} / {{total}}",
+    "summary": {
+      "valid": "{{count}} valid contact(s) ready",
+      "invalid": "{{count}} number(s) not on WhatsApp"
+    },
+    "preview": {
+      "title": "Preview",
+      "empty": "Your message will appear here"
+    },
+    "review": {
+      "recipients": "Recipients",
+      "type": "Message type",
+      "duration": "Estimated duration",
+      "durationValue": "About {{minutes}} min",
+      "message": "Message to send",
+      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
+      "send": "Send campaign"
+    },
+    "sending": {
+      "title": "Sending in progress…",
+      "hint": "Please keep this page open. Estimated time: about {{minutes}} min.",
+      "stats": "{{sent}} sent · {{failed}} failed · {{total}} total",
+      "cancel": "Stop sending"
+    },
+    "done": {
+      "successTitle": "Campaign finished",
+      "cancelledTitle": "Campaign stopped",
+      "failedTitle": "Campaign failed",
+      "newCampaign": "Start a new campaign"
+    },
+    "viewOnly": "View only",
+    "errors": {
+      "loadContacts": "Could not load contacts",
+      "validate": "Could not verify numbers",
+      "fileRead": "Could not read the file",
+      "fileTooLarge": "File is too large (max 50 MB)",
+      "send": "Could not send the campaign"
+    }
   },
   "infrastructure": {
     "title": "Infrastructure",

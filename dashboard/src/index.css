@@ -66,7 +66,7 @@ h3 {
   margin: 0;
 }
 
-button {
+button:not(.btn-primary):not(.btn-secondary):not(.btn-danger):not(.btn-link):not(.btn-icon) {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -77,7 +77,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
+button:not(.btn-primary):not(.btn-secondary):not(.btn-danger):not(.btn-link):not(.btn-icon):hover {
   border-color: #646cff;
 }
 /* Visible keyboard focus — cross-browser and keyboard-only, so the ring guides Tab navigation
@@ -108,7 +108,7 @@ html {
   a:hover {
     color: #747bff;
   }
-  :root:not([data-theme='dark']) button {
+  :root:not([data-theme='dark']) button:not(.btn-primary):not(.btn-secondary):not(.btn-danger):not(.btn-link):not(.btn-icon) {
     background-color: #f9f9f9;
   }
 }
@@ -316,26 +316,9 @@ select:disabled {
   stroke: var(--error);
 }
 
-/* Secondary Button */
+/* Secondary Button — see App.css for global btn-primary / btn-secondary / btn-danger */
 .btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  background: var(--bg-light, #f8fafc);
-  color: var(--text-secondary, #64748b);
-  border: 1px solid var(--border, #e2e8f0);
-  border-radius: 8px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-secondary:hover {
-  background: var(--bg-white, #fff);
-  border-color: var(--text-muted, #94a3b8);
-  color: var(--text-primary, #1e293b);
+  /* Kept for backwards compatibility; styles defined in App.css */
 }
 
 /* Spin Animation */

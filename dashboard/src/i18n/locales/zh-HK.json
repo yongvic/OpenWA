@@ -75,7 +75,8 @@
     "messageTester": "訊息測試器",
     "infrastructure": "基礎架構",
     "plugins": "外掛",
-    "logs": "記錄"
+    "logs": "記錄",
+    "campaigns": "Campaigns"
   },
   "chats": {
     "media": {
@@ -553,6 +554,246 @@
     "sendFailed": "傳送訊息失敗",
     "notOnWhatsApp": "此號碼未在 WhatsApp 註冊"
   },
+  "plugins": {
+    "title": "外掛",
+    "subtitle": "安裝、設定和管理擴充功能",
+    "refresh": "重新整理",
+    "engineCard": "目前 WhatsApp 引擎",
+    "running": "執行中",
+    "supportedFeatures": "支援功能：",
+    "builtIn": "內置",
+    "noDescription": "沒有可用描述",
+    "required": "必需",
+    "active": "活躍",
+    "activate": "啟用",
+    "enable": "啟用",
+    "disable": "停用",
+    "healthCheck": "健康檢查",
+    "configure": "設定",
+    "available": "可用",
+    "install": "安裝外掛",
+    "uninstall": "解除安裝",
+    "uninstallConfirm": "解除安裝「{{name}}」？此操作會刪除其檔案。",
+    "engineSwitchHint": "在「設定」中設為使用中的引擎，然後重新啟動",
+    "empty": {
+      "title": "找不到外掛",
+      "description": "安裝外掛以擴展 OpenWA 功能"
+    },
+    "config": {
+      "title": "設定 {{name}}",
+      "restartNotice": "變更需要重新啟動伺服器後才會生效",
+      "engineType": "引擎類型",
+      "headless": "無頭模式",
+      "headlessDesc": "執行不顯示介面的瀏覽器（建議用於生產環境）",
+      "sessionDataPath": "工作階段資料路徑",
+      "browserArgs": "瀏覽器參數",
+      "noOptions": "此外掛沒有可用設定選項",
+      "save": "儲存設定",
+      "addItem": "新增",
+      "tabConfig": "設定",
+      "tabSessions": "工作階段"
+    },
+    "rail": {
+      "engine": "使用中的引擎",
+      "enabled": "已啟用",
+      "installed": "已安裝",
+      "active": "活躍外掛",
+      "none": "尚未啟用任何外掛"
+    },
+    "installModal": {
+      "title": "安裝外掛",
+      "hint": "上載打包成 .zip 的外掛（內含 manifest.json）。啟用後會以沙盒方式執行。",
+      "choose": "選擇 .zip 檔案…",
+      "tooLarge": "檔案超出 5 MB 上限。"
+    },
+    "toasts": {
+      "errorTitle": "外掛錯誤",
+      "errorDefault": "切換外掛失敗",
+      "healthOk": "健康檢查通過",
+      "healthFail": "健康檢查失敗",
+      "healthError": "健康檢查錯誤",
+      "savedTitle": "設定已儲存",
+      "savedDesc": "需要重新啟動伺服器以套用變更。",
+      "saveFailed": "儲存失敗",
+      "installed": "外掛已安裝",
+      "installFailed": "安裝失敗",
+      "uninstalled": "外掛已解除安裝",
+      "uninstallFailed": "解除安裝失敗"
+    },
+    "sessions": {
+      "activationTitle": "執行對象",
+      "activationDesc": "選擇此外掛程式要為哪些工作階段執行。",
+      "allSessions": "所有工作階段",
+      "specificSessions": "指定工作階段",
+      "noSessions": "尚無工作階段。",
+      "saveActivation": "儲存啟用設定",
+      "perSessionTitle": "個別工作階段設定",
+      "perSessionDesc": "為某個工作階段覆寫全域設定;未變更的欄位會沿用全域數值。",
+      "selectSession": "選擇工作階段…",
+      "saveOverride": "儲存覆寫",
+      "clearOverride": "清除覆寫"
+    },
+    "instances": {
+      "title": "執行個體",
+      "description": "為此整合按帳戶佈建執行個體。每個執行個體都有專屬的簽署密鑰和連入 URL。",
+      "create": "建立執行個體",
+      "empty": "尚無執行個體。建立一個即可取得連入 URL 和密鑰。",
+      "loadError": "載入執行個體失敗。",
+      "allSessions": "所有工作階段",
+      "enabled": "已啟用",
+      "disabled": "已停用",
+      "form": {
+        "instanceId": "執行個體 ID",
+        "instanceIdPlaceholder": "例如 acme-support",
+        "instanceIdHint": "字母、數字、連字號、底線（最多 64 個字元）。",
+        "sessionScope": "工作階段範圍（選填）",
+        "sessionScopePlaceholder": "留空表示套用至所有工作階段",
+        "verifyToken": "驗證權杖（選填）",
+        "verifyTokenPlaceholder": "服務商在驗證時回傳的權杖",
+        "config": "設定（選填 JSON）",
+        "configPlaceholder": "{ }"
+      },
+      "created": {
+        "title": "執行個體已建立",
+        "hint": "請立即複製密鑰——只會顯示一次。",
+        "secret": "簽署密鑰",
+        "ingressUrls": "連入 URL"
+      },
+      "regenerate": {
+        "title": "重新產生密鑰",
+        "confirm": "要重新產生 {{id}} 的簽署密鑰嗎？目前的密鑰會立即失效。",
+        "action": "重新產生"
+      },
+      "edit": {
+        "title": "編輯 {{id}}"
+      },
+      "delete": {
+        "title": "刪除執行個體",
+        "confirm": "要刪除執行個體 {{id}} 嗎？其連入 URL 和密鑰會立即失效。",
+        "action": "刪除"
+      },
+      "actions": {
+        "regenerate": "重新產生密鑰",
+        "edit": "編輯",
+        "delete": "刪除",
+        "copy": "複製",
+        "save": "儲存",
+        "enable": "啟用",
+        "disable": "停用"
+      },
+      "errors": {
+        "invalidId": "執行個體 ID 只能包含字母、數字、連字號或底線（最多 64 個字元）。",
+        "invalidJson": "設定必須是有效的 JSON。",
+        "duplicateId": "已存在使用該 ID 的執行個體。"
+      },
+      "toasts": {
+        "created": "執行個體已建立",
+        "updated": "執行個體已更新",
+        "deleted": "執行個體已刪除",
+        "secretRegenerated": "密鑰已重新產生",
+        "actionFailed": "操作失敗"
+      }
+    }
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Send the same message to many contacts in a few clicks",
+    "stepsLabel": "Campaign steps",
+    "steps": {
+      "1": "Contacts",
+      "2": "Message",
+      "3": "Send"
+    },
+    "noSessionTitle": "No WhatsApp account connected",
+    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
+    "goToSessions": "Connect a session",
+    "messageTypes": {
+      "text": "Text",
+      "image": "Image",
+      "video": "Video",
+      "document": "Document",
+      "template": "Saved template"
+    },
+    "fields": {
+      "session": "WhatsApp account",
+      "numbers": "Phone numbers",
+      "numbersPlaceholder": "One number per line\nExample:\n33612345678\n33698765432",
+      "numbersHint": "Use international format without spaces. Numbers are checked automatically.",
+      "message": "Your message",
+      "messagePlaceholder": "Write the message everyone will receive...",
+      "messageHint": "{{count}} / 4096 characters",
+      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "caption": "Caption (optional)",
+      "mediaUrl": "Image or file URL",
+      "mediaUrlHint": "Paste a public link, or upload a file below.",
+      "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
+      "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
+      "template": "Choose a template",
+      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "uploadImage": "Upload an image",
+      "uploadVideo": "Upload a video",
+      "uploadDocument": "Upload a document",
+      "fileSelected": "Selected: {{name}}"
+    },
+    "sources": {
+      "paste": "Paste numbers",
+      "file": "Import file",
+      "whatsapp": "My WhatsApp contacts"
+    },
+    "file": {
+      "dropHint": "Import a CSV or TXT file with one phone number per line",
+      "choose": "Choose a file"
+    },
+    "wa": {
+      "load": "Load my contacts",
+      "loading": "Loading contacts...",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "selected": "{{count}} of {{total}} selected"
+    },
+    "validating": "Checking numbers… {{done}} / {{total}}",
+    "summary": {
+      "valid": "{{count}} valid contact(s) ready",
+      "invalid": "{{count}} number(s) not on WhatsApp"
+    },
+    "preview": {
+      "title": "Preview",
+      "empty": "Your message will appear here"
+    },
+    "review": {
+      "recipients": "Recipients",
+      "type": "Message type",
+      "duration": "Estimated duration",
+      "durationValue": "About {{minutes}} min",
+      "message": "Message to send",
+      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
+      "send": "Send campaign"
+    },
+    "sending": {
+      "title": "Sending in progress…",
+      "hint": "Please keep this page open. Estimated time: about {{minutes}} min.",
+      "stats": "{{sent}} sent · {{failed}} failed · {{total}} total",
+      "cancel": "Stop sending"
+    },
+    "done": {
+      "successTitle": "Campaign finished",
+      "cancelledTitle": "Campaign stopped",
+      "failedTitle": "Campaign failed",
+      "newCampaign": "Start a new campaign"
+    },
+    "viewOnly": "View only",
+    "errors": {
+      "loadContacts": "Could not load contacts",
+      "validate": "Could not verify numbers",
+      "fileRead": "Could not read the file",
+      "fileTooLarge": "File is too large (max 50 MB)",
+      "send": "Could not send the campaign"
+    },
+    "mediaSource": {
+      "upload": "Upload a file",
+      "url": "Use a URL"
+    }
+  },
   "infrastructure": {
     "title": "基礎架構",
     "subtitle": "設定伺服器、資料庫、快取、儲存空間和引擎設定",
@@ -698,144 +939,5 @@
       "importTooLarge": "備份超出請求大小限制。請在伺服器上調高 BODY_SIZE_LIMIT 後重試。"
     },
     "statusLoadError": "無法載入目前的基礎設施狀態。請重新整理以重試。"
-  },
-  "plugins": {
-    "title": "外掛",
-    "subtitle": "安裝、設定和管理擴充功能",
-    "refresh": "重新整理",
-    "engineCard": "目前 WhatsApp 引擎",
-    "running": "執行中",
-    "supportedFeatures": "支援功能：",
-    "builtIn": "內置",
-    "noDescription": "沒有可用描述",
-    "required": "必需",
-    "active": "活躍",
-    "activate": "啟用",
-    "enable": "啟用",
-    "disable": "停用",
-    "healthCheck": "健康檢查",
-    "configure": "設定",
-    "available": "可用",
-    "install": "安裝外掛",
-    "uninstall": "解除安裝",
-    "uninstallConfirm": "解除安裝「{{name}}」？此操作會刪除其檔案。",
-    "engineSwitchHint": "在「設定」中設為使用中的引擎，然後重新啟動",
-    "empty": {
-      "title": "找不到外掛",
-      "description": "安裝外掛以擴展 OpenWA 功能"
-    },
-    "config": {
-      "title": "設定 {{name}}",
-      "restartNotice": "變更需要重新啟動伺服器後才會生效",
-      "engineType": "引擎類型",
-      "headless": "無頭模式",
-      "headlessDesc": "執行不顯示介面的瀏覽器（建議用於生產環境）",
-      "sessionDataPath": "工作階段資料路徑",
-      "browserArgs": "瀏覽器參數",
-      "noOptions": "此外掛沒有可用設定選項",
-      "save": "儲存設定",
-      "addItem": "新增",
-      "tabConfig": "設定",
-      "tabSessions": "工作階段"
-    },
-    "rail": {
-      "engine": "使用中的引擎",
-      "enabled": "已啟用",
-      "installed": "已安裝",
-      "active": "活躍外掛",
-      "none": "尚未啟用任何外掛"
-    },
-    "installModal": {
-      "title": "安裝外掛",
-      "hint": "上載打包成 .zip 的外掛（內含 manifest.json）。啟用後會以沙盒方式執行。",
-      "choose": "選擇 .zip 檔案…",
-      "tooLarge": "檔案超出 5 MB 上限。"
-    },
-    "toasts": {
-      "errorTitle": "外掛錯誤",
-      "errorDefault": "切換外掛失敗",
-      "healthOk": "健康檢查通過",
-      "healthFail": "健康檢查失敗",
-      "healthError": "健康檢查錯誤",
-      "savedTitle": "設定已儲存",
-      "savedDesc": "需要重新啟動伺服器以套用變更。",
-      "saveFailed": "儲存失敗",
-      "installed": "外掛已安裝",
-      "installFailed": "安裝失敗",
-      "uninstalled": "外掛已解除安裝",
-      "uninstallFailed": "解除安裝失敗"
-    },
-    "sessions": {
-      "activationTitle": "執行對象",
-      "activationDesc": "選擇此外掛程式要為哪些工作階段執行。",
-      "allSessions": "所有工作階段",
-      "specificSessions": "指定工作階段",
-      "noSessions": "尚無工作階段。",
-      "saveActivation": "儲存啟用設定",
-      "perSessionTitle": "個別工作階段設定",
-      "perSessionDesc": "為某個工作階段覆寫全域設定;未變更的欄位會沿用全域數值。",
-      "selectSession": "選擇工作階段…",
-      "saveOverride": "儲存覆寫",
-      "clearOverride": "清除覆寫"
-    },
-    "instances": {
-      "title": "執行個體",
-      "description": "為此整合按帳戶佈建執行個體。每個執行個體都有專屬的簽署密鑰和連入 URL。",
-      "create": "建立執行個體",
-      "empty": "尚無執行個體。建立一個即可取得連入 URL 和密鑰。",
-      "loadError": "載入執行個體失敗。",
-      "allSessions": "所有工作階段",
-      "enabled": "已啟用",
-      "disabled": "已停用",
-      "form": {
-        "instanceId": "執行個體 ID",
-        "instanceIdPlaceholder": "例如 acme-support",
-        "instanceIdHint": "字母、數字、連字號、底線（最多 64 個字元）。",
-        "sessionScope": "工作階段範圍（選填）",
-        "sessionScopePlaceholder": "留空表示套用至所有工作階段",
-        "verifyToken": "驗證權杖（選填）",
-        "verifyTokenPlaceholder": "服務商在驗證時回傳的權杖",
-        "config": "設定（選填 JSON）",
-        "configPlaceholder": "{ }"
-      },
-      "created": {
-        "title": "執行個體已建立",
-        "hint": "請立即複製密鑰——只會顯示一次。",
-        "secret": "簽署密鑰",
-        "ingressUrls": "連入 URL"
-      },
-      "regenerate": {
-        "title": "重新產生密鑰",
-        "confirm": "要重新產生 {{id}} 的簽署密鑰嗎？目前的密鑰會立即失效。",
-        "action": "重新產生"
-      },
-      "edit": { "title": "編輯 {{id}}" },
-      "delete": {
-        "title": "刪除執行個體",
-        "confirm": "要刪除執行個體 {{id}} 嗎？其連入 URL 和密鑰會立即失效。",
-        "action": "刪除"
-      },
-      "actions": {
-        "regenerate": "重新產生密鑰",
-        "edit": "編輯",
-        "delete": "刪除",
-        "copy": "複製",
-        "save": "儲存",
-        "enable": "啟用",
-        "disable": "停用"
-      },
-      "errors": {
-        "invalidId": "執行個體 ID 只能包含字母、數字、連字號或底線（最多 64 個字元）。",
-        "invalidJson": "設定必須是有效的 JSON。",
-        "duplicateId": "已存在使用該 ID 的執行個體。"
-      },
-      "toasts": {
-        "created": "執行個體已建立",
-        "updated": "執行個體已更新",
-        "deleted": "執行個體已刪除",
-        "secretRegenerated": "密鑰已重新產生",
-        "actionFailed": "操作失敗"
-      }
-    }
   }
 }

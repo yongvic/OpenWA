@@ -75,7 +75,8 @@
     "messageTester": "اختبار الرسائل",
     "infrastructure": "البنية التحتية",
     "plugins": "الإضافات",
-    "logs": "السجلات"
+    "logs": "السجلات",
+    "campaigns": "Campaigns"
   },
   "chats": {
     "media": {
@@ -557,6 +558,246 @@
     "sendFailed": "فشل إرسال الرسالة",
     "notOnWhatsApp": "هذا الرقم غير مسجَّل على واتساب"
   },
+  "plugins": {
+    "title": "الإضافات",
+    "subtitle": "ثبّت الإضافات وكوّنها وأدِرها",
+    "refresh": "تحديث",
+    "engineCard": "محرك واتساب النشط",
+    "running": "يعمل",
+    "supportedFeatures": "الميزات المدعومة:",
+    "builtIn": "مدمج",
+    "noDescription": "لا يوجد وصف متاح",
+    "required": "مطلوب",
+    "active": "نشط",
+    "activate": "تفعيل",
+    "enable": "تمكين",
+    "disable": "تعطيل",
+    "healthCheck": "فحص الصحة",
+    "configure": "إعداد",
+    "available": "متاحة",
+    "install": "تثبيت إضافة",
+    "uninstall": "إزالة",
+    "uninstallConfirm": "إزالة \"{{name}}\"؟ سيؤدي ذلك إلى حذف ملفاتها.",
+    "engineSwitchHint": "عيّنها كمحرك نشط في الإعدادات، ثم أعد التشغيل",
+    "empty": {
+      "title": "لم يتم العثور على إضافات",
+      "description": "ثبّت إضافات لتوسيع وظائف OpenWA"
+    },
+    "config": {
+      "title": "إعداد {{name}}",
+      "restartNotice": "تتطلب التغييرات إعادة تشغيل الخادم لتصبح فعّالة",
+      "engineType": "نوع المحرك",
+      "headless": "الوضع غير المرئي",
+      "headlessDesc": "تشغيل المتصفح بدون واجهة مرئية (موصى به للإنتاج)",
+      "sessionDataPath": "مسار بيانات الجلسة",
+      "browserArgs": "مُعطيات المتصفح",
+      "noOptions": "لا توجد خيارات إعداد لهذه الإضافة",
+      "save": "حفظ الإعدادات",
+      "addItem": "إضافة",
+      "tabConfig": "الإعدادات",
+      "tabSessions": "الجلسات"
+    },
+    "rail": {
+      "engine": "المحرك النشط",
+      "enabled": "مُمكَّنة",
+      "installed": "مُثبَّتة",
+      "active": "الإضافات النشطة",
+      "none": "لا توجد إضافات مُمكَّنة بعد"
+    },
+    "installModal": {
+      "title": "تثبيت إضافة",
+      "hint": "ارفع إضافة معبّأة بصيغة .zip (تحتوي على manifest.json). تعمل في بيئة معزولة بعد تمكينها.",
+      "choose": "اختر ملف .zip…",
+      "tooLarge": "يتجاوز الملف الحد الأقصى البالغ 5 MB."
+    },
+    "toasts": {
+      "errorTitle": "خطأ في الإضافة",
+      "errorDefault": "فشل تبديل حالة الإضافة",
+      "healthOk": "نجح فحص الصحة",
+      "healthFail": "فشل فحص الصحة",
+      "healthError": "خطأ في فحص الصحة",
+      "savedTitle": "تم حفظ الإعدادات",
+      "savedDesc": "يلزم إعادة تشغيل الخادم لتطبيق التغييرات.",
+      "saveFailed": "فشل الحفظ",
+      "installed": "تم تثبيت الإضافة",
+      "installFailed": "فشل التثبيت",
+      "uninstalled": "تمت إزالة الإضافة",
+      "uninstallFailed": "فشلت الإزالة"
+    },
+    "sessions": {
+      "activationTitle": "التشغيل لـ",
+      "activationDesc": "اختر الجلسات التي يعمل عليها هذا الملحق.",
+      "allSessions": "جميع الجلسات",
+      "specificSessions": "جلسات محددة",
+      "noSessions": "لا توجد جلسات بعد.",
+      "saveActivation": "حفظ التفعيل",
+      "perSessionTitle": "إعدادات لكل جلسة",
+      "perSessionDesc": "تجاوز الإعدادات العامة لجلسة معينة؛ الحقول غير المعدّلة ترث القيمة العامة.",
+      "selectSession": "اختر جلسة…",
+      "saveOverride": "حفظ التجاوز",
+      "clearOverride": "مسح التجاوز"
+    },
+    "instances": {
+      "title": "المثيلات",
+      "description": "أنشئ مثيلات لكل حساب لهذا التكامل. كل مثيل له مفتاح توقيع سري وعنوان دخول خاص به.",
+      "create": "إنشاء مثيل",
+      "empty": "لا توجد مثيلات بعد. أنشئ مثيلًا للحصول على عنوان دخول ومفتاح سري.",
+      "loadError": "فشل تحميل المثيلات.",
+      "allSessions": "جميع الجلسات",
+      "enabled": "مُمكَّن",
+      "disabled": "مُعطَّل",
+      "form": {
+        "instanceId": "معرّف المثيل",
+        "instanceIdPlaceholder": "مثال: acme-support",
+        "instanceIdHint": "أحرف وأرقام وشرطات وشرطات سفلية فقط (بحد أقصى 64 حرفًا).",
+        "sessionScope": "نطاق الجلسة (اختياري)",
+        "sessionScopePlaceholder": "اتركه فارغًا لجميع الجلسات",
+        "verifyToken": "رمز التحقق (اختياري)",
+        "verifyTokenPlaceholder": "الرمز الذي يُرجعه المزوّد عند التحقق",
+        "config": "التكوين (JSON اختياري)",
+        "configPlaceholder": "{ }"
+      },
+      "created": {
+        "title": "تم إنشاء المثيل",
+        "hint": "انسخ المفتاح السري الآن — لن يُعرض مرة أخرى.",
+        "secret": "مفتاح التوقيع السري",
+        "ingressUrls": "عنوان (عناوين) الدخول"
+      },
+      "regenerate": {
+        "title": "إعادة إنشاء المفتاح السري",
+        "confirm": "هل تريد إعادة إنشاء المفتاح السري لـ {{id}}؟ سيتوقف المفتاح الحالي عن العمل فورًا.",
+        "action": "إعادة الإنشاء"
+      },
+      "edit": {
+        "title": "تعديل {{id}}"
+      },
+      "delete": {
+        "title": "حذف المثيل",
+        "confirm": "هل تريد حذف المثيل {{id}}؟ سيتوقف عنوان الدخول والمفتاح السري الخاصان به عن العمل فورًا.",
+        "action": "حذف"
+      },
+      "actions": {
+        "regenerate": "إعادة إنشاء المفتاح السري",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "copy": "نسخ",
+        "save": "حفظ",
+        "enable": "تمكين",
+        "disable": "تعطيل"
+      },
+      "errors": {
+        "invalidId": "يجب أن يتكوّن معرّف المثيل من أحرف وأرقام وشرطات أو شرطات سفلية فقط (بحد أقصى 64 حرفًا).",
+        "invalidJson": "يجب أن يكون التكوين بصيغة JSON صحيحة.",
+        "duplicateId": "يوجد مثيل بهذا المعرّف مسبقًا."
+      },
+      "toasts": {
+        "created": "تم إنشاء المثيل",
+        "updated": "تم تحديث المثيل",
+        "deleted": "تم حذف المثيل",
+        "secretRegenerated": "تم إعادة إنشاء المفتاح السري",
+        "actionFailed": "فشل الإجراء"
+      }
+    }
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Send the same message to many contacts in a few clicks",
+    "stepsLabel": "Campaign steps",
+    "steps": {
+      "1": "Contacts",
+      "2": "Message",
+      "3": "Send"
+    },
+    "noSessionTitle": "No WhatsApp account connected",
+    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
+    "goToSessions": "Connect a session",
+    "messageTypes": {
+      "text": "Text",
+      "image": "Image",
+      "video": "Video",
+      "document": "Document",
+      "template": "Saved template"
+    },
+    "fields": {
+      "session": "WhatsApp account",
+      "numbers": "Phone numbers",
+      "numbersPlaceholder": "One number per line\nExample:\n33612345678\n33698765432",
+      "numbersHint": "Use international format without spaces. Numbers are checked automatically.",
+      "message": "Your message",
+      "messagePlaceholder": "Write the message everyone will receive...",
+      "messageHint": "{{count}} / 4096 characters",
+      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "caption": "Caption (optional)",
+      "mediaUrl": "Image or file URL",
+      "mediaUrlHint": "Paste a public link, or upload a file below.",
+      "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
+      "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
+      "template": "Choose a template",
+      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "uploadImage": "Upload an image",
+      "uploadVideo": "Upload a video",
+      "uploadDocument": "Upload a document",
+      "fileSelected": "Selected: {{name}}"
+    },
+    "sources": {
+      "paste": "Paste numbers",
+      "file": "Import file",
+      "whatsapp": "My WhatsApp contacts"
+    },
+    "file": {
+      "dropHint": "Import a CSV or TXT file with one phone number per line",
+      "choose": "Choose a file"
+    },
+    "wa": {
+      "load": "Load my contacts",
+      "loading": "Loading contacts...",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "selected": "{{count}} of {{total}} selected"
+    },
+    "validating": "Checking numbers… {{done}} / {{total}}",
+    "summary": {
+      "valid": "{{count}} valid contact(s) ready",
+      "invalid": "{{count}} number(s) not on WhatsApp"
+    },
+    "preview": {
+      "title": "Preview",
+      "empty": "Your message will appear here"
+    },
+    "review": {
+      "recipients": "Recipients",
+      "type": "Message type",
+      "duration": "Estimated duration",
+      "durationValue": "About {{minutes}} min",
+      "message": "Message to send",
+      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
+      "send": "Send campaign"
+    },
+    "sending": {
+      "title": "Sending in progress…",
+      "hint": "Please keep this page open. Estimated time: about {{minutes}} min.",
+      "stats": "{{sent}} sent · {{failed}} failed · {{total}} total",
+      "cancel": "Stop sending"
+    },
+    "done": {
+      "successTitle": "Campaign finished",
+      "cancelledTitle": "Campaign stopped",
+      "failedTitle": "Campaign failed",
+      "newCampaign": "Start a new campaign"
+    },
+    "viewOnly": "View only",
+    "errors": {
+      "loadContacts": "Could not load contacts",
+      "validate": "Could not verify numbers",
+      "fileRead": "Could not read the file",
+      "fileTooLarge": "File is too large (max 50 MB)",
+      "send": "Could not send the campaign"
+    },
+    "mediaSource": {
+      "upload": "Upload a file",
+      "url": "Use a URL"
+    }
+  },
   "infrastructure": {
     "title": "البنية التحتية",
     "subtitle": "تهيئة إعدادات الخادم وقاعدة البيانات والذاكرة المؤقتة والتخزين والمحرك",
@@ -702,144 +943,5 @@
       "importTooLarge": "النسخة الاحتياطية أكبر من حدّ الطلب. زِد قيمة BODY_SIZE_LIMIT على الخادم ثم أعد المحاولة."
     },
     "statusLoadError": "تعذّر تحميل حالة البنية التحتية الحالية. حدّث الصفحة لإعادة المحاولة."
-  },
-  "plugins": {
-    "title": "الإضافات",
-    "subtitle": "ثبّت الإضافات وكوّنها وأدِرها",
-    "refresh": "تحديث",
-    "engineCard": "محرك واتساب النشط",
-    "running": "يعمل",
-    "supportedFeatures": "الميزات المدعومة:",
-    "builtIn": "مدمج",
-    "noDescription": "لا يوجد وصف متاح",
-    "required": "مطلوب",
-    "active": "نشط",
-    "activate": "تفعيل",
-    "enable": "تمكين",
-    "disable": "تعطيل",
-    "healthCheck": "فحص الصحة",
-    "configure": "إعداد",
-    "available": "متاحة",
-    "install": "تثبيت إضافة",
-    "uninstall": "إزالة",
-    "uninstallConfirm": "إزالة \"{{name}}\"؟ سيؤدي ذلك إلى حذف ملفاتها.",
-    "engineSwitchHint": "عيّنها كمحرك نشط في الإعدادات، ثم أعد التشغيل",
-    "empty": {
-      "title": "لم يتم العثور على إضافات",
-      "description": "ثبّت إضافات لتوسيع وظائف OpenWA"
-    },
-    "config": {
-      "title": "إعداد {{name}}",
-      "restartNotice": "تتطلب التغييرات إعادة تشغيل الخادم لتصبح فعّالة",
-      "engineType": "نوع المحرك",
-      "headless": "الوضع غير المرئي",
-      "headlessDesc": "تشغيل المتصفح بدون واجهة مرئية (موصى به للإنتاج)",
-      "sessionDataPath": "مسار بيانات الجلسة",
-      "browserArgs": "مُعطيات المتصفح",
-      "noOptions": "لا توجد خيارات إعداد لهذه الإضافة",
-      "save": "حفظ الإعدادات",
-      "addItem": "إضافة",
-      "tabConfig": "الإعدادات",
-      "tabSessions": "الجلسات"
-    },
-    "rail": {
-      "engine": "المحرك النشط",
-      "enabled": "مُمكَّنة",
-      "installed": "مُثبَّتة",
-      "active": "الإضافات النشطة",
-      "none": "لا توجد إضافات مُمكَّنة بعد"
-    },
-    "installModal": {
-      "title": "تثبيت إضافة",
-      "hint": "ارفع إضافة معبّأة بصيغة .zip (تحتوي على manifest.json). تعمل في بيئة معزولة بعد تمكينها.",
-      "choose": "اختر ملف .zip…",
-      "tooLarge": "يتجاوز الملف الحد الأقصى البالغ 5 MB."
-    },
-    "toasts": {
-      "errorTitle": "خطأ في الإضافة",
-      "errorDefault": "فشل تبديل حالة الإضافة",
-      "healthOk": "نجح فحص الصحة",
-      "healthFail": "فشل فحص الصحة",
-      "healthError": "خطأ في فحص الصحة",
-      "savedTitle": "تم حفظ الإعدادات",
-      "savedDesc": "يلزم إعادة تشغيل الخادم لتطبيق التغييرات.",
-      "saveFailed": "فشل الحفظ",
-      "installed": "تم تثبيت الإضافة",
-      "installFailed": "فشل التثبيت",
-      "uninstalled": "تمت إزالة الإضافة",
-      "uninstallFailed": "فشلت الإزالة"
-    },
-    "sessions": {
-      "activationTitle": "التشغيل لـ",
-      "activationDesc": "اختر الجلسات التي يعمل عليها هذا الملحق.",
-      "allSessions": "جميع الجلسات",
-      "specificSessions": "جلسات محددة",
-      "noSessions": "لا توجد جلسات بعد.",
-      "saveActivation": "حفظ التفعيل",
-      "perSessionTitle": "إعدادات لكل جلسة",
-      "perSessionDesc": "تجاوز الإعدادات العامة لجلسة معينة؛ الحقول غير المعدّلة ترث القيمة العامة.",
-      "selectSession": "اختر جلسة…",
-      "saveOverride": "حفظ التجاوز",
-      "clearOverride": "مسح التجاوز"
-    },
-    "instances": {
-      "title": "المثيلات",
-      "description": "أنشئ مثيلات لكل حساب لهذا التكامل. كل مثيل له مفتاح توقيع سري وعنوان دخول خاص به.",
-      "create": "إنشاء مثيل",
-      "empty": "لا توجد مثيلات بعد. أنشئ مثيلًا للحصول على عنوان دخول ومفتاح سري.",
-      "loadError": "فشل تحميل المثيلات.",
-      "allSessions": "جميع الجلسات",
-      "enabled": "مُمكَّن",
-      "disabled": "مُعطَّل",
-      "form": {
-        "instanceId": "معرّف المثيل",
-        "instanceIdPlaceholder": "مثال: acme-support",
-        "instanceIdHint": "أحرف وأرقام وشرطات وشرطات سفلية فقط (بحد أقصى 64 حرفًا).",
-        "sessionScope": "نطاق الجلسة (اختياري)",
-        "sessionScopePlaceholder": "اتركه فارغًا لجميع الجلسات",
-        "verifyToken": "رمز التحقق (اختياري)",
-        "verifyTokenPlaceholder": "الرمز الذي يُرجعه المزوّد عند التحقق",
-        "config": "التكوين (JSON اختياري)",
-        "configPlaceholder": "{ }"
-      },
-      "created": {
-        "title": "تم إنشاء المثيل",
-        "hint": "انسخ المفتاح السري الآن — لن يُعرض مرة أخرى.",
-        "secret": "مفتاح التوقيع السري",
-        "ingressUrls": "عنوان (عناوين) الدخول"
-      },
-      "regenerate": {
-        "title": "إعادة إنشاء المفتاح السري",
-        "confirm": "هل تريد إعادة إنشاء المفتاح السري لـ {{id}}؟ سيتوقف المفتاح الحالي عن العمل فورًا.",
-        "action": "إعادة الإنشاء"
-      },
-      "edit": { "title": "تعديل {{id}}" },
-      "delete": {
-        "title": "حذف المثيل",
-        "confirm": "هل تريد حذف المثيل {{id}}؟ سيتوقف عنوان الدخول والمفتاح السري الخاصان به عن العمل فورًا.",
-        "action": "حذف"
-      },
-      "actions": {
-        "regenerate": "إعادة إنشاء المفتاح السري",
-        "edit": "تعديل",
-        "delete": "حذف",
-        "copy": "نسخ",
-        "save": "حفظ",
-        "enable": "تمكين",
-        "disable": "تعطيل"
-      },
-      "errors": {
-        "invalidId": "يجب أن يتكوّن معرّف المثيل من أحرف وأرقام وشرطات أو شرطات سفلية فقط (بحد أقصى 64 حرفًا).",
-        "invalidJson": "يجب أن يكون التكوين بصيغة JSON صحيحة.",
-        "duplicateId": "يوجد مثيل بهذا المعرّف مسبقًا."
-      },
-      "toasts": {
-        "created": "تم إنشاء المثيل",
-        "updated": "تم تحديث المثيل",
-        "deleted": "تم حذف المثيل",
-        "secretRegenerated": "تم إعادة إنشاء المفتاح السري",
-        "actionFailed": "فشل الإجراء"
-      }
-    }
   }
 }

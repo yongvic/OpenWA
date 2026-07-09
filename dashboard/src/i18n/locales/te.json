@@ -75,7 +75,8 @@
     "messageTester": "మెసేజ్ టెస్టర్",
     "infrastructure": "ఇన్‌ఫ్రాస్ట్రక్చర్",
     "plugins": "ప్లగిన్స్",
-    "logs": "లాగ్స్"
+    "logs": "లాగ్స్",
+    "campaigns": "Campaigns"
   },
   "chats": {
     "media": {
@@ -553,6 +554,246 @@
     "sendFailed": "సందేశాన్ని పంపడం విఫలమైంది",
     "notOnWhatsApp": "ఈ నంబర్ WhatsAppలో నమోదు కాలేదు"
   },
+  "plugins": {
+    "title": "ప్లగిన్స్",
+    "subtitle": "ఎక్స్‌టెన్షన్‌లను ఇన్‌స్టాల్, కాన్ఫిగర్ మరియు నిర్వహించండి",
+    "refresh": "రిఫ్రెష్",
+    "engineCard": "యాక్టివ్ వాట్సాప్ ఇంజిన్",
+    "running": "నడుస్తోంది",
+    "supportedFeatures": "మద్దతు ఉన్న ఫీచర్లు:",
+    "builtIn": "ఇన్-బిల్ట్",
+    "noDescription": "ఎలాంటి వివరణ అందుబాటులో లేదు",
+    "required": "అవసరం",
+    "active": "యాక్టివ్",
+    "activate": "యాక్టివేట్ చేయి",
+    "enable": "ప్రారంభించు",
+    "disable": "నిలిపివేయి",
+    "healthCheck": "హెల్త్ చెక్",
+    "configure": "కాన్ఫిగర్ చేయి",
+    "available": "అందుబాటులో ఉంది",
+    "install": "ప్లగిన్‌ను ఇన్‌స్టాల్ చేయి",
+    "uninstall": "అన్‌ఇన్‌స్టాల్ చేయి",
+    "uninstallConfirm": "\"{{name}}\"ను అన్‌ఇన్‌స్టాల్ చేయాలా? ఇది దాని ఫైళ్లను తొలగిస్తుంది.",
+    "engineSwitchHint": "సెట్టింగ్‌లలో దీన్ని యాక్టివ్ ఇంజిన్‌గా సెట్ చేసి, ఆపై రీస్టార్ట్ చేయండి",
+    "empty": {
+      "title": "ఎలాంటి ప్లగిన్స్ కనుగొనబడలేదు",
+      "description": "OpenWA కార్యాచరణను విస్తరించడానికి ప్లగిన్లను ఇన్‌స్టాల్ చేయండి"
+    },
+    "config": {
+      "title": "{{name}} కాన్ఫిగర్ చేయి",
+      "restartNotice": "మార్పులు అమలులోకి రావడానికి సర్వర్ రీస్టార్ట్ అవసరం",
+      "engineType": "ఇంజిన్ రకం",
+      "headless": "హెడ్‌లెస్ మోడ్",
+      "headlessDesc": "కనిపించే UI లేకుండా బ్రౌజర్‌ను రన్ చేయి (ప్రొడక్షన్ కోసం సిఫార్సు చేయబడింది)",
+      "sessionDataPath": "సెషన్ డేటా పాత్",
+      "browserArgs": "బ్రౌజర్ ఆర్గుమెంట్స్",
+      "noOptions": "ఈ ప్లగిన్ కోసం ఎలాంటి కాన్ఫిగరేషన్ ఆప్షన్లు అందుబాటులో లేవు",
+      "save": "కాన్ఫిగరేషన్‌ను సేవ్ చేయి",
+      "addItem": "జోడించు",
+      "tabConfig": "కాన్ఫిగరేషన్",
+      "tabSessions": "సెషన్‌లు"
+    },
+    "rail": {
+      "engine": "యాక్టివ్ ఇంజిన్",
+      "enabled": "ప్రారంభించబడింది",
+      "installed": "ఇన్‌స్టాల్ చేయబడింది",
+      "active": "యాక్టివ్ ప్లగిన్స్",
+      "none": "ఇంకా ఏదీ ప్రారంభించబడలేదు"
+    },
+    "installModal": {
+      "title": "ఒక ప్లగిన్‌ను ఇన్‌స్టాల్ చేయి",
+      "hint": "ఒక .zip గా ప్యాక్ చేయబడిన ప్లగిన్‌ను అప్‌లోడ్ చేయండి (manifest.json తో). ప్రారంభించిన తర్వాత ఇది శాండ్‌బాక్స్‌లో రన్ అవుతుంది.",
+      "choose": "ఒక .zip ఫైల్‌ను ఎంచుకోండి…",
+      "tooLarge": "ఫైల్ 5 MB పరిమితిని మించిపోయింది."
+    },
+    "toasts": {
+      "errorTitle": "ప్లగిన్ లోపం",
+      "errorDefault": "ప్లగిన్ టోగుల్ చేయడం విఫలమైంది",
+      "healthOk": "హెల్త్ చెక్ పాస్ అయింది",
+      "healthFail": "హెల్త్ చెక్ విఫలమైంది",
+      "healthError": "హెల్త్ చెక్ లోపం",
+      "savedTitle": "కాన్ఫిగరేషన్ సేవ్ చేయబడింది",
+      "savedDesc": "మార్పులను వర్తింపజేయడానికి సర్వర్ రీస్టార్ట్ అవసరం.",
+      "saveFailed": "సేవ్ చేయడం విఫలమైంది",
+      "installed": "ప్లగిన్ ఇన్‌స్టాల్ చేయబడింది",
+      "installFailed": "ఇన్‌స్టాల్ విఫలమైంది",
+      "uninstalled": "ప్లగిన్ అన్‌ఇన్‌స్టాల్ చేయబడింది",
+      "uninstallFailed": "అన్‌ఇన్‌స్టాల్ విఫలమైంది"
+    },
+    "sessions": {
+      "activationTitle": "దీని కోసం రన్ చేయండి",
+      "activationDesc": "ఈ ప్లగిన్ ఏ సెషన్‌ల కోసం రన్ అవుతుందో ఎంచుకోండి.",
+      "allSessions": "అన్ని సెషన్‌లు",
+      "specificSessions": "నిర్దిష్ట సెషన్‌లు",
+      "noSessions": "ఇంకా సెషన్‌లు లేవు.",
+      "saveActivation": "యాక్టివేషన్‌ను సేవ్ చేయండి",
+      "perSessionTitle": "సెషన్-వారీ కాన్ఫిగ్",
+      "perSessionDesc": "ఒక సెషన్ కోసం గ్లోబల్ కాన్ఫిగ్‌ను ఓవర్‌రైడ్ చేయండి; మార్చని ఫీల్డ్‌లు గ్లోబల్ విలువను వారసత్వంగా పొందుతాయి.",
+      "selectSession": "ఒక సెషన్‌ను ఎంచుకోండి…",
+      "saveOverride": "ఓవర్‌రైడ్‌ను సేవ్ చేయండి",
+      "clearOverride": "ఓవర్‌రైడ్‌ను క్లియర్ చేయండి"
+    },
+    "instances": {
+      "title": "ఇన్‌స్టాన్స్‌లు",
+      "description": "ఈ ఇంటిగ్రేషన్ కోసం ఖాతా వారీగా ఇన్‌స్టాన్స్‌లను ప్రొవిజన్ చేయండి. ప్రతి ఇన్‌స్టాన్స్‌కు దాని స్వంత సైనింగ్ సీక్రెట్ మరియు ఇన్‌గ్రెస్ URL ఉంటుంది.",
+      "create": "ఇన్‌స్టాన్స్‌ను సృష్టించండి",
+      "empty": "ఇంకా ఇన్‌స్టాన్స్‌లు లేవు. ఇన్‌గ్రెస్ URL మరియు సీక్రెట్ పొందడానికి ఒకటి సృష్టించండి.",
+      "loadError": "ఇన్‌స్టాన్స్‌లను లోడ్ చేయడం విఫలమైంది.",
+      "allSessions": "అన్ని సెషన్‌లు",
+      "enabled": "ప్రారంభించబడింది",
+      "disabled": "నిలిపివేయబడింది",
+      "form": {
+        "instanceId": "ఇన్‌స్టాన్స్ ఐడీ",
+        "instanceIdPlaceholder": "ఉదా. acme-support",
+        "instanceIdHint": "అక్షరాలు, సంఖ్యలు, హైఫన్‌లు, అండర్‌స్కోర్‌లు (గరిష్టంగా 64).",
+        "sessionScope": "సెషన్ స్కోప్ (ఆప్షనల్)",
+        "sessionScopePlaceholder": "అన్ని సెషన్‌ల కోసం ఖాళీగా ఉంచండి",
+        "verifyToken": "వెరిఫై టోకెన్ (ఆప్షనల్)",
+        "verifyTokenPlaceholder": "వెరిఫికేషన్ సమయంలో ప్రొవైడర్ తిప్పి పంపే టోకెన్",
+        "config": "కాన్ఫిగ్ (ఆప్షనల్ JSON)",
+        "configPlaceholder": "{ }"
+      },
+      "created": {
+        "title": "ఇన్‌స్టాన్స్ సృష్టించబడింది",
+        "hint": "సీక్రెట్‌ను ఇప్పుడే కాపీ చేయండి — ఇది ఒక్కసారి మాత్రమే చూపబడుతుంది.",
+        "secret": "సైనింగ్ సీక్రెట్",
+        "ingressUrls": "ఇన్‌గ్రెస్ URL(లు)"
+      },
+      "regenerate": {
+        "title": "సీక్రెట్‌ను రీజెనరేట్ చేయండి",
+        "confirm": "{{id}} కోసం సైనింగ్ సీక్రెట్‌ను రీజెనరేట్ చేయాలా? ప్రస్తుత సీక్రెట్ వెంటనే పనిచేయడం మానేస్తుంది.",
+        "action": "రీజెనరేట్ చేయి"
+      },
+      "edit": {
+        "title": "{{id}}ను ఎడిట్ చేయండి"
+      },
+      "delete": {
+        "title": "ఇన్‌స్టాన్స్‌ను డిలీట్ చేయండి",
+        "confirm": "ఇన్‌స్టాన్స్ {{id}}ను డిలీట్ చేయాలా? దీని ఇన్‌గ్రెస్ URL మరియు సీక్రెట్ వెంటనే పనిచేయడం మానేస్తాయి.",
+        "action": "డిలీట్ చేయి"
+      },
+      "actions": {
+        "regenerate": "సీక్రెట్‌ను రీజెనరేట్ చేయి",
+        "edit": "ఎడిట్ చేయి",
+        "delete": "డిలీట్ చేయి",
+        "copy": "కాపీ చేయి",
+        "save": "సేవ్ చేయి",
+        "enable": "ప్రారంభించు",
+        "disable": "నిలిపివేయి"
+      },
+      "errors": {
+        "invalidId": "ఇన్‌స్టాన్స్ ఐడీలో అక్షరాలు, సంఖ్యలు, హైఫన్‌లు లేదా అండర్‌స్కోర్‌లు మాత్రమే ఉండాలి (గరిష్టంగా 64).",
+        "invalidJson": "కాన్ఫిగ్ చెల్లుబాటు అయ్యే JSON గా ఉండాలి.",
+        "duplicateId": "ఆ ఐడీతో ఇన్‌స్టాన్స్ ఇప్పటికే ఉంది."
+      },
+      "toasts": {
+        "created": "ఇన్‌స్టాన్స్ సృష్టించబడింది",
+        "updated": "ఇన్‌స్టాన్స్ అప్‌డేట్ చేయబడింది",
+        "deleted": "ఇన్‌స్టాన్స్ డిలీట్ చేయబడింది",
+        "secretRegenerated": "సీక్రెట్ రీజెనరేట్ చేయబడింది",
+        "actionFailed": "చర్య విఫలమైంది"
+      }
+    }
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Send the same message to many contacts in a few clicks",
+    "stepsLabel": "Campaign steps",
+    "steps": {
+      "1": "Contacts",
+      "2": "Message",
+      "3": "Send"
+    },
+    "noSessionTitle": "No WhatsApp account connected",
+    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
+    "goToSessions": "Connect a session",
+    "messageTypes": {
+      "text": "Text",
+      "image": "Image",
+      "video": "Video",
+      "document": "Document",
+      "template": "Saved template"
+    },
+    "fields": {
+      "session": "WhatsApp account",
+      "numbers": "Phone numbers",
+      "numbersPlaceholder": "One number per line\nExample:\n33612345678\n33698765432",
+      "numbersHint": "Use international format without spaces. Numbers are checked automatically.",
+      "message": "Your message",
+      "messagePlaceholder": "Write the message everyone will receive...",
+      "messageHint": "{{count}} / 4096 characters",
+      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "caption": "Caption (optional)",
+      "mediaUrl": "Image or file URL",
+      "mediaUrlHint": "Paste a public link, or upload a file below.",
+      "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
+      "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
+      "template": "Choose a template",
+      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "uploadImage": "Upload an image",
+      "uploadVideo": "Upload a video",
+      "uploadDocument": "Upload a document",
+      "fileSelected": "Selected: {{name}}"
+    },
+    "sources": {
+      "paste": "Paste numbers",
+      "file": "Import file",
+      "whatsapp": "My WhatsApp contacts"
+    },
+    "file": {
+      "dropHint": "Import a CSV or TXT file with one phone number per line",
+      "choose": "Choose a file"
+    },
+    "wa": {
+      "load": "Load my contacts",
+      "loading": "Loading contacts...",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "selected": "{{count}} of {{total}} selected"
+    },
+    "validating": "Checking numbers… {{done}} / {{total}}",
+    "summary": {
+      "valid": "{{count}} valid contact(s) ready",
+      "invalid": "{{count}} number(s) not on WhatsApp"
+    },
+    "preview": {
+      "title": "Preview",
+      "empty": "Your message will appear here"
+    },
+    "review": {
+      "recipients": "Recipients",
+      "type": "Message type",
+      "duration": "Estimated duration",
+      "durationValue": "About {{minutes}} min",
+      "message": "Message to send",
+      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
+      "send": "Send campaign"
+    },
+    "sending": {
+      "title": "Sending in progress…",
+      "hint": "Please keep this page open. Estimated time: about {{minutes}} min.",
+      "stats": "{{sent}} sent · {{failed}} failed · {{total}} total",
+      "cancel": "Stop sending"
+    },
+    "done": {
+      "successTitle": "Campaign finished",
+      "cancelledTitle": "Campaign stopped",
+      "failedTitle": "Campaign failed",
+      "newCampaign": "Start a new campaign"
+    },
+    "viewOnly": "View only",
+    "errors": {
+      "loadContacts": "Could not load contacts",
+      "validate": "Could not verify numbers",
+      "fileRead": "Could not read the file",
+      "fileTooLarge": "File is too large (max 50 MB)",
+      "send": "Could not send the campaign"
+    },
+    "mediaSource": {
+      "upload": "Upload a file",
+      "url": "Use a URL"
+    }
+  },
   "infrastructure": {
     "title": "ఇన్‌ఫ్రాస్ట్రక్చర్",
     "subtitle": "సర్వర్, డేటాబేస్, క్యాషే, స్టోరేజ్ మరియు ఇంజిన్ సెట్టింగ్‌లను కాన్ఫిగర్ చేయండి",
@@ -698,144 +939,5 @@
       "importTooLarge": "బ్యాకప్ అభ్యర్థన పరిమితి కంటే పెద్దది. సర్వర్‌లో BODY_SIZE_LIMIT పెంచి మళ్లీ ప్రయత్నించండి."
     },
     "statusLoadError": "ప్రస్తుత ఇన్‌ఫ్రాస్ట్రక్చర్ స్థితిని లోడ్ చేయడం సాధ్యం కాలేదు. మళ్లీ ప్రయత్నించడానికి రిఫ్రెష్ చేయండి."
-  },
-  "plugins": {
-    "title": "ప్లగిన్స్",
-    "subtitle": "ఎక్స్‌టెన్షన్‌లను ఇన్‌స్టాల్, కాన్ఫిగర్ మరియు నిర్వహించండి",
-    "refresh": "రిఫ్రెష్",
-    "engineCard": "యాక్టివ్ వాట్సాప్ ఇంజిన్",
-    "running": "నడుస్తోంది",
-    "supportedFeatures": "మద్దతు ఉన్న ఫీచర్లు:",
-    "builtIn": "ఇన్-బిల్ట్",
-    "noDescription": "ఎలాంటి వివరణ అందుబాటులో లేదు",
-    "required": "అవసరం",
-    "active": "యాక్టివ్",
-    "activate": "యాక్టివేట్ చేయి",
-    "enable": "ప్రారంభించు",
-    "disable": "నిలిపివేయి",
-    "healthCheck": "హెల్త్ చెక్",
-    "configure": "కాన్ఫిగర్ చేయి",
-    "available": "అందుబాటులో ఉంది",
-    "install": "ప్లగిన్‌ను ఇన్‌స్టాల్ చేయి",
-    "uninstall": "అన్‌ఇన్‌స్టాల్ చేయి",
-    "uninstallConfirm": "\"{{name}}\"ను అన్‌ఇన్‌స్టాల్ చేయాలా? ఇది దాని ఫైళ్లను తొలగిస్తుంది.",
-    "engineSwitchHint": "సెట్టింగ్‌లలో దీన్ని యాక్టివ్ ఇంజిన్‌గా సెట్ చేసి, ఆపై రీస్టార్ట్ చేయండి",
-    "empty": {
-      "title": "ఎలాంటి ప్లగిన్స్ కనుగొనబడలేదు",
-      "description": "OpenWA కార్యాచరణను విస్తరించడానికి ప్లగిన్లను ఇన్‌స్టాల్ చేయండి"
-    },
-    "config": {
-      "title": "{{name}} కాన్ఫిగర్ చేయి",
-      "restartNotice": "మార్పులు అమలులోకి రావడానికి సర్వర్ రీస్టార్ట్ అవసరం",
-      "engineType": "ఇంజిన్ రకం",
-      "headless": "హెడ్‌లెస్ మోడ్",
-      "headlessDesc": "కనిపించే UI లేకుండా బ్రౌజర్‌ను రన్ చేయి (ప్రొడక్షన్ కోసం సిఫార్సు చేయబడింది)",
-      "sessionDataPath": "సెషన్ డేటా పాత్",
-      "browserArgs": "బ్రౌజర్ ఆర్గుమెంట్స్",
-      "noOptions": "ఈ ప్లగిన్ కోసం ఎలాంటి కాన్ఫిగరేషన్ ఆప్షన్లు అందుబాటులో లేవు",
-      "save": "కాన్ఫిగరేషన్‌ను సేవ్ చేయి",
-      "addItem": "జోడించు",
-      "tabConfig": "కాన్ఫిగరేషన్",
-      "tabSessions": "సెషన్‌లు"
-    },
-    "rail": {
-      "engine": "యాక్టివ్ ఇంజిన్",
-      "enabled": "ప్రారంభించబడింది",
-      "installed": "ఇన్‌స్టాల్ చేయబడింది",
-      "active": "యాక్టివ్ ప్లగిన్స్",
-      "none": "ఇంకా ఏదీ ప్రారంభించబడలేదు"
-    },
-    "installModal": {
-      "title": "ఒక ప్లగిన్‌ను ఇన్‌స్టాల్ చేయి",
-      "hint": "ఒక .zip గా ప్యాక్ చేయబడిన ప్లగిన్‌ను అప్‌లోడ్ చేయండి (manifest.json తో). ప్రారంభించిన తర్వాత ఇది శాండ్‌బాక్స్‌లో రన్ అవుతుంది.",
-      "choose": "ఒక .zip ఫైల్‌ను ఎంచుకోండి…",
-      "tooLarge": "ఫైల్ 5 MB పరిమితిని మించిపోయింది."
-    },
-    "toasts": {
-      "errorTitle": "ప్లగిన్ లోపం",
-      "errorDefault": "ప్లగిన్ టోగుల్ చేయడం విఫలమైంది",
-      "healthOk": "హెల్త్ చెక్ పాస్ అయింది",
-      "healthFail": "హెల్త్ చెక్ విఫలమైంది",
-      "healthError": "హెల్త్ చెక్ లోపం",
-      "savedTitle": "కాన్ఫిగరేషన్ సేవ్ చేయబడింది",
-      "savedDesc": "మార్పులను వర్తింపజేయడానికి సర్వర్ రీస్టార్ట్ అవసరం.",
-      "saveFailed": "సేవ్ చేయడం విఫలమైంది",
-      "installed": "ప్లగిన్ ఇన్‌స్టాల్ చేయబడింది",
-      "installFailed": "ఇన్‌స్టాల్ విఫలమైంది",
-      "uninstalled": "ప్లగిన్ అన్‌ఇన్‌స్టాల్ చేయబడింది",
-      "uninstallFailed": "అన్‌ఇన్‌స్టాల్ విఫలమైంది"
-    },
-    "sessions": {
-      "activationTitle": "దీని కోసం రన్ చేయండి",
-      "activationDesc": "ఈ ప్లగిన్ ఏ సెషన్‌ల కోసం రన్ అవుతుందో ఎంచుకోండి.",
-      "allSessions": "అన్ని సెషన్‌లు",
-      "specificSessions": "నిర్దిష్ట సెషన్‌లు",
-      "noSessions": "ఇంకా సెషన్‌లు లేవు.",
-      "saveActivation": "యాక్టివేషన్‌ను సేవ్ చేయండి",
-      "perSessionTitle": "సెషన్-వారీ కాన్ఫిగ్",
-      "perSessionDesc": "ఒక సెషన్ కోసం గ్లోబల్ కాన్ఫిగ్‌ను ఓవర్‌రైడ్ చేయండి; మార్చని ఫీల్డ్‌లు గ్లోబల్ విలువను వారసత్వంగా పొందుతాయి.",
-      "selectSession": "ఒక సెషన్‌ను ఎంచుకోండి…",
-      "saveOverride": "ఓవర్‌రైడ్‌ను సేవ్ చేయండి",
-      "clearOverride": "ఓవర్‌రైడ్‌ను క్లియర్ చేయండి"
-    },
-    "instances": {
-      "title": "ఇన్‌స్టాన్స్‌లు",
-      "description": "ఈ ఇంటిగ్రేషన్ కోసం ఖాతా వారీగా ఇన్‌స్టాన్స్‌లను ప్రొవిజన్ చేయండి. ప్రతి ఇన్‌స్టాన్స్‌కు దాని స్వంత సైనింగ్ సీక్రెట్ మరియు ఇన్‌గ్రెస్ URL ఉంటుంది.",
-      "create": "ఇన్‌స్టాన్స్‌ను సృష్టించండి",
-      "empty": "ఇంకా ఇన్‌స్టాన్స్‌లు లేవు. ఇన్‌గ్రెస్ URL మరియు సీక్రెట్ పొందడానికి ఒకటి సృష్టించండి.",
-      "loadError": "ఇన్‌స్టాన్స్‌లను లోడ్ చేయడం విఫలమైంది.",
-      "allSessions": "అన్ని సెషన్‌లు",
-      "enabled": "ప్రారంభించబడింది",
-      "disabled": "నిలిపివేయబడింది",
-      "form": {
-        "instanceId": "ఇన్‌స్టాన్స్ ఐడీ",
-        "instanceIdPlaceholder": "ఉదా. acme-support",
-        "instanceIdHint": "అక్షరాలు, సంఖ్యలు, హైఫన్‌లు, అండర్‌స్కోర్‌లు (గరిష్టంగా 64).",
-        "sessionScope": "సెషన్ స్కోప్ (ఆప్షనల్)",
-        "sessionScopePlaceholder": "అన్ని సెషన్‌ల కోసం ఖాళీగా ఉంచండి",
-        "verifyToken": "వెరిఫై టోకెన్ (ఆప్షనల్)",
-        "verifyTokenPlaceholder": "వెరిఫికేషన్ సమయంలో ప్రొవైడర్ తిప్పి పంపే టోకెన్",
-        "config": "కాన్ఫిగ్ (ఆప్షనల్ JSON)",
-        "configPlaceholder": "{ }"
-      },
-      "created": {
-        "title": "ఇన్‌స్టాన్స్ సృష్టించబడింది",
-        "hint": "సీక్రెట్‌ను ఇప్పుడే కాపీ చేయండి — ఇది ఒక్కసారి మాత్రమే చూపబడుతుంది.",
-        "secret": "సైనింగ్ సీక్రెట్",
-        "ingressUrls": "ఇన్‌గ్రెస్ URL(లు)"
-      },
-      "regenerate": {
-        "title": "సీక్రెట్‌ను రీజెనరేట్ చేయండి",
-        "confirm": "{{id}} కోసం సైనింగ్ సీక్రెట్‌ను రీజెనరేట్ చేయాలా? ప్రస్తుత సీక్రెట్ వెంటనే పనిచేయడం మానేస్తుంది.",
-        "action": "రీజెనరేట్ చేయి"
-      },
-      "edit": { "title": "{{id}}ను ఎడిట్ చేయండి" },
-      "delete": {
-        "title": "ఇన్‌స్టాన్స్‌ను డిలీట్ చేయండి",
-        "confirm": "ఇన్‌స్టాన్స్ {{id}}ను డిలీట్ చేయాలా? దీని ఇన్‌గ్రెస్ URL మరియు సీక్రెట్ వెంటనే పనిచేయడం మానేస్తాయి.",
-        "action": "డిలీట్ చేయి"
-      },
-      "actions": {
-        "regenerate": "సీక్రెట్‌ను రీజెనరేట్ చేయి",
-        "edit": "ఎడిట్ చేయి",
-        "delete": "డిలీట్ చేయి",
-        "copy": "కాపీ చేయి",
-        "save": "సేవ్ చేయి",
-        "enable": "ప్రారంభించు",
-        "disable": "నిలిపివేయి"
-      },
-      "errors": {
-        "invalidId": "ఇన్‌స్టాన్స్ ఐడీలో అక్షరాలు, సంఖ్యలు, హైఫన్‌లు లేదా అండర్‌స్కోర్‌లు మాత్రమే ఉండాలి (గరిష్టంగా 64).",
-        "invalidJson": "కాన్ఫిగ్ చెల్లుబాటు అయ్యే JSON గా ఉండాలి.",
-        "duplicateId": "ఆ ఐడీతో ఇన్‌స్టాన్స్ ఇప్పటికే ఉంది."
-      },
-      "toasts": {
-        "created": "ఇన్‌స్టాన్స్ సృష్టించబడింది",
-        "updated": "ఇన్‌స్టాన్స్ అప్‌డేట్ చేయబడింది",
-        "deleted": "ఇన్‌స్టాన్స్ డిలీట్ చేయబడింది",
-        "secretRegenerated": "సీక్రెట్ రీజెనరేట్ చేయబడింది",
-        "actionFailed": "చర్య విఫలమైంది"
-      }
-    }
   }
 }

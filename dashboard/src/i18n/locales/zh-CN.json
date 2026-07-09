@@ -75,7 +75,8 @@
     "messageTester": "消息测试器",
     "infrastructure": "基础设施",
     "plugins": "插件",
-    "logs": "日志"
+    "logs": "日志",
+    "campaigns": "Campaigns"
   },
   "chats": {
     "media": {
@@ -553,6 +554,246 @@
     "sendFailed": "发送消息失败",
     "notOnWhatsApp": "该号码未在 WhatsApp 注册"
   },
+  "plugins": {
+    "title": "插件",
+    "subtitle": "安装、配置和管理扩展",
+    "refresh": "刷新",
+    "engineCard": "当前 WhatsApp 引擎",
+    "running": "运行中",
+    "supportedFeatures": "支持的功能：",
+    "builtIn": "内置",
+    "noDescription": "没有可用描述",
+    "required": "必需",
+    "active": "活跃",
+    "activate": "激活",
+    "enable": "启用",
+    "disable": "禁用",
+    "healthCheck": "健康检查",
+    "configure": "配置",
+    "available": "可用",
+    "install": "安装插件",
+    "uninstall": "卸载",
+    "uninstallConfirm": "卸载“{{name}}”？这将删除其文件。",
+    "engineSwitchHint": "在设置中将其设为活动引擎，然后重启",
+    "empty": {
+      "title": "未找到插件",
+      "description": "安装插件以扩展 OpenWA 功能"
+    },
+    "config": {
+      "title": "配置 {{name}}",
+      "restartNotice": "更改需要重启服务器后才会生效",
+      "engineType": "引擎类型",
+      "headless": "无头模式",
+      "headlessDesc": "运行不显示界面的浏览器（推荐用于生产环境）",
+      "sessionDataPath": "会话数据路径",
+      "browserArgs": "浏览器参数",
+      "noOptions": "此插件没有可用配置项",
+      "save": "保存配置",
+      "addItem": "添加",
+      "tabConfig": "配置",
+      "tabSessions": "会话"
+    },
+    "rail": {
+      "engine": "活动引擎",
+      "enabled": "已启用",
+      "installed": "已安装",
+      "active": "活跃插件",
+      "none": "尚未启用任何插件"
+    },
+    "installModal": {
+      "title": "安装插件",
+      "hint": "上传打包为 .zip 的插件（包含 manifest.json）。启用后将在沙箱中运行。",
+      "choose": "选择 .zip 文件…",
+      "tooLarge": "文件超过 5 MB 限制。"
+    },
+    "toasts": {
+      "errorTitle": "插件错误",
+      "errorDefault": "切换插件失败",
+      "healthOk": "健康检查通过",
+      "healthFail": "健康检查失败",
+      "healthError": "健康检查出错",
+      "savedTitle": "配置已保存",
+      "savedDesc": "需要重启服务器以应用更改。",
+      "saveFailed": "保存失败",
+      "installed": "插件已安装",
+      "installFailed": "安装失败",
+      "uninstalled": "插件已卸载",
+      "uninstallFailed": "卸载失败"
+    },
+    "sessions": {
+      "activationTitle": "运行范围",
+      "activationDesc": "选择此插件运行的会话。",
+      "allSessions": "所有会话",
+      "specificSessions": "指定会话",
+      "noSessions": "暂无会话。",
+      "saveActivation": "保存启用设置",
+      "perSessionTitle": "单会话配置",
+      "perSessionDesc": "为某个会话覆盖全局配置；未修改的字段将沿用全局值。",
+      "selectSession": "选择一个会话…",
+      "saveOverride": "保存覆盖配置",
+      "clearOverride": "清除覆盖配置"
+    },
+    "instances": {
+      "title": "实例",
+      "description": "为此集成按账户配置实例。每个实例都有自己的签名密钥和接入 URL。",
+      "create": "创建实例",
+      "empty": "暂无实例。创建一个以获取接入 URL 和密钥。",
+      "loadError": "加载实例失败。",
+      "allSessions": "所有会话",
+      "enabled": "已启用",
+      "disabled": "已禁用",
+      "form": {
+        "instanceId": "实例 ID",
+        "instanceIdPlaceholder": "例如 acme-support",
+        "instanceIdHint": "字母、数字、连字符、下划线（最多 64 个字符）。",
+        "sessionScope": "会话范围（可选）",
+        "sessionScopePlaceholder": "留空表示所有会话",
+        "verifyToken": "验证令牌（可选）",
+        "verifyTokenPlaceholder": "服务商在验证时回传的令牌",
+        "config": "配置（可选 JSON）",
+        "configPlaceholder": "{ }"
+      },
+      "created": {
+        "title": "实例已创建",
+        "hint": "请立即复制密钥——它只会显示一次。",
+        "secret": "签名密钥",
+        "ingressUrls": "接入 URL"
+      },
+      "regenerate": {
+        "title": "重新生成密钥",
+        "confirm": "要重新生成 {{id}} 的签名密钥吗？当前密钥将立即失效。",
+        "action": "重新生成"
+      },
+      "edit": {
+        "title": "编辑 {{id}}"
+      },
+      "delete": {
+        "title": "删除实例",
+        "confirm": "要删除实例 {{id}} 吗？其接入 URL 和密钥将立即失效。",
+        "action": "删除"
+      },
+      "actions": {
+        "regenerate": "重新生成密钥",
+        "edit": "编辑",
+        "delete": "删除",
+        "copy": "复制",
+        "save": "保存",
+        "enable": "启用",
+        "disable": "禁用"
+      },
+      "errors": {
+        "invalidId": "实例 ID 只能包含字母、数字、连字符或下划线（最多 64 个字符）。",
+        "invalidJson": "配置必须是有效的 JSON。",
+        "duplicateId": "已存在具有该 ID 的实例。"
+      },
+      "toasts": {
+        "created": "实例已创建",
+        "updated": "实例已更新",
+        "deleted": "实例已删除",
+        "secretRegenerated": "密钥已重新生成",
+        "actionFailed": "操作失败"
+      }
+    }
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Send the same message to many contacts in a few clicks",
+    "stepsLabel": "Campaign steps",
+    "steps": {
+      "1": "Contacts",
+      "2": "Message",
+      "3": "Send"
+    },
+    "noSessionTitle": "No WhatsApp account connected",
+    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
+    "goToSessions": "Connect a session",
+    "messageTypes": {
+      "text": "Text",
+      "image": "Image",
+      "video": "Video",
+      "document": "Document",
+      "template": "Saved template"
+    },
+    "fields": {
+      "session": "WhatsApp account",
+      "numbers": "Phone numbers",
+      "numbersPlaceholder": "One number per line\nExample:\n33612345678\n33698765432",
+      "numbersHint": "Use international format without spaces. Numbers are checked automatically.",
+      "message": "Your message",
+      "messagePlaceholder": "Write the message everyone will receive...",
+      "messageHint": "{{count}} / 4096 characters",
+      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "caption": "Caption (optional)",
+      "mediaUrl": "Image or file URL",
+      "mediaUrlHint": "Paste a public link, or upload a file below.",
+      "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
+      "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
+      "template": "Choose a template",
+      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "uploadImage": "Upload an image",
+      "uploadVideo": "Upload a video",
+      "uploadDocument": "Upload a document",
+      "fileSelected": "Selected: {{name}}"
+    },
+    "sources": {
+      "paste": "Paste numbers",
+      "file": "Import file",
+      "whatsapp": "My WhatsApp contacts"
+    },
+    "file": {
+      "dropHint": "Import a CSV or TXT file with one phone number per line",
+      "choose": "Choose a file"
+    },
+    "wa": {
+      "load": "Load my contacts",
+      "loading": "Loading contacts...",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "selected": "{{count}} of {{total}} selected"
+    },
+    "validating": "Checking numbers… {{done}} / {{total}}",
+    "summary": {
+      "valid": "{{count}} valid contact(s) ready",
+      "invalid": "{{count}} number(s) not on WhatsApp"
+    },
+    "preview": {
+      "title": "Preview",
+      "empty": "Your message will appear here"
+    },
+    "review": {
+      "recipients": "Recipients",
+      "type": "Message type",
+      "duration": "Estimated duration",
+      "durationValue": "About {{minutes}} min",
+      "message": "Message to send",
+      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
+      "send": "Send campaign"
+    },
+    "sending": {
+      "title": "Sending in progress…",
+      "hint": "Please keep this page open. Estimated time: about {{minutes}} min.",
+      "stats": "{{sent}} sent · {{failed}} failed · {{total}} total",
+      "cancel": "Stop sending"
+    },
+    "done": {
+      "successTitle": "Campaign finished",
+      "cancelledTitle": "Campaign stopped",
+      "failedTitle": "Campaign failed",
+      "newCampaign": "Start a new campaign"
+    },
+    "viewOnly": "View only",
+    "errors": {
+      "loadContacts": "Could not load contacts",
+      "validate": "Could not verify numbers",
+      "fileRead": "Could not read the file",
+      "fileTooLarge": "File is too large (max 50 MB)",
+      "send": "Could not send the campaign"
+    },
+    "mediaSource": {
+      "upload": "Upload a file",
+      "url": "Use a URL"
+    }
+  },
   "infrastructure": {
     "title": "基础设施",
     "subtitle": "配置服务器、数据库、缓存、存储和引擎设置",
@@ -698,144 +939,5 @@
       "importTooLarge": "备份超出请求大小限制。请在服务器上调高 BODY_SIZE_LIMIT 后重试。"
     },
     "statusLoadError": "无法加载当前基础设施状态。请刷新重试。"
-  },
-  "plugins": {
-    "title": "插件",
-    "subtitle": "安装、配置和管理扩展",
-    "refresh": "刷新",
-    "engineCard": "当前 WhatsApp 引擎",
-    "running": "运行中",
-    "supportedFeatures": "支持的功能：",
-    "builtIn": "内置",
-    "noDescription": "没有可用描述",
-    "required": "必需",
-    "active": "活跃",
-    "activate": "激活",
-    "enable": "启用",
-    "disable": "禁用",
-    "healthCheck": "健康检查",
-    "configure": "配置",
-    "available": "可用",
-    "install": "安装插件",
-    "uninstall": "卸载",
-    "uninstallConfirm": "卸载“{{name}}”？这将删除其文件。",
-    "engineSwitchHint": "在设置中将其设为活动引擎，然后重启",
-    "empty": {
-      "title": "未找到插件",
-      "description": "安装插件以扩展 OpenWA 功能"
-    },
-    "config": {
-      "title": "配置 {{name}}",
-      "restartNotice": "更改需要重启服务器后才会生效",
-      "engineType": "引擎类型",
-      "headless": "无头模式",
-      "headlessDesc": "运行不显示界面的浏览器（推荐用于生产环境）",
-      "sessionDataPath": "会话数据路径",
-      "browserArgs": "浏览器参数",
-      "noOptions": "此插件没有可用配置项",
-      "save": "保存配置",
-      "addItem": "添加",
-      "tabConfig": "配置",
-      "tabSessions": "会话"
-    },
-    "rail": {
-      "engine": "活动引擎",
-      "enabled": "已启用",
-      "installed": "已安装",
-      "active": "活跃插件",
-      "none": "尚未启用任何插件"
-    },
-    "installModal": {
-      "title": "安装插件",
-      "hint": "上传打包为 .zip 的插件（包含 manifest.json）。启用后将在沙箱中运行。",
-      "choose": "选择 .zip 文件…",
-      "tooLarge": "文件超过 5 MB 限制。"
-    },
-    "toasts": {
-      "errorTitle": "插件错误",
-      "errorDefault": "切换插件失败",
-      "healthOk": "健康检查通过",
-      "healthFail": "健康检查失败",
-      "healthError": "健康检查出错",
-      "savedTitle": "配置已保存",
-      "savedDesc": "需要重启服务器以应用更改。",
-      "saveFailed": "保存失败",
-      "installed": "插件已安装",
-      "installFailed": "安装失败",
-      "uninstalled": "插件已卸载",
-      "uninstallFailed": "卸载失败"
-    },
-    "sessions": {
-      "activationTitle": "运行范围",
-      "activationDesc": "选择此插件运行的会话。",
-      "allSessions": "所有会话",
-      "specificSessions": "指定会话",
-      "noSessions": "暂无会话。",
-      "saveActivation": "保存启用设置",
-      "perSessionTitle": "单会话配置",
-      "perSessionDesc": "为某个会话覆盖全局配置；未修改的字段将沿用全局值。",
-      "selectSession": "选择一个会话…",
-      "saveOverride": "保存覆盖配置",
-      "clearOverride": "清除覆盖配置"
-    },
-    "instances": {
-      "title": "实例",
-      "description": "为此集成按账户配置实例。每个实例都有自己的签名密钥和接入 URL。",
-      "create": "创建实例",
-      "empty": "暂无实例。创建一个以获取接入 URL 和密钥。",
-      "loadError": "加载实例失败。",
-      "allSessions": "所有会话",
-      "enabled": "已启用",
-      "disabled": "已禁用",
-      "form": {
-        "instanceId": "实例 ID",
-        "instanceIdPlaceholder": "例如 acme-support",
-        "instanceIdHint": "字母、数字、连字符、下划线（最多 64 个字符）。",
-        "sessionScope": "会话范围（可选）",
-        "sessionScopePlaceholder": "留空表示所有会话",
-        "verifyToken": "验证令牌（可选）",
-        "verifyTokenPlaceholder": "服务商在验证时回传的令牌",
-        "config": "配置（可选 JSON）",
-        "configPlaceholder": "{ }"
-      },
-      "created": {
-        "title": "实例已创建",
-        "hint": "请立即复制密钥——它只会显示一次。",
-        "secret": "签名密钥",
-        "ingressUrls": "接入 URL"
-      },
-      "regenerate": {
-        "title": "重新生成密钥",
-        "confirm": "要重新生成 {{id}} 的签名密钥吗？当前密钥将立即失效。",
-        "action": "重新生成"
-      },
-      "edit": { "title": "编辑 {{id}}" },
-      "delete": {
-        "title": "删除实例",
-        "confirm": "要删除实例 {{id}} 吗？其接入 URL 和密钥将立即失效。",
-        "action": "删除"
-      },
-      "actions": {
-        "regenerate": "重新生成密钥",
-        "edit": "编辑",
-        "delete": "删除",
-        "copy": "复制",
-        "save": "保存",
-        "enable": "启用",
-        "disable": "禁用"
-      },
-      "errors": {
-        "invalidId": "实例 ID 只能包含字母、数字、连字符或下划线（最多 64 个字符）。",
-        "invalidJson": "配置必须是有效的 JSON。",
-        "duplicateId": "已存在具有该 ID 的实例。"
-      },
-      "toasts": {
-        "created": "实例已创建",
-        "updated": "实例已更新",
-        "deleted": "实例已删除",
-        "secretRegenerated": "密钥已重新生成",
-        "actionFailed": "操作失败"
-      }
-    }
   }
 }

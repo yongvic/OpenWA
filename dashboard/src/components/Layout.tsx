@@ -21,11 +21,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Languages,
+  Megaphone,
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { type UserRole } from '../hooks/useRole';
 import { languageOptions, resolveSupportedLanguage, rtlLanguages, type SupportedLanguage } from '../i18n';
 import { healthApi } from '../services/api';
+import { CAMPAIGN_FOCUSED_UI, CAMPAIGN_NAV_ORDER, HIDDEN_NAV_KEYS } from '../config/uiMode';
 import './Layout.css';
 
 interface LayoutProps {
@@ -39,6 +41,7 @@ const allNavItems = [
   { to: '/chats', icon: MessageSquare, key: 'chats' as const, adminOnly: false },
   { to: '/webhooks', icon: Webhook, key: 'webhooks' as const, adminOnly: false },
   { to: '/templates', icon: ClipboardList, key: 'templates' as const, adminOnly: false },
+  { to: '/campaigns', icon: Megaphone, key: 'campaigns' as const, adminOnly: false },
   { to: '/api-keys', icon: Key, key: 'apiKeys' as const, adminOnly: true },
   { to: '/message-tester', icon: Send, key: 'messageTester' as const, adminOnly: false },
   // Backend /infra/* is ADMIN-only; hide the nav item from non-admins (UX + defense-in-depth).
@@ -56,7 +59,20 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
   const themeLabel = t(`theme.${theme}`);
   const activePalette = paletteOptions.find(option => option.value === palette) ?? paletteOptions[0];
 
-  const navItems = allNavItems.filter(item => !item.adminOnly || userRole === 'admin');
+  const navItems = allNavItems
+    .filter(item => {
+      if (item.adminOnly && userRole !== 'admin') return false;
+      if (CAMPAIGN_FOCUSED_UI && HIDDEN_NAV_KEYS.has(item.key)) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (!CAMPAIGN_FOCUSED_UI) return 0;
+      const ai = CAMPAIGN_NAV_ORDER.indexOf(a.key as (typeof CAMPAIGN_NAV_ORDER)[number]);
+      const bi = CAMPAIGN_NAV_ORDER.indexOf(b.key as (typeof CAMPAIGN_NAV_ORDER)[number]);
+      const ar = ai === -1 ? 99 : ai;
+      const br = bi === -1 ? 99 : bi;
+      return ar - br;
+    });
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -157,7 +173,7 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
   const isRtl = rtlLanguages.includes(currentLang);
 
   return (
-    <div className="layout">
+    <div className={`layout${CAMPAIGN_FOCUSED_UI ? ' campaign-mode' : ''}`}>
       {isMobile && (
         <header className="mobile-header">
           <button className="mobile-menu-btn" onClick={toggleMobile} aria-label={t('common.expand')}>

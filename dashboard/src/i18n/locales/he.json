@@ -75,7 +75,8 @@
     "messageTester": "בדיקת הודעות",
     "infrastructure": "תשתית",
     "plugins": "תוספים",
-    "logs": "לוגים"
+    "logs": "לוגים",
+    "campaigns": "Campaigns"
   },
   "chats": {
     "media": {
@@ -554,6 +555,246 @@
     "sendFailed": "שליחת ההודעה נכשלה",
     "notOnWhatsApp": "מספר זה אינו רשום בוואטסאפ"
   },
+  "plugins": {
+    "title": "תוספים",
+    "subtitle": "התקנה, הגדרה וניהול של הרחבות",
+    "refresh": "רענון",
+    "engineCard": "מנוע WhatsApp פעיל",
+    "running": "פועל",
+    "supportedFeatures": "תכונות נתמכות:",
+    "builtIn": "מובנה",
+    "noDescription": "אין תיאור זמין",
+    "required": "נדרש",
+    "active": "פעיל",
+    "activate": "הפעלה",
+    "enable": "הפעלה",
+    "disable": "השבתה",
+    "healthCheck": "בדיקת תקינות",
+    "configure": "הגדרה",
+    "available": "זמינים",
+    "install": "התקנת תוסף",
+    "uninstall": "הסרה",
+    "uninstallConfirm": "להסיר את \"{{name}}\"? פעולה זו תמחק את הקבצים שלו.",
+    "engineSwitchHint": "יש להגדיר כמנוע הפעיל בהגדרות ולאחר מכן לאתחל",
+    "empty": {
+      "title": "לא נמצאו תוספים",
+      "description": "ניתן להתקין תוספים כדי להרחיב את היכולות של OpenWA"
+    },
+    "config": {
+      "title": "הגדרת {{name}}",
+      "restartNotice": "השינויים דורשים אתחול שרת כדי להיכנס לתוקף",
+      "engineType": "סוג מנוע",
+      "headless": "מצב Headless",
+      "headlessDesc": "הרצת דפדפן ללא ממשק גרפי (מומלץ לייצור)",
+      "sessionDataPath": "נתיב נתוני Session",
+      "browserArgs": "ארגומנטים של הדפדפן",
+      "noOptions": "אין אפשרויות הגדרה זמינות עבור תוסף זה",
+      "save": "שמירת תצורה",
+      "addItem": "הוספה",
+      "tabConfig": "הגדרות",
+      "tabSessions": "Sessions"
+    },
+    "rail": {
+      "engine": "מנוע פעיל",
+      "enabled": "מופעלים",
+      "installed": "מותקנים",
+      "active": "תוספים פעילים",
+      "none": "אף אחד אינו מופעל עדיין"
+    },
+    "installModal": {
+      "title": "התקנת תוסף",
+      "hint": "ניתן להעלות תוסף ארוז כקובץ .zip (הכולל manifest.json). הוא פועל בארגז חול לאחר ההפעלה.",
+      "choose": "בחירת קובץ ‎.zip‎…",
+      "tooLarge": "הקובץ חורג מהמגבלה של ‎5 MB‎."
+    },
+    "toasts": {
+      "errorTitle": "שגיאת תוסף",
+      "errorDefault": "החלפת מצב התוסף נכשלה",
+      "healthOk": "בדיקת התקינות הצליחה",
+      "healthFail": "בדיקת התקינות נכשלה",
+      "healthError": "שגיאה בבדיקת תקינות",
+      "savedTitle": "התצורה נשמרה",
+      "savedDesc": "נדרש אתחול שרת כדי להחיל את השינויים.",
+      "saveFailed": "השמירה נכשלה",
+      "installed": "התוסף הותקן",
+      "installFailed": "ההתקנה נכשלה",
+      "uninstalled": "התוסף הוסר",
+      "uninstallFailed": "ההסרה נכשלה"
+    },
+    "sessions": {
+      "activationTitle": "הפעלה עבור",
+      "activationDesc": "בחרו עבור אילו sessions תוסף זה יפעל.",
+      "allSessions": "כל ה-Sessions",
+      "specificSessions": "Sessions מסוימים",
+      "noSessions": "אין Sessions עדיין.",
+      "saveActivation": "שמירת הפעלה",
+      "perSessionTitle": "הגדרות לכל Session",
+      "perSessionDesc": "דריסת ההגדרות הגלובליות עבור session; שדות שלא שונו יורשים את הערך הגלובלי.",
+      "selectSession": "בחירת session…",
+      "saveOverride": "שמירת דריסה",
+      "clearOverride": "ניקוי דריסה"
+    },
+    "instances": {
+      "title": "מופעים",
+      "description": "הקצו מופעים לכל חשבון עבור אינטגרציה זו. לכל מופע יש מפתח חתימה סודי וכתובת URL לקליטה משלו.",
+      "create": "יצירת מופע",
+      "empty": "אין עדיין מופעים. צרו מופע כדי לקבל כתובת URL וסוד.",
+      "loadError": "טעינת המופעים נכשלה.",
+      "allSessions": "כל ה-Sessions",
+      "enabled": "מופעל",
+      "disabled": "מושבת",
+      "form": {
+        "instanceId": "מזהה מופע",
+        "instanceIdPlaceholder": "לדוגמה: acme-support",
+        "instanceIdHint": "אותיות, מספרים, מקפים וקווים תחתונים (עד 64 תווים).",
+        "sessionScope": "טווח session (אופציונלי)",
+        "sessionScopePlaceholder": "השאירו ריק לכל ה-Sessions",
+        "verifyToken": "טוקן אימות (אופציונלי)",
+        "verifyTokenPlaceholder": "הטוקן שהספק מחזיר בעת האימות",
+        "config": "תצורה (JSON אופציונלי)",
+        "configPlaceholder": "{ }"
+      },
+      "created": {
+        "title": "המופע נוצר",
+        "hint": "העתיקו את הסוד כעת — הוא מוצג רק פעם אחת.",
+        "secret": "מפתח חתימה סודי",
+        "ingressUrls": "כתובת/כתובות URL לקליטה"
+      },
+      "regenerate": {
+        "title": "יצירת סוד מחדש",
+        "confirm": "ליצור מחדש את מפתח החתימה הסודי של {{id}}? הסוד הנוכחי יפסיק לעבוד באופן מיידי.",
+        "action": "יצירה מחדש"
+      },
+      "edit": {
+        "title": "עריכת {{id}}"
+      },
+      "delete": {
+        "title": "מחיקת מופע",
+        "confirm": "למחוק את המופע {{id}}? כתובת ה-URL והסוד שלו יפסיקו לעבוד באופן מיידי.",
+        "action": "מחיקה"
+      },
+      "actions": {
+        "regenerate": "יצירת סוד מחדש",
+        "edit": "עריכה",
+        "delete": "מחיקה",
+        "copy": "העתקה",
+        "save": "שמירה",
+        "enable": "הפעלה",
+        "disable": "השבתה"
+      },
+      "errors": {
+        "invalidId": "מזהה המופע חייב לכלול אותיות, מספרים, מקפים או קווים תחתונים (עד 64 תווים).",
+        "invalidJson": "התצורה חייבת להיות JSON תקין.",
+        "duplicateId": "כבר קיים מופע עם מזהה זה."
+      },
+      "toasts": {
+        "created": "המופע נוצר",
+        "updated": "המופע עודכן",
+        "deleted": "המופע נמחק",
+        "secretRegenerated": "הסוד נוצר מחדש",
+        "actionFailed": "הפעולה נכשלה"
+      }
+    }
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Send the same message to many contacts in a few clicks",
+    "stepsLabel": "Campaign steps",
+    "steps": {
+      "1": "Contacts",
+      "2": "Message",
+      "3": "Send"
+    },
+    "noSessionTitle": "No WhatsApp account connected",
+    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
+    "goToSessions": "Connect a session",
+    "messageTypes": {
+      "text": "Text",
+      "image": "Image",
+      "video": "Video",
+      "document": "Document",
+      "template": "Saved template"
+    },
+    "fields": {
+      "session": "WhatsApp account",
+      "numbers": "Phone numbers",
+      "numbersPlaceholder": "One number per line\nExample:\n33612345678\n33698765432",
+      "numbersHint": "Use international format without spaces. Numbers are checked automatically.",
+      "message": "Your message",
+      "messagePlaceholder": "Write the message everyone will receive...",
+      "messageHint": "{{count}} / 4096 characters",
+      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "caption": "Caption (optional)",
+      "mediaUrl": "Image or file URL",
+      "mediaUrlHint": "Paste a public link, or upload a file below.",
+      "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
+      "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
+      "template": "Choose a template",
+      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "uploadImage": "Upload an image",
+      "uploadVideo": "Upload a video",
+      "uploadDocument": "Upload a document",
+      "fileSelected": "Selected: {{name}}"
+    },
+    "sources": {
+      "paste": "Paste numbers",
+      "file": "Import file",
+      "whatsapp": "My WhatsApp contacts"
+    },
+    "file": {
+      "dropHint": "Import a CSV or TXT file with one phone number per line",
+      "choose": "Choose a file"
+    },
+    "wa": {
+      "load": "Load my contacts",
+      "loading": "Loading contacts...",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "selected": "{{count}} of {{total}} selected"
+    },
+    "validating": "Checking numbers… {{done}} / {{total}}",
+    "summary": {
+      "valid": "{{count}} valid contact(s) ready",
+      "invalid": "{{count}} number(s) not on WhatsApp"
+    },
+    "preview": {
+      "title": "Preview",
+      "empty": "Your message will appear here"
+    },
+    "review": {
+      "recipients": "Recipients",
+      "type": "Message type",
+      "duration": "Estimated duration",
+      "durationValue": "About {{minutes}} min",
+      "message": "Message to send",
+      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
+      "send": "Send campaign"
+    },
+    "sending": {
+      "title": "Sending in progress…",
+      "hint": "Please keep this page open. Estimated time: about {{minutes}} min.",
+      "stats": "{{sent}} sent · {{failed}} failed · {{total}} total",
+      "cancel": "Stop sending"
+    },
+    "done": {
+      "successTitle": "Campaign finished",
+      "cancelledTitle": "Campaign stopped",
+      "failedTitle": "Campaign failed",
+      "newCampaign": "Start a new campaign"
+    },
+    "viewOnly": "View only",
+    "errors": {
+      "loadContacts": "Could not load contacts",
+      "validate": "Could not verify numbers",
+      "fileRead": "Could not read the file",
+      "fileTooLarge": "File is too large (max 50 MB)",
+      "send": "Could not send the campaign"
+    },
+    "mediaSource": {
+      "upload": "Upload a file",
+      "url": "Use a URL"
+    }
+  },
   "infrastructure": {
     "title": "תשתית",
     "subtitle": "הגדרת השרת, מסד נתונים, מטמון, אחסון ומנוע WhatsApp",
@@ -699,144 +940,5 @@
       "importTooLarge": "הגיבוי גדול מדי עבור מגבלת הבקשה. הגדילו את BODY_SIZE_LIMIT בשרת ונסו שוב."
     },
     "statusLoadError": "לא ניתן לטעון את מצב התשתית הנוכחי. רעננו כדי לנסות שוב."
-  },
-  "plugins": {
-    "title": "תוספים",
-    "subtitle": "התקנה, הגדרה וניהול של הרחבות",
-    "refresh": "רענון",
-    "engineCard": "מנוע WhatsApp פעיל",
-    "running": "פועל",
-    "supportedFeatures": "תכונות נתמכות:",
-    "builtIn": "מובנה",
-    "noDescription": "אין תיאור זמין",
-    "required": "נדרש",
-    "active": "פעיל",
-    "activate": "הפעלה",
-    "enable": "הפעלה",
-    "disable": "השבתה",
-    "healthCheck": "בדיקת תקינות",
-    "configure": "הגדרה",
-    "available": "זמינים",
-    "install": "התקנת תוסף",
-    "uninstall": "הסרה",
-    "uninstallConfirm": "להסיר את \"{{name}}\"? פעולה זו תמחק את הקבצים שלו.",
-    "engineSwitchHint": "יש להגדיר כמנוע הפעיל בהגדרות ולאחר מכן לאתחל",
-    "empty": {
-      "title": "לא נמצאו תוספים",
-      "description": "ניתן להתקין תוספים כדי להרחיב את היכולות של OpenWA"
-    },
-    "config": {
-      "title": "הגדרת {{name}}",
-      "restartNotice": "השינויים דורשים אתחול שרת כדי להיכנס לתוקף",
-      "engineType": "סוג מנוע",
-      "headless": "מצב Headless",
-      "headlessDesc": "הרצת דפדפן ללא ממשק גרפי (מומלץ לייצור)",
-      "sessionDataPath": "נתיב נתוני Session",
-      "browserArgs": "ארגומנטים של הדפדפן",
-      "noOptions": "אין אפשרויות הגדרה זמינות עבור תוסף זה",
-      "save": "שמירת תצורה",
-      "addItem": "הוספה",
-      "tabConfig": "הגדרות",
-      "tabSessions": "Sessions"
-    },
-    "rail": {
-      "engine": "מנוע פעיל",
-      "enabled": "מופעלים",
-      "installed": "מותקנים",
-      "active": "תוספים פעילים",
-      "none": "אף אחד אינו מופעל עדיין"
-    },
-    "installModal": {
-      "title": "התקנת תוסף",
-      "hint": "ניתן להעלות תוסף ארוז כקובץ .zip (הכולל manifest.json). הוא פועל בארגז חול לאחר ההפעלה.",
-      "choose": "בחירת קובץ ‎.zip‎…",
-      "tooLarge": "הקובץ חורג מהמגבלה של ‎5 MB‎."
-    },
-    "toasts": {
-      "errorTitle": "שגיאת תוסף",
-      "errorDefault": "החלפת מצב התוסף נכשלה",
-      "healthOk": "בדיקת התקינות הצליחה",
-      "healthFail": "בדיקת התקינות נכשלה",
-      "healthError": "שגיאה בבדיקת תקינות",
-      "savedTitle": "התצורה נשמרה",
-      "savedDesc": "נדרש אתחול שרת כדי להחיל את השינויים.",
-      "saveFailed": "השמירה נכשלה",
-      "installed": "התוסף הותקן",
-      "installFailed": "ההתקנה נכשלה",
-      "uninstalled": "התוסף הוסר",
-      "uninstallFailed": "ההסרה נכשלה"
-    },
-    "sessions": {
-      "activationTitle": "הפעלה עבור",
-      "activationDesc": "בחרו עבור אילו sessions תוסף זה יפעל.",
-      "allSessions": "כל ה-Sessions",
-      "specificSessions": "Sessions מסוימים",
-      "noSessions": "אין Sessions עדיין.",
-      "saveActivation": "שמירת הפעלה",
-      "perSessionTitle": "הגדרות לכל Session",
-      "perSessionDesc": "דריסת ההגדרות הגלובליות עבור session; שדות שלא שונו יורשים את הערך הגלובלי.",
-      "selectSession": "בחירת session…",
-      "saveOverride": "שמירת דריסה",
-      "clearOverride": "ניקוי דריסה"
-    },
-    "instances": {
-      "title": "מופעים",
-      "description": "הקצו מופעים לכל חשבון עבור אינטגרציה זו. לכל מופע יש מפתח חתימה סודי וכתובת URL לקליטה משלו.",
-      "create": "יצירת מופע",
-      "empty": "אין עדיין מופעים. צרו מופע כדי לקבל כתובת URL וסוד.",
-      "loadError": "טעינת המופעים נכשלה.",
-      "allSessions": "כל ה-Sessions",
-      "enabled": "מופעל",
-      "disabled": "מושבת",
-      "form": {
-        "instanceId": "מזהה מופע",
-        "instanceIdPlaceholder": "לדוגמה: acme-support",
-        "instanceIdHint": "אותיות, מספרים, מקפים וקווים תחתונים (עד 64 תווים).",
-        "sessionScope": "טווח session (אופציונלי)",
-        "sessionScopePlaceholder": "השאירו ריק לכל ה-Sessions",
-        "verifyToken": "טוקן אימות (אופציונלי)",
-        "verifyTokenPlaceholder": "הטוקן שהספק מחזיר בעת האימות",
-        "config": "תצורה (JSON אופציונלי)",
-        "configPlaceholder": "{ }"
-      },
-      "created": {
-        "title": "המופע נוצר",
-        "hint": "העתיקו את הסוד כעת — הוא מוצג רק פעם אחת.",
-        "secret": "מפתח חתימה סודי",
-        "ingressUrls": "כתובת/כתובות URL לקליטה"
-      },
-      "regenerate": {
-        "title": "יצירת סוד מחדש",
-        "confirm": "ליצור מחדש את מפתח החתימה הסודי של {{id}}? הסוד הנוכחי יפסיק לעבוד באופן מיידי.",
-        "action": "יצירה מחדש"
-      },
-      "edit": { "title": "עריכת {{id}}" },
-      "delete": {
-        "title": "מחיקת מופע",
-        "confirm": "למחוק את המופע {{id}}? כתובת ה-URL והסוד שלו יפסיקו לעבוד באופן מיידי.",
-        "action": "מחיקה"
-      },
-      "actions": {
-        "regenerate": "יצירת סוד מחדש",
-        "edit": "עריכה",
-        "delete": "מחיקה",
-        "copy": "העתקה",
-        "save": "שמירה",
-        "enable": "הפעלה",
-        "disable": "השבתה"
-      },
-      "errors": {
-        "invalidId": "מזהה המופע חייב לכלול אותיות, מספרים, מקפים או קווים תחתונים (עד 64 תווים).",
-        "invalidJson": "התצורה חייבת להיות JSON תקין.",
-        "duplicateId": "כבר קיים מופע עם מזהה זה."
-      },
-      "toasts": {
-        "created": "המופע נוצר",
-        "updated": "המופע עודכן",
-        "deleted": "המופע נמחק",
-        "secretRegenerated": "הסוד נוצר מחדש",
-        "actionFailed": "הפעולה נכשלה"
-      }
-    }
   }
 }

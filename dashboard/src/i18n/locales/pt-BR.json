@@ -75,7 +75,8 @@
     "infrastructure": "Infraestrutura",
     "plugins": "Plugins",
     "logs": "Registros",
-    "templates": "Modelos"
+    "templates": "Modelos",
+    "campaigns": "Campaigns"
   },
   "chats": {
     "media": {
@@ -553,6 +554,246 @@
       "copied": "Nome do modelo copiado"
     }
   },
+  "plugins": {
+    "title": "Plugins",
+    "subtitle": "Instale, configure e gerencie extensões",
+    "refresh": "Atualizar",
+    "engineCard": "Motor do WhatsApp ativo",
+    "running": "Em execução",
+    "supportedFeatures": "Funcionalidades suportadas:",
+    "builtIn": "Integrado",
+    "noDescription": "Sem descrição disponível",
+    "required": "Obrigatório",
+    "active": "Ativo",
+    "activate": "Ativar",
+    "enable": "Habilitar",
+    "disable": "Desabilitar",
+    "healthCheck": "Verificação de saúde",
+    "configure": "Configurar",
+    "available": "Disponível",
+    "install": "Instalar plugin",
+    "uninstall": "Desinstalar",
+    "uninstallConfirm": "Desinstalar \"{{name}}\"? Isso remove seus arquivos.",
+    "engineSwitchHint": "Defina-o como motor ativo nas Configurações e reinicie",
+    "empty": {
+      "title": "Nenhum plugin encontrado",
+      "description": "Instale plugins para ampliar a funcionalidade do OpenWA"
+    },
+    "config": {
+      "title": "Configurar {{name}}",
+      "restartNotice": "As alterações requerem reiniciar o servidor para serem aplicadas",
+      "engineType": "Tipo de motor",
+      "headless": "Modo headless",
+      "headlessDesc": "Executar o navegador sem interface visível (recomendado para produção)",
+      "sessionDataPath": "Caminho dos dados da sessão",
+      "browserArgs": "Argumentos do navegador",
+      "noOptions": "Não há opções de configuração disponíveis para este plugin",
+      "save": "Salvar configuração",
+      "addItem": "Adicionar",
+      "tabConfig": "Configuração",
+      "tabSessions": "Sessões"
+    },
+    "rail": {
+      "engine": "Motor ativo",
+      "enabled": "habilitado",
+      "installed": "instalado",
+      "active": "Plugins ativos",
+      "none": "Nenhum habilitado ainda"
+    },
+    "installModal": {
+      "title": "Instalar um plugin",
+      "hint": "Envie um plugin empacotado como .zip (com um manifest.json). É executado em modo isolado quando habilitado.",
+      "choose": "Escolha um arquivo .zip…",
+      "tooLarge": "O arquivo excede o limite de 5 MB."
+    },
+    "toasts": {
+      "errorTitle": "Erro de plugin",
+      "errorDefault": "Erro ao ativar/desativar o plugin",
+      "healthOk": "Verificação de saúde aprovada",
+      "healthFail": "Verificação de saúde falhou",
+      "healthError": "Erro na verificação de saúde",
+      "savedTitle": "Configuração salva",
+      "savedDesc": "É necessário reiniciar o servidor para aplicar as alterações.",
+      "saveFailed": "Erro ao salvar",
+      "installed": "Plugin instalado",
+      "installFailed": "Erro na instalação",
+      "uninstalled": "Plugin desinstalado",
+      "uninstallFailed": "Erro ao desinstalar"
+    },
+    "sessions": {
+      "activationTitle": "Executar para",
+      "activationDesc": "Escolha para quais sessões este complemento será executado.",
+      "allSessions": "Todas as sessões",
+      "specificSessions": "Sessões específicas",
+      "noSessions": "Ainda não há sessões.",
+      "saveActivation": "Salvar ativação",
+      "perSessionTitle": "Configuração por sessão",
+      "perSessionDesc": "Substitui a configuração global para uma sessão; campos não modificados herdam o valor global.",
+      "selectSession": "Selecione uma sessão…",
+      "saveOverride": "Salvar substituição",
+      "clearOverride": "Limpar substituição"
+    },
+    "instances": {
+      "title": "Instâncias",
+      "description": "Provisione instâncias por conta para esta integração. Cada instância tem seu próprio segredo de assinatura e URL de entrada.",
+      "create": "Criar instância",
+      "empty": "Ainda não há instâncias. Crie uma para obter uma URL de entrada e um segredo.",
+      "loadError": "Falha ao carregar as instâncias.",
+      "allSessions": "Todas as sessões",
+      "enabled": "Habilitada",
+      "disabled": "Desabilitada",
+      "form": {
+        "instanceId": "ID da instância",
+        "instanceIdPlaceholder": "ex.: acme-support",
+        "instanceIdHint": "Letras, números, hífens e sublinhados (máx. 64).",
+        "sessionScope": "Escopo da sessão (opcional)",
+        "sessionScopePlaceholder": "Deixe em branco para todas as sessões",
+        "verifyToken": "Token de verificação (opcional)",
+        "verifyTokenPlaceholder": "Token que o provedor retorna na verificação",
+        "config": "Configuração (JSON opcional)",
+        "configPlaceholder": "{ }"
+      },
+      "created": {
+        "title": "Instância criada",
+        "hint": "Copie o segredo agora — ele é exibido apenas uma vez.",
+        "secret": "Segredo de assinatura",
+        "ingressUrls": "URL(s) de entrada"
+      },
+      "regenerate": {
+        "title": "Regenerar segredo",
+        "confirm": "Regenerar o segredo de assinatura de {{id}}? O segredo atual deixará de funcionar imediatamente.",
+        "action": "Regenerar"
+      },
+      "edit": {
+        "title": "Editar {{id}}"
+      },
+      "delete": {
+        "title": "Excluir instância",
+        "confirm": "Excluir a instância {{id}}? A URL de entrada e o segredo dela deixarão de funcionar imediatamente.",
+        "action": "Excluir"
+      },
+      "actions": {
+        "regenerate": "Regenerar segredo",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "copy": "Copiar",
+        "save": "Salvar",
+        "enable": "Habilitar",
+        "disable": "Desabilitar"
+      },
+      "errors": {
+        "invalidId": "O ID da instância deve conter letras, números, hífens ou sublinhados (máx. 64).",
+        "invalidJson": "A configuração deve ser um JSON válido.",
+        "duplicateId": "Já existe uma instância com esse ID."
+      },
+      "toasts": {
+        "created": "Instância criada",
+        "updated": "Instância atualizada",
+        "deleted": "Instância excluída",
+        "secretRegenerated": "Segredo regenerado",
+        "actionFailed": "Falha na ação"
+      }
+    }
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Send the same message to many contacts in a few clicks",
+    "stepsLabel": "Campaign steps",
+    "steps": {
+      "1": "Contacts",
+      "2": "Message",
+      "3": "Send"
+    },
+    "noSessionTitle": "No WhatsApp account connected",
+    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
+    "goToSessions": "Connect a session",
+    "messageTypes": {
+      "text": "Text",
+      "image": "Image",
+      "video": "Video",
+      "document": "Document",
+      "template": "Saved template"
+    },
+    "fields": {
+      "session": "WhatsApp account",
+      "numbers": "Phone numbers",
+      "numbersPlaceholder": "One number per line\nExample:\n33612345678\n33698765432",
+      "numbersHint": "Use international format without spaces. Numbers are checked automatically.",
+      "message": "Your message",
+      "messagePlaceholder": "Write the message everyone will receive...",
+      "messageHint": "{{count}} / 4096 characters",
+      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "caption": "Caption (optional)",
+      "mediaUrl": "Image or file URL",
+      "mediaUrlHint": "Paste a public link, or upload a file below.",
+      "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
+      "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
+      "template": "Choose a template",
+      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "uploadImage": "Upload an image",
+      "uploadVideo": "Upload a video",
+      "uploadDocument": "Upload a document",
+      "fileSelected": "Selected: {{name}}"
+    },
+    "sources": {
+      "paste": "Paste numbers",
+      "file": "Import file",
+      "whatsapp": "My WhatsApp contacts"
+    },
+    "file": {
+      "dropHint": "Import a CSV or TXT file with one phone number per line",
+      "choose": "Choose a file"
+    },
+    "wa": {
+      "load": "Load my contacts",
+      "loading": "Loading contacts...",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "selected": "{{count}} of {{total}} selected"
+    },
+    "validating": "Checking numbers… {{done}} / {{total}}",
+    "summary": {
+      "valid": "{{count}} valid contact(s) ready",
+      "invalid": "{{count}} number(s) not on WhatsApp"
+    },
+    "preview": {
+      "title": "Preview",
+      "empty": "Your message will appear here"
+    },
+    "review": {
+      "recipients": "Recipients",
+      "type": "Message type",
+      "duration": "Estimated duration",
+      "durationValue": "About {{minutes}} min",
+      "message": "Message to send",
+      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
+      "send": "Send campaign"
+    },
+    "sending": {
+      "title": "Sending in progress…",
+      "hint": "Please keep this page open. Estimated time: about {{minutes}} min.",
+      "stats": "{{sent}} sent · {{failed}} failed · {{total}} total",
+      "cancel": "Stop sending"
+    },
+    "done": {
+      "successTitle": "Campaign finished",
+      "cancelledTitle": "Campaign stopped",
+      "failedTitle": "Campaign failed",
+      "newCampaign": "Start a new campaign"
+    },
+    "viewOnly": "View only",
+    "errors": {
+      "loadContacts": "Could not load contacts",
+      "validate": "Could not verify numbers",
+      "fileRead": "Could not read the file",
+      "fileTooLarge": "File is too large (max 50 MB)",
+      "send": "Could not send the campaign"
+    },
+    "mediaSource": {
+      "upload": "Upload a file",
+      "url": "Use a URL"
+    }
+  },
   "infrastructure": {
     "title": "Infraestrutura",
     "subtitle": "Configure o servidor, banco de dados, cache, armazenamento e motor",
@@ -698,144 +939,5 @@
       "importTooLarge": "O backup excede o limite da requisição. Aumente BODY_SIZE_LIMIT no servidor e tente novamente."
     },
     "statusLoadError": "Não foi possível carregar o status atual da infraestrutura. Atualize para tentar novamente."
-  },
-  "plugins": {
-    "title": "Plugins",
-    "subtitle": "Instale, configure e gerencie extensões",
-    "refresh": "Atualizar",
-    "engineCard": "Motor do WhatsApp ativo",
-    "running": "Em execução",
-    "supportedFeatures": "Funcionalidades suportadas:",
-    "builtIn": "Integrado",
-    "noDescription": "Sem descrição disponível",
-    "required": "Obrigatório",
-    "active": "Ativo",
-    "activate": "Ativar",
-    "enable": "Habilitar",
-    "disable": "Desabilitar",
-    "healthCheck": "Verificação de saúde",
-    "configure": "Configurar",
-    "available": "Disponível",
-    "install": "Instalar plugin",
-    "uninstall": "Desinstalar",
-    "uninstallConfirm": "Desinstalar \"{{name}}\"? Isso remove seus arquivos.",
-    "engineSwitchHint": "Defina-o como motor ativo nas Configurações e reinicie",
-    "empty": {
-      "title": "Nenhum plugin encontrado",
-      "description": "Instale plugins para ampliar a funcionalidade do OpenWA"
-    },
-    "config": {
-      "title": "Configurar {{name}}",
-      "restartNotice": "As alterações requerem reiniciar o servidor para serem aplicadas",
-      "engineType": "Tipo de motor",
-      "headless": "Modo headless",
-      "headlessDesc": "Executar o navegador sem interface visível (recomendado para produção)",
-      "sessionDataPath": "Caminho dos dados da sessão",
-      "browserArgs": "Argumentos do navegador",
-      "noOptions": "Não há opções de configuração disponíveis para este plugin",
-      "save": "Salvar configuração",
-      "addItem": "Adicionar",
-      "tabConfig": "Configuração",
-      "tabSessions": "Sessões"
-    },
-    "rail": {
-      "engine": "Motor ativo",
-      "enabled": "habilitado",
-      "installed": "instalado",
-      "active": "Plugins ativos",
-      "none": "Nenhum habilitado ainda"
-    },
-    "installModal": {
-      "title": "Instalar um plugin",
-      "hint": "Envie um plugin empacotado como .zip (com um manifest.json). É executado em modo isolado quando habilitado.",
-      "choose": "Escolha um arquivo .zip…",
-      "tooLarge": "O arquivo excede o limite de 5 MB."
-    },
-    "toasts": {
-      "errorTitle": "Erro de plugin",
-      "errorDefault": "Erro ao ativar/desativar o plugin",
-      "healthOk": "Verificação de saúde aprovada",
-      "healthFail": "Verificação de saúde falhou",
-      "healthError": "Erro na verificação de saúde",
-      "savedTitle": "Configuração salva",
-      "savedDesc": "É necessário reiniciar o servidor para aplicar as alterações.",
-      "saveFailed": "Erro ao salvar",
-      "installed": "Plugin instalado",
-      "installFailed": "Erro na instalação",
-      "uninstalled": "Plugin desinstalado",
-      "uninstallFailed": "Erro ao desinstalar"
-    },
-    "sessions": {
-      "activationTitle": "Executar para",
-      "activationDesc": "Escolha para quais sessões este complemento será executado.",
-      "allSessions": "Todas as sessões",
-      "specificSessions": "Sessões específicas",
-      "noSessions": "Ainda não há sessões.",
-      "saveActivation": "Salvar ativação",
-      "perSessionTitle": "Configuração por sessão",
-      "perSessionDesc": "Substitui a configuração global para uma sessão; campos não modificados herdam o valor global.",
-      "selectSession": "Selecione uma sessão…",
-      "saveOverride": "Salvar substituição",
-      "clearOverride": "Limpar substituição"
-    },
-    "instances": {
-      "title": "Instâncias",
-      "description": "Provisione instâncias por conta para esta integração. Cada instância tem seu próprio segredo de assinatura e URL de entrada.",
-      "create": "Criar instância",
-      "empty": "Ainda não há instâncias. Crie uma para obter uma URL de entrada e um segredo.",
-      "loadError": "Falha ao carregar as instâncias.",
-      "allSessions": "Todas as sessões",
-      "enabled": "Habilitada",
-      "disabled": "Desabilitada",
-      "form": {
-        "instanceId": "ID da instância",
-        "instanceIdPlaceholder": "ex.: acme-support",
-        "instanceIdHint": "Letras, números, hífens e sublinhados (máx. 64).",
-        "sessionScope": "Escopo da sessão (opcional)",
-        "sessionScopePlaceholder": "Deixe em branco para todas as sessões",
-        "verifyToken": "Token de verificação (opcional)",
-        "verifyTokenPlaceholder": "Token que o provedor retorna na verificação",
-        "config": "Configuração (JSON opcional)",
-        "configPlaceholder": "{ }"
-      },
-      "created": {
-        "title": "Instância criada",
-        "hint": "Copie o segredo agora — ele é exibido apenas uma vez.",
-        "secret": "Segredo de assinatura",
-        "ingressUrls": "URL(s) de entrada"
-      },
-      "regenerate": {
-        "title": "Regenerar segredo",
-        "confirm": "Regenerar o segredo de assinatura de {{id}}? O segredo atual deixará de funcionar imediatamente.",
-        "action": "Regenerar"
-      },
-      "edit": { "title": "Editar {{id}}" },
-      "delete": {
-        "title": "Excluir instância",
-        "confirm": "Excluir a instância {{id}}? A URL de entrada e o segredo dela deixarão de funcionar imediatamente.",
-        "action": "Excluir"
-      },
-      "actions": {
-        "regenerate": "Regenerar segredo",
-        "edit": "Editar",
-        "delete": "Excluir",
-        "copy": "Copiar",
-        "save": "Salvar",
-        "enable": "Habilitar",
-        "disable": "Desabilitar"
-      },
-      "errors": {
-        "invalidId": "O ID da instância deve conter letras, números, hífens ou sublinhados (máx. 64).",
-        "invalidJson": "A configuração deve ser um JSON válido.",
-        "duplicateId": "Já existe uma instância com esse ID."
-      },
-      "toasts": {
-        "created": "Instância criada",
-        "updated": "Instância atualizada",
-        "deleted": "Instância excluída",
-        "secretRegenerated": "Segredo regenerado",
-        "actionFailed": "Falha na ação"
-      }
-    }
   }
 }

@@ -489,7 +489,24 @@ export interface CheckNumberResponse {
   whatsappId: string | null;
 }
 
+export interface WhatsAppContact {
+  id: string;
+  name?: string;
+  pushName?: string;
+  number: string;
+  isMyContact: boolean;
+  isBlocked: boolean;
+  profilePicUrl?: string;
+}
+
 export const contactApi = {
+  list: (sessionId: string, params?: { limit?: number; offset?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.limit != null) query.set('limit', String(params.limit));
+    if (params?.offset != null) query.set('offset', String(params.offset));
+    const qs = query.toString();
+    return request<WhatsAppContact[]>(`/sessions/${sessionId}/contacts${qs ? `?${qs}` : ''}`);
+  },
   checkNumber: (sessionId: string, number: string) =>
     request<CheckNumberResponse>(`/sessions/${sessionId}/contacts/check/${encodeURIComponent(number)}`),
 };
@@ -600,7 +617,70 @@ export const messageApi = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+  sendBulk: (
+    sessionId: string,
+    data: {
+      messages: Array<{
+        chatId: string;
+        type: 'text' | 'image' | 'video' | 'audio' | 'document';
+        content: {
+          text?: string;
+          caption?: string;
+          image?: { url?: string; base64?: string; mimetype?: string };
+          video?: { url?: string; base64?: string; mimetype?: string };
+          document?: { url?: string; base64?: string; mimetype?: string; filename?: string };
+        };
+        variables?: Record<string, string>;
+      }>;
+      options?: {
+        delayBetweenMessages?: number;
+        randomizeDelay?: boolean;
+        stopOnError?: boolean;
+      };
+    },
+  ) =>
+    request<BulkMessageResponse>(`/sessions/${sessionId}/messages/send-bulk`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  getBatchStatus: (sessionId: string, batchId: string) =>
+    request<BulkBatchStatus>(`/sessions/${sessionId}/messages/batch/${batchId}`),
+  cancelBatch: (sessionId: string, batchId: string) =>
+    request<{ batchId: string; status: string; progress: BulkBatchProgress }>(
+      `/sessions/${sessionId}/messages/batch/${batchId}/cancel`,
+      { method: 'POST' },
+    ),
 };
+
+export interface BulkMessageResponse {
+  batchId: string;
+  status: string;
+  totalMessages: number;
+  estimatedCompletionTime?: string;
+  statusUrl: string;
+}
+
+export interface BulkBatchProgress {
+  total: number;
+  sent: number;
+  failed: number;
+  pending: number;
+  cancelled: number;
+}
+
+export interface BulkBatchStatus {
+  batchId: string;
+  status: 'pending' | 'processing' | 'completed' | 'cancelled' | 'failed';
+  progress: BulkBatchProgress;
+  results?: Array<{
+    chatId: string;
+    status: string;
+    messageId?: string;
+    error?: { code: string; message: string };
+  }>;
+  startedAt?: string;
+  completedAt?: string;
+}
 
 // =============================================================================
 // Health & Infrastructure API

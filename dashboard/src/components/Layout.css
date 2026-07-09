@@ -160,6 +160,29 @@
   color: var(--primary);
 }
 
+.campaign-mode .nav-item.active {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.campaign-mode .nav-item.active svg {
+  color: #fff;
+}
+
+.campaign-mode .nav-item:hover:not(.active) {
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-light));
+  color: var(--text-primary);
+}
+
+.campaign-mode .sidebar-header {
+  border-bottom-color: color-mix(in srgb, var(--primary) 20%, var(--border));
+}
+
+.campaign-mode .brand-name {
+  color: var(--primary);
+}
+
 .nav-item.active svg {
   color: var(--primary);
 }

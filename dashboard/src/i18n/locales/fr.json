@@ -71,6 +71,8 @@
     "chats": "Discussions",
     "webhooks": "Webhooks",
     "templates": "Templates",
+    "campaigns": "Campagnes",
+    "campaigns": "Campagnes",
     "apiKeys": "Clés API",
     "messageTester": "Testeur de messages",
     "infrastructure": "Infrastructure",
@@ -552,6 +554,105 @@
     },
     "sendFailed": "Échec de l'envoi du message",
     "notOnWhatsApp": "Ce numéro n'est pas enregistré sur WhatsApp"
+  },
+  "campaigns": {
+    "title": "Campagnes",
+    "subtitle": "Envoyez le même message à plusieurs contacts en quelques clics",
+    "stepsLabel": "Étapes de la campagne",
+    "steps": {
+      "1": "Contacts",
+      "2": "Message",
+      "3": "Envoi"
+    },
+    "noSessionTitle": "Aucun compte WhatsApp connecté",
+    "noSessionDesc": "Connectez d'abord une session WhatsApp depuis le menu Sessions.",
+    "goToSessions": "Connecter une session",
+    "messageTypes": {
+      "text": "Texte",
+      "image": "Image",
+      "video": "Vidéo",
+      "document": "Document",
+      "template": "Modèle enregistré"
+    },
+    "mediaSource": {
+      "upload": "Importer un fichier",
+      "url": "Utiliser une URL"
+    },
+    "fields": {
+      "session": "Compte WhatsApp",
+      "numbers": "Numéros de téléphone",
+      "numbersPlaceholder": "Un numéro par ligne\nExemple :\n33612345678\n33698765432",
+      "numbersHint": "Format international sans espaces. Les numéros sont vérifiés automatiquement.",
+      "message": "Votre message",
+      "messagePlaceholder": "Écrivez le message que tout le monde recevra…",
+      "messageHint": "{{count}} / 4096 caractères",
+      "nameHint": "Astuce : utilisez {{name}} pour personnaliser avec le nom de chaque contact.",
+      "caption": "Légende (optionnelle)",
+      "mediaUrl": "Lien public",
+      "mediaUrlHint": "Collez un lien public, ou importez un fichier ci-dessous.",
+      "mediaUrlOnlyHint": "Collez un lien public vers votre image, vidéo ou document.",
+      "uploadOnlyHint": "Choisissez un fichier sur votre ordinateur (max 50 Mo).",
+      "template": "Choisir un modèle",
+      "noTemplates": "Aucun modèle — créez-en un dans le menu Templates.",
+      "uploadImage": "Importer une image",
+      "uploadVideo": "Importer une vidéo",
+      "uploadDocument": "Importer un document",
+      "fileSelected": "Sélectionné : {{name}}"
+    },
+    "sources": {
+      "paste": "Coller des numéros",
+      "file": "Importer un fichier",
+      "whatsapp": "Mes contacts WhatsApp"
+    },
+    "file": {
+      "dropHint": "Importez un fichier CSV ou TXT avec un numéro par ligne",
+      "choose": "Choisir un fichier"
+    },
+    "wa": {
+      "load": "Charger mes contacts",
+      "loading": "Chargement des contacts…",
+      "selectAll": "Tout sélectionner",
+      "deselectAll": "Tout désélectionner",
+      "selected": "{{count}} sur {{total}} sélectionné(s)"
+    },
+    "validating": "Vérification des numéros… {{done}} / {{total}}",
+    "summary": {
+      "valid": "{{count}} contact(s) valide(s)",
+      "invalid": "{{count}} numéro(s) absent(s) de WhatsApp"
+    },
+    "preview": {
+      "title": "Aperçu",
+      "empty": "Votre message s'affichera ici"
+    },
+    "review": {
+      "recipients": "Destinataires",
+      "type": "Type de message",
+      "duration": "Durée estimée",
+      "durationValue": "Environ {{minutes}} min",
+      "message": "Message à envoyer",
+      "warning": "N'envoyez qu'aux personnes qui ont accepté de recevoir vos messages. Trop de messages trop vite peut entraîner une restriction de votre compte WhatsApp.",
+      "send": "Envoyer la campagne"
+    },
+    "sending": {
+      "title": "Envoi en cours…",
+      "hint": "Gardez cette page ouverte. Temps estimé : environ {{minutes}} min.",
+      "stats": "{{sent}} envoyés · {{failed}} échoués · {{total}} au total",
+      "cancel": "Arrêter l'envoi"
+    },
+    "done": {
+      "successTitle": "Campagne terminée",
+      "cancelledTitle": "Campagne arrêtée",
+      "failedTitle": "Échec de la campagne",
+      "newCampaign": "Nouvelle campagne"
+    },
+    "viewOnly": "Lecture seule",
+    "errors": {
+      "loadContacts": "Impossible de charger les contacts",
+      "validate": "Impossible de vérifier les numéros",
+      "fileRead": "Impossible de lire le fichier",
+      "fileTooLarge": "Fichier trop volumineux (max 50 Mo)",
+      "send": "Impossible d'envoyer la campagne"
+    }
   },
   "infrastructure": {
     "title": "Infrastructure",
