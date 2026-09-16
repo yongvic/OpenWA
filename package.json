@@ -202,5 +202,15 @@
       }
     },
     "testEnvironment": "node"
+  },
+  "allowScripts": {
+    "@scarf/scarf@1.4.0": true,
+    "@whiskeysockets/baileys@6.7.23": true,
+    "msgpackr-extract@3.0.4": true,
+    "protobufjs@7.6.4": true,
+    "puppeteer@24.38.0": true,
+    "sqlite3@5.1.7": true,
+    "ssh2@1.17.0": true,
+    "unrs-resolver@1.11.1": true
   }
 }

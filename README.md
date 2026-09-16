@@ -96,6 +96,39 @@ Sur Windows, si la connexion QR est lente, ajoutez :
 WWEBJS_AUTH_TIMEOUT_MS=120000
 ```
 
+### Dépannage installation (Windows, npm 11+)
+
+**Beaucoup de lignes `npm warn deprecated`** : normal, ce n’est pas une erreur. L’installation peut prendre **10–15 minutes** (téléchargement Chromium pour Puppeteer + dépendances du dashboard).
+
+**Message `allow-scripts` / scripts bloqués** : avec npm 11, les scripts d’install de `puppeteer`, `sqlite3`, etc. doivent être approuvés une fois :
+
+```powershell
+npm approve-scripts --allow-scripts-pending
+```
+
+Ou, si PowerShell refuse d’exécuter `npm` :
+
+```powershell
+npm.cmd approve-scripts --allow-scripts-pending
+npm.cmd install
+```
+
+Puis relancez si besoin :
+
+```powershell
+npm rebuild puppeteer sqlite3
+```
+
+**`npm` bloqué par la stratégie d’exécution PowerShell** : utilisez `npm.cmd` au lieu de `npm`, ou ouvrez **Invite de commandes (cmd)**.
+
+**Vérifier que tout est OK** :
+
+```powershell
+copy .env.minimal .env
+npm run build
+npm run dev
+```
+
 ---
 
 ## Données et confidentialité
