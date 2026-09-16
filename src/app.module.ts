@@ -34,6 +34,7 @@ import { PluginsModule } from './core/plugins';
 import { PluginsApiModule } from './modules/plugins/plugins.module';
 import { AgentToolsModule } from './core/agent-tools/agent-tools.module';
 import { IntegrationModule } from './modules/integration/integration.module';
+import { isCampaignMinimalBackend } from './config/campaign-mode';
 
 // Only import QueueModule if explicitly enabled to avoid Redis connection errors
 const queueModules: Array<Type | DynamicModule> = [];
@@ -69,6 +70,25 @@ if (process.env.MCP_ENABLED === 'true') {
 export const DASHBOARD_DIST = path.resolve(__dirname, '..', 'dashboard', 'dist');
 export const dashboardServingEnabled = process.env.SERVE_DASHBOARD !== 'false';
 export const dashboardBuildPresent = fs.existsSync(path.join(DASHBOARD_DIST, 'index.html'));
+
+const campaignMinimal = isCampaignMinimalBackend();
+
+/** Optional API surfaces disabled in campaign-minimal deployments (see CAMPAIGN-SCOPE.md). */
+const extendedApiModules: Array<Type | DynamicModule> = campaignMinimal
+  ? []
+  : [
+      GroupModule,
+      LabelModule,
+      ChannelModule,
+      StatsModule,
+      MetricsModule,
+      StatusModule,
+      CatalogModule,
+      PluginsApiModule,
+      AgentToolsModule,
+      IntegrationModule,
+      InfraModule,
+    ];
 
 const serveStaticModules: Array<Type | DynamicModule> = [];
 if (dashboardServingEnabled && dashboardBuildPresent) {
@@ -246,16 +266,7 @@ if (dashboardServingEnabled && dashboardBuildPresent) {
     SettingsModule,
     InfraModule,
     ContactModule,
-    GroupModule,
-    LabelModule, // Phase 3: Labels Management
-    ChannelModule, // Phase 3: Channels/Newsletter
-    StatsModule, // Phase 3: Statistics Dashboard
-    MetricsModule, // Prometheus /api/metrics
-    StatusModule, // Phase 3: Status/Stories API
-    CatalogModule, // Phase 3: Catalog API (WhatsApp Business)
-    PluginsApiModule, // Phase 5: Plugins API
-    AgentToolsModule, // Agent-invocable tool registry (protocol-neutral)
-    IntegrationModule, // Integration Fabric: @Public provider-webhook ingress + fast-ack pipeline
+    ...extendedApiModules,
     ...mcpModules, // MCP Streamable-HTTP server (opt-in via MCP_ENABLED=true)
     ...serveStaticModules, // Bundled dashboard SPA (production single-port setup)
   ],

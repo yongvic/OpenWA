@@ -1,7 +1,78 @@
+@import '../styles/campaignProduct.css';
+
 .sessions-page {
   padding: 2rem;
   width: 100%;
   box-sizing: border-box;
+}
+
+.sessions-page.product-page {
+  padding: 2rem;
+}
+
+.sessions-page.product-page .sessions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sessions-page.product-page .session-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.sessions-page.product-page .empty-state {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-white);
+}
+
+.sessions-page.product-page .card-actions .btn-action {
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.sessions-page.product-page .card-actions .btn-action:not(.danger):hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.sessions-page.product-page .card-actions .btn-action.danger {
+  color: var(--error);
+  border-color: color-mix(in srgb, var(--error) 35%, var(--border));
+}
+
+.sessions-page.product-page .info-row .info-value.mono {
+  display: none;
+}
+
+.sessions-page.product-page .product-search {
+  margin-bottom: 1.25rem;
+}
+
+.sessions-page.product-page .product-search input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  box-sizing: border-box;
+}
+
+.sessions-page.product-page .product-search {
+  position: relative;
+}
+
+.sessions-page.product-page .product-search svg {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
 }
 
 .sessions-page .page-header {

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle, Check, Copy, FileText, Loader2, Plus, Search, Trash2, X } from 'lucide-react';
 import { type MessageTemplate, type TemplatePayload } from '../services/api';
@@ -12,6 +13,7 @@ import {
   useUpdateTemplateMutation,
 } from '../hooks/queries';
 import { PageHeader } from '../components/PageHeader';
+import { CAMPAIGN_FOCUSED_UI } from '../config/uiMode';
 import { copyToClipboard } from '../utils/clipboard';
 import './Templates.css';
 
@@ -173,16 +175,18 @@ export function Templates() {
     }
   };
 
+  const pageClass = CAMPAIGN_FOCUSED_UI ? 'templates-page product-page' : 'templates-page';
+
   if (loadingSessions) {
     return (
-      <div className="templates-page templates-loading">
+      <div className={`${pageClass} templates-loading`}>
         <Loader2 className="animate-spin" size={32} />
       </div>
     );
   }
 
   return (
-    <div className="templates-page">
+    <div className={pageClass}>
       {toast && (
         <div className={`toast ${toast.type}`}>
           {toast.type === 'success' ? <Check size={18} /> : <AlertTriangle size={18} />}
@@ -216,10 +220,13 @@ export function Templates() {
       />
 
       {sessions.length === 0 ? (
-        <div className="templates-empty-page">
+        <div className="templates-empty-page product-empty">
           <FileText size={48} strokeWidth={1} />
           <h3>{t('templates.empty.noSessionsTitle')}</h3>
           <p>{t('templates.empty.noSessionsDesc')}</p>
+          <Link to="/sessions" className="btn-primary">
+            {t('campaigns.goToSessions')}
+          </Link>
         </div>
       ) : (
         <div className="templates-workspace">

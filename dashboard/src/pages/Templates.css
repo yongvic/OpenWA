@@ -1,7 +1,78 @@
+@import '../styles/campaignProduct.css';
+
 .templates-page{
   width: 100%;
   padding: 2rem;
   overflow-x: hidden;
+}
+
+.templates-page.product-page {
+  max-width: 920px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.templates-page.product-page .templates-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: auto;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  overflow: visible;
+}
+
+.templates-page.product-page .templates-library,
+.templates-page.product-page .template-editor,
+.templates-page.product-page .template-preview {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-white);
+}
+
+.templates-page.product-page .templates-library {
+  border-right: none;
+  background: var(--bg-white);
+}
+
+.templates-page.product-page .templates-library-header h2,
+.templates-page.product-page .template-editor-header h2,
+.templates-page.product-page .template-preview-header h2 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--text-primary);
+}
+
+.templates-page.product-page .template-preview-message pre {
+  border-radius: 12px 12px 12px 4px;
+  background: color-mix(in srgb, var(--primary) 12%, var(--bg-light));
+  padding: 0.875rem 1rem;
+  white-space: pre-wrap;
+}
+
+.templates-page.product-page .templates-session-select {
+  min-width: 200px;
+  padding: 0.625rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+@media (min-width: 960px) {
+  .templates-page.product-page .templates-workspace {
+    display: grid;
+    grid-template-columns: minmax(240px, 300px) 1fr;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+  }
+
+  .templates-page.product-page .template-preview {
+    grid-column: 1 / -1;
+  }
 }
 
 .templates-page .templates-loading, .templates-page .templates-loading-inline, .templates-page .templates-empty-page, .templates-page .templates-empty-list{

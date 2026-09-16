@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
-import { Plus, QrCode, RefreshCw, Trash2, Eye, Loader2, Play, Square, X, Search, Filter, Skull } from 'lucide-react';
+import { Plus, QrCode, RefreshCw, Trash2, Loader2, Play, Square, X, Search, Filter, Skull } from 'lucide-react';
+import { CAMPAIGN_FOCUSED_UI } from '../config/uiMode';
 import { sessionApi, type Session } from '../services/api';
 import { queryKeys } from '../hooks/queries';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
@@ -316,10 +317,12 @@ export function Sessions() {
     return matchesSearch && matchesStatus;
   });
 
+  const pageClass = CAMPAIGN_FOCUSED_UI ? 'sessions-page product-page' : 'sessions-page';
+
   if (loading) {
     return (
       <div
-        className="sessions-page"
+        className={pageClass}
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}
       >
         <Loader2 className="animate-spin" size={32} />
@@ -328,7 +331,7 @@ export function Sessions() {
   }
 
   return (
-    <div className="sessions-page">
+    <div className={pageClass}>
       <PageHeader
         title={t('sessions.title')}
         subtitle={t('sessions.subtitle')}
@@ -342,45 +345,66 @@ export function Sessions() {
         }
       />
 
-      <div className="filters-bar">
-        <div className="search-input">
-          <Search size={18} />
-          <input
-            type="text"
-            placeholder={t('sessions.searchPlaceholder')}
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        <div className="filter-group">
-          <Filter size={16} />
-          <CustomSelect
-            value={statusFilter}
-            onChange={setStatusFilter}
-            options={[
-              { value: 'all', label: t('sessions.filter.all') },
-              { value: 'active', label: t('sessions.filter.active') },
-              { value: 'inactive', label: t('sessions.filter.inactive') },
-              { value: 'connecting', label: t('sessions.filter.connecting') },
-            ]}
-          />
-        </div>
-      </div>
-
-      {error && (
-        <div
-          style={{
-            background: 'rgba(239, 68, 68, 0.12)',
-            padding: '1rem',
-            borderRadius: '8px',
-            color: 'var(--error)',
-            marginBottom: '1rem',
-          }}
-        >
-          {error}
+      {CAMPAIGN_FOCUSED_UI ? (
+        <>
+          <div className="product-source-tabs" role="tablist">
+            {(
+              [
+                ['all', t('sessions.filter.all')],
+                ['active', t('sessions.filter.active')],
+                ['connecting', t('sessions.filter.connecting')],
+                ['inactive', t('sessions.filter.inactive')],
+              ] as const
+            ).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                role="tab"
+                className={`product-source-tab ${statusFilter === value ? 'active' : ''}`}
+                onClick={() => setStatusFilter(value)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className="product-search">
+            <Search size={18} />
+            <input
+              type="search"
+              placeholder={t('sessions.searchPlaceholder')}
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </>
+      ) : (
+        <div className="filters-bar">
+          <div className="search-input">
+            <Search size={18} />
+            <input
+              type="text"
+              placeholder={t('sessions.searchPlaceholder')}
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <div className="filter-group">
+            <Filter size={16} />
+            <CustomSelect
+              value={statusFilter}
+              onChange={setStatusFilter}
+              options={[
+                { value: 'all', label: t('sessions.filter.all') },
+                { value: 'active', label: t('sessions.filter.active') },
+                { value: 'inactive', label: t('sessions.filter.inactive') },
+                { value: 'connecting', label: t('sessions.filter.connecting') },
+              ]}
+            />
+          </div>
         </div>
       )}
+
+      {error && <div className="product-alert">{error}</div>}
 
       {showCreateModal && (
         <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
@@ -731,7 +755,8 @@ export function Sessions() {
                   <QrCode size={80} className="qr-icon" />
                   <p>{session.status === 'qr_ready' ? t('sessions.qr.scanToConnect') : t('sessions.qr.preparing')}</p>
                   <button
-                    className="btn-sm"
+                    type="button"
+                    className={CAMPAIGN_FOCUSED_UI ? 'btn-primary' : 'btn-sm'}
                     onClick={() => handleShowQR(session.id)}
                     disabled={session.status !== 'qr_ready'}
                   >
@@ -764,10 +789,6 @@ export function Sessions() {
               )}
 
               <div className="card-actions">
-                <button className="btn-action" onClick={() => setSelectedSession(session)}>
-                  <Eye size={16} />
-                  {t('sessions.actions.view')}
-                </button>
                 {canWrite &&
                 (session.status === 'created' || session.status === 'idle' || session.status === 'disconnected') ? (
                   <button className="btn-action" onClick={() => handleStart(session.id)}>
@@ -791,7 +812,7 @@ export function Sessions() {
                     {t('sessions.actions.delete')}
                   </button>
                 )}
-                {canWrite && session.status === 'failed' && (
+                {canWrite && !CAMPAIGN_FOCUSED_UI && session.status === 'failed' && (
                   <button className="btn-action danger" onClick={() => setKillConfirmId(session.id)}>
                     <Skull size={16} />
                     {t('sessions.actions.killStuck')}

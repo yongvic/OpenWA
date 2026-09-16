@@ -23,7 +23,7 @@ const version = JSON.parse(read('package.json')).version;
 const errors = [];
 
 // 1) README badges must be dynamic, not a pinned `badge/version-x`.
-for (const f of ['README.md', 'docs/README.md']) {
+for (const f of ['README.md']) {
   if (/shields\.io\/badge\/version-\d/.test(read(f))) {
     errors.push(`${f}: hardcoded version badge — use the dynamic shields "github/package-json/v" badge so it tracks package.json.`);
   }

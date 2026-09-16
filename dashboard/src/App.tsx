@@ -8,21 +8,13 @@ import { ToastProvider } from './components/Toast';
 import { RoleProvider, useRole, type UserRole } from './hooks/useRole';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { API_BASE_URL } from './services/api';
-import { CAMPAIGN_DEFAULT_ROUTE, CAMPAIGN_FOCUSED_UI } from './config/uiMode';
+import { CAMPAIGN_DEFAULT_ROUTE } from './config/uiMode';
 import './App.css';
 
 const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
-const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
 const Sessions = lazy(() => import('./pages/Sessions').then(m => ({ default: m.Sessions })));
-const Chats = lazy(() => import('./pages/Chats').then(m => ({ default: m.Chats })));
-const Webhooks = lazy(() => import('./pages/Webhooks').then(m => ({ default: m.Webhooks })));
 const Templates = lazy(() => import('./pages/Templates').then(m => ({ default: m.Templates })));
 const Campaigns = lazy(() => import('./pages/Campaigns').then(m => ({ default: m.Campaigns })));
-const Logs = lazy(() => import('./pages/Logs').then(m => ({ default: m.Logs })));
-const ApiKeys = lazy(() => import('./pages/ApiKeys').then(m => ({ default: m.ApiKeys })));
-const MessageTester = lazy(() => import('./pages/MessageTester').then(m => ({ default: m.MessageTester })));
-const Infrastructure = lazy(() => import('./pages/Infrastructure').then(m => ({ default: m.Infrastructure })));
-const Plugins = lazy(() => import('./pages/Plugins'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,7 +27,6 @@ const queryClient = new QueryClient({
 });
 
 function AppContent() {
-  // Initialize from sessionStorage to avoid setState in effect
   const savedKey = sessionStorage.getItem('openwa_api_key');
   const [isAuthenticated, setIsAuthenticated] = useState(!!savedKey);
   const [, setApiKey] = useState(savedKey || '');
@@ -45,7 +36,6 @@ function AppContent() {
     setApiKey(key);
     sessionStorage.setItem('openwa_api_key', key);
 
-    // Fetch the role from API
     try {
       const response = await fetch(`${API_BASE_URL}/auth/validate`, {
         method: 'POST',
@@ -56,7 +46,6 @@ function AppContent() {
         setRole(data.role as UserRole);
       }
     } catch {
-      // Default to viewer if we can't fetch role
       setRole('viewer');
     }
 
@@ -70,7 +59,6 @@ function AppContent() {
     sessionStorage.removeItem('openwa_api_key');
   };
 
-  // Re-validate and get role on mount if already authenticated
   useEffect(() => {
     if (!savedKey) return;
 
@@ -85,7 +73,7 @@ function AppContent() {
         }
       })
       .catch(() => {
-        // Keep existing role from localStorage if validation fails
+        /* keep role from storage */
       });
   }, [savedKey, setRole]);
 
@@ -96,29 +84,26 @@ function AppContent() {
   );
 
   if (!isAuthenticated) {
-    return <Suspense fallback={loadingFallback}><Login onLogin={handleLogin} /></Suspense>;
+    return (
+      <Suspense fallback={loadingFallback}>
+        <Login onLogin={handleLogin} />
+      </Suspense>
+    );
   }
 
   return (
     <ToastProvider>
       <BrowserRouter>
         <Suspense fallback={loadingFallback}>
-        <Routes>
-          <Route path="/" element={<Layout onLogout={handleLogout} userRole={role} />}>
-            <Route index element={CAMPAIGN_FOCUSED_UI ? <Navigate to={CAMPAIGN_DEFAULT_ROUTE} replace /> : <Dashboard />} />
-            <Route path="sessions" element={<Sessions />} />
-            <Route path="chats" element={<Chats />} />
-            <Route path="webhooks" element={<Webhooks />} />
-            <Route path="templates" element={<Templates />} />
-            <Route path="campaigns" element={<Campaigns />} />
-            {role === 'admin' && <Route path="api-keys" element={<ApiKeys />} />}
-            <Route path="logs" element={<Logs />} />
-            <Route path="message-tester" element={<MessageTester />} />
-            {role === 'admin' && <Route path="infrastructure" element={<Infrastructure />} />}
-            {role === 'admin' && <Route path="plugins" element={<Plugins />} />}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
-        </Routes>
+          <Routes>
+            <Route path="/" element={<Layout onLogout={handleLogout} userRole={role} />}>
+              <Route index element={<Navigate to={CAMPAIGN_DEFAULT_ROUTE} replace />} />
+              <Route path="sessions" element={<Sessions />} />
+              <Route path="templates" element={<Templates />} />
+              <Route path="campaigns" element={<Campaigns />} />
+              <Route path="*" element={<Navigate to={CAMPAIGN_DEFAULT_ROUTE} replace />} />
+            </Route>
+          </Routes>
         </Suspense>
       </BrowserRouter>
     </ToastProvider>

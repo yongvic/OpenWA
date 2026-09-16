@@ -397,7 +397,7 @@ export function Campaigns() {
 
   if (loadingSessions) {
     return (
-      <div className="campaigns-page campaigns-loading">
+      <div className="campaigns-page product-page campaigns-loading">
         <Loader2 className="animate-spin" size={32} />
       </div>
     );
@@ -405,7 +405,7 @@ export function Campaigns() {
 
   if (readySessions.length === 0) {
     return (
-      <div className="campaigns-page">
+      <div className="campaigns-page product-page">
         <PageHeader title={t('campaigns.title')} subtitle={t('campaigns.subtitle')} />
         <div className="campaigns-empty">
           <Smartphone size={48} />
@@ -426,7 +426,7 @@ export function Campaigns() {
         : 0;
 
     return (
-      <div className="campaigns-page">
+      <div className="campaigns-page product-page">
         <PageHeader title={t('campaigns.title')} subtitle={t('campaigns.subtitle')} />
         <div className="campaigns-progress-card">
           {phase === 'sending' ? (
@@ -483,7 +483,7 @@ export function Campaigns() {
   }
 
   return (
-    <div className="campaigns-page">
+    <div className="campaigns-page product-page">
       <PageHeader title={t('campaigns.title')} subtitle={t('campaigns.subtitle')} />
 
       <div className="campaigns-steps" aria-label={t('campaigns.stepsLabel')}>

@@ -2,17 +2,9 @@ import { useState, useEffect, useRef, type CSSProperties } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  LayoutDashboard,
   Smartphone,
-  MessageSquare,
-  Webhook,
-  Key,
-  FileText,
   ClipboardList,
   LogOut,
-  Send,
-  Server,
-  Puzzle,
   Sun,
   Moon,
   Monitor,
@@ -27,7 +19,7 @@ import { useTheme } from '../hooks/useTheme';
 import { type UserRole } from '../hooks/useRole';
 import { languageOptions, resolveSupportedLanguage, rtlLanguages, type SupportedLanguage } from '../i18n';
 import { healthApi } from '../services/api';
-import { CAMPAIGN_FOCUSED_UI, CAMPAIGN_NAV_ORDER, HIDDEN_NAV_KEYS } from '../config/uiMode';
+import { CAMPAIGN_FOCUSED_UI, CAMPAIGN_NAV_ORDER } from '../config/uiMode';
 import './Layout.css';
 
 interface LayoutProps {
@@ -35,20 +27,18 @@ interface LayoutProps {
   userRole: UserRole | null;
 }
 
-const allNavItems = [
-  { to: '/', icon: LayoutDashboard, key: 'dashboard' as const, adminOnly: false },
-  { to: '/sessions', icon: Smartphone, key: 'sessions' as const, adminOnly: false },
-  { to: '/chats', icon: MessageSquare, key: 'chats' as const, adminOnly: false },
-  { to: '/webhooks', icon: Webhook, key: 'webhooks' as const, adminOnly: false },
-  { to: '/templates', icon: ClipboardList, key: 'templates' as const, adminOnly: false },
+const campaignNavItems = [
   { to: '/campaigns', icon: Megaphone, key: 'campaigns' as const, adminOnly: false },
-  { to: '/api-keys', icon: Key, key: 'apiKeys' as const, adminOnly: true },
-  { to: '/message-tester', icon: Send, key: 'messageTester' as const, adminOnly: false },
-  // Backend /infra/* is ADMIN-only; hide the nav item from non-admins (UX + defense-in-depth).
-  { to: '/infrastructure', icon: Server, key: 'infrastructure' as const, adminOnly: true },
-  { to: '/plugins', icon: Puzzle, key: 'plugins' as const, adminOnly: true },
-  { to: '/logs', icon: FileText, key: 'logs' as const, adminOnly: false },
-];
+  { to: '/sessions', icon: Smartphone, key: 'sessions' as const, adminOnly: false },
+  { to: '/templates', icon: ClipboardList, key: 'templates' as const, adminOnly: false },
+] as const;
+
+const allNavItems = CAMPAIGN_FOCUSED_UI
+  ? [...campaignNavItems]
+  : [
+      ...campaignNavItems,
+      // Extend here if CAMPAIGN_FOCUSED_UI is disabled (upstream full nav lives on main fork).
+    ];
 
 const themeIcons = { light: Sun, dark: Moon, system: Monitor };
 
@@ -62,7 +52,6 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
   const navItems = allNavItems
     .filter(item => {
       if (item.adminOnly && userRole !== 'admin') return false;
-      if (CAMPAIGN_FOCUSED_UI && HIDDEN_NAV_KEYS.has(item.key)) return false;
       return true;
     })
     .sort((a, b) => {
@@ -231,7 +220,7 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
                 key={to}
                 to={to}
                 className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-                end={to === '/'}
+                end={to === '/campaigns'}
                 onClick={handleNavClick}
                 title={isCollapsed ? label : undefined}
               >
