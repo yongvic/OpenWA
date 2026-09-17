@@ -12,6 +12,9 @@ import {
   toOutboundMessageResult,
   formatUnknownError,
   isStatusOrChannelMessage,
+  isUnsafeWwebjsContactId,
+  isWwebjsStoreGetterError,
+  mapWwebjsContact,
   extractWwebjsCall,
 } from './whatsapp-web-js.adapter';
 import { getEffectiveWebVersionInfo, resolveWebVersionPin, __resetWebVersionCache } from '../wa-web-version';
@@ -98,6 +101,99 @@ describe('isStatusOrChannelMessage', () => {
     expect(isStatusOrChannelMessage({ from: 'status@broadcast', fromMe: false })).toBe(true);
     expect(isStatusOrChannelMessage({ from: '123@newsletter', fromMe: false })).toBe(true);
     expect(isStatusOrChannelMessage({ from: '628111@c.us', fromMe: false })).toBe(false);
+  });
+});
+
+describe('mapWwebjsContact / incomplete LID rows', () => {
+  it('skips contacts with no id (WhatsApp Store memoize throw)', () => {
+    expect(mapWwebjsContact(undefined)).toBeNull();
+    expect(mapWwebjsContact({})).toBeNull();
+    expect(mapWwebjsContact({ name: 'Ghost' })).toBeNull();
+  });
+
+  it('skips device-suffixed @lid authors that crash getContact', () => {
+    expect(isUnsafeWwebjsContactId('12345:56@lid')).toBe(true);
+    expect(mapWwebjsContact({ id: { _serialized: '12345:56@lid' }, name: 'X' })).toBeNull();
+  });
+
+  it('recognizes WhatsApp Store getter pageerrors so they are not treated as session failure', () => {
+    expect(
+      isWwebjsStoreGetterError(
+        new Error(
+          "Data passed to getter must include an id property (it's how we memoize) but got undefined s (https://static.whatsapp.net/rsrc.php/v4/ys/r/cmqMr-wgNWt.js:84:180)",
+        ),
+      ),
+    ).toBe(true);
+    expect(isWwebjsStoreGetterError(new Error('net::ERR_CONNECTION_CLOSED'))).toBe(false);
+  });
+
+  it('maps a normal address-book contact', () => {
+    expect(
+      mapWwebjsContact({
+        id: { _serialized: '3361@c.us', user: '3361' },
+        name: 'Ada',
+        pushname: 'A',
+        isMyContact: true,
+        isBlocked: false,
+      }),
+    ).toEqual({
+      id: '3361@c.us',
+      name: 'Ada',
+      pushName: 'A',
+      number: '3361',
+      isMyContact: true,
+      isBlocked: false,
+    });
+  });
+});
+
+describe('WhatsAppWebJsAdapter.getContacts (incomplete Store rows)', () => {
+  const ready = (client: unknown): WhatsAppWebJsAdapter => {
+    const adapter = new WhatsAppWebJsAdapter({ sessionId: 's', sessionDataPath: './data/sessions', puppeteer: {} });
+    (adapter as unknown as { status: EngineStatus }).status = EngineStatus.READY;
+    (adapter as unknown as { client: unknown }).client = client;
+    return adapter;
+  };
+
+  it('keeps only models that already have an id (skips ghosts that crash WhatsApp getters)', async () => {
+    const evaluate = jest.fn().mockResolvedValue([
+      { id: { _serialized: '1@c.us' }, name: 'Anne' },
+      { id: { _serialized: '2@c.us' }, name: 'Bob', isMyContact: true },
+    ]);
+    const contacts = await ready({ pupPage: { evaluate } }).getContacts();
+    expect(contacts.map(c => c.id)).toEqual(['1@c.us', '2@c.us']);
+    expect(evaluate).toHaveBeenCalled();
+  });
+
+  it('returns an empty list when wwebjs getContacts throws the Store memoize error', async () => {
+    const getContacts = jest
+      .fn()
+      .mockRejectedValue(
+        new Error("Data passed to getter must include an id property (it's how we memoize) but got undefined"),
+      );
+    await expect(ready({ getContacts }).getContacts()).resolves.toEqual([]);
+  });
+
+  it('does not crash when WhatsApp emits the Store memoize pageerror on the client', () => {
+    const adapter = new WhatsAppWebJsAdapter({ sessionId: 's', sessionDataPath: './data/sessions', puppeteer: {} });
+    const client = new EventEmitter();
+    (adapter as unknown as { client: unknown }).client = client;
+    (adapter as unknown as { setupEventHandlers: () => void }).setupEventHandlers();
+    expect(() =>
+      client.emit(
+        'error',
+        new Error(
+          "Data passed to getter must include an id property (it's how we memoize) but got undefined s (https://static.whatsapp.net/rsrc.php/v4/ys/r/cmqMr-wgNWt.js:84:180)",
+        ),
+      ),
+    ).not.toThrow();
+    expect(adapter.getStatus()).not.toBe(EngineStatus.FAILED);
+  });
+
+  it('returns null for getContactById when Store.Contact.get has no model (avoids getContactModel(undefined))', async () => {
+    const evaluate = jest.fn().mockResolvedValue(null);
+    await expect(ready({ pupPage: { evaluate } }).getContactById('999@c.us')).resolves.toBeNull();
+    expect(evaluate).toHaveBeenCalled();
   });
 });
 

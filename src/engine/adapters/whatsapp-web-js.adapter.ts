@@ -140,6 +140,50 @@ export function isStatusOrChannelMessage(msg: {
 }
 
 /**
+ * WhatsApp Web's Store getters throw `Data passed to getter must include an id property` when
+ * wwebjs looks up an incomplete LID (device-suffixed `@lid`, missing phone mapping). Skip those.
+ */
+export function isUnsafeWwebjsContactId(id: string | undefined): boolean {
+  if (!id) return true;
+  return /:\d+@lid$/i.test(id) || id === 'undefined' || id === 'null';
+}
+
+/** Puppeteer `pageerror` forwarded by wwebjs as Client `error` when a Store model has no `id`. */
+export function isWwebjsStoreGetterError(error: unknown): boolean {
+  return /must include an id property/i.test(formatUnknownError(error));
+}
+
+export type WwebjsContactLike = {
+  id?: { _serialized?: string; user?: string } | string;
+  name?: string;
+  shortName?: string;
+  verifiedName?: string;
+  pushname?: string;
+  pushName?: string;
+  number?: string;
+  isMyContact?: boolean;
+  isBlocked?: boolean;
+};
+
+export function mapWwebjsContact(c: WwebjsContactLike | null | undefined): Contact | null {
+  if (!c) return null;
+  const rawId = typeof c.id === 'string' ? c.id : c.id?._serialized;
+  if (!rawId || isUnsafeWwebjsContactId(rawId)) return null;
+  const number =
+    (typeof c.number === 'string' && c.number.trim()) ||
+    (typeof c.id === 'object' && typeof c.id?.user === 'string' ? c.id.user : '') ||
+    userPart(rawId);
+  return {
+    id: rawId,
+    name: c.name || c.shortName || c.verifiedName || undefined,
+    pushName: c.pushname || c.pushName || undefined,
+    number: number || '',
+    isMyContact: Boolean(c.isMyContact),
+    isBlocked: Boolean(c.isBlocked),
+  };
+}
+
+/**
  * Extract call detail from a whatsapp-web.js `call_log` message, or `undefined` for any other type.
  * The public Message wrapper doesn't expose call fields, so we read them off the raw `_data`. An
  * incoming call (`!fromMe`) with no recorded `callDuration` was never answered → missed; an outgoing
@@ -319,6 +363,9 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
   private readonly inboundLimiter = new ConcurrencyLimiter(inboundMediaConcurrency());
   private inboundMediaFailLogAt = 0;
   private inboundMediaFailSuppressed = 0;
+  private storeGetterFailLogAt = 0;
+  private storeGetterFailSuppressed = 0;
+  private storeGetterPageErrorBound = false;
 
   /**
    * Download inbound media safely. downloadMedia() can't be size-bounded at the source, so (1) pre-gate
@@ -559,19 +606,22 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
         // in 1:1); we read only its synchronous fields and never the async getters (profile pic, about),
         // which would hit WhatsApp on every message.
         try {
-          const contact = await msg.getContact();
-          if (contact) {
-            // Off by default the payload keeps { name, pushName }; WEBHOOK_CONTACT_DETAILS opts into the
-            // full set. Merge over the base so the notifyName pushName isn't lost, and skip an empty
-            // result so we don't emit an empty contact object.
-            const full = process.env.WEBHOOK_CONTACT_DETAILS === 'true';
-            const merged = { ...incomingMessage.contact, ...mapContactFields(contact, full) };
-            if (Object.keys(merged).length > 0) {
-              incomingMessage.contact = merged;
+          const lookupId = String(msg.author || msg.from || '');
+          if (!isUnsafeWwebjsContactId(lookupId)) {
+            const contact = await msg.getContact();
+            if (contact) {
+              // Off by default the payload keeps { name, pushName }; WEBHOOK_CONTACT_DETAILS opts into the
+              // full set. Merge over the base so the notifyName pushName isn't lost, and skip an empty
+              // result so we don't emit an empty contact object.
+              const full = process.env.WEBHOOK_CONTACT_DETAILS === 'true';
+              const merged = { ...incomingMessage.contact, ...mapContactFields(contact, full) };
+              if (Object.keys(merged).length > 0) {
+                incomingMessage.contact = merged;
+              }
             }
           }
         } catch (error) {
-          this.logger.error('Error getting message contact', String(error));
+          this.logger.warn('Error getting message contact', { error: formatUnknownError(error) });
         }
 
         // Handle location
@@ -695,11 +745,47 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
       // through onError (FAILED, no reconnect) rather than onDisconnected (reconnect).
       this.callbacks.onError?.(message ? `Authentication failed: ${message}` : 'Authentication failed');
     });
+
+    // wwebjs forwards Puppeteer `pageerror` as Client `error`. An unhandled EventEmitter `error`
+    // crashes the process — swallow WhatsApp's known Store-getter fault, log other page errors.
+    this.client.on('error', (error: unknown) => {
+      this.handleWhatsAppPageError(error);
+    });
+  }
+
+  private handleWhatsAppPageError(error: unknown): void {
+    if (isWwebjsStoreGetterError(error)) {
+      const now = Date.now();
+      if (now - this.storeGetterFailLogAt < 10_000) {
+        this.storeGetterFailSuppressed += 1;
+        return;
+      }
+      const similarSuppressed = this.storeGetterFailSuppressed;
+      this.storeGetterFailLogAt = now;
+      this.storeGetterFailSuppressed = 0;
+      this.logger.warn('WhatsApp Web skipped a Store row with no id (incomplete LID); contacts still load', {
+        error: formatUnknownError(error),
+        ...(similarSuppressed > 0 ? { similarSuppressed } : {}),
+      });
+      return;
+    }
+    this.logger.warn('WhatsApp Web page error', { error: formatUnknownError(error) });
+  }
+
+  private bindWhatsAppPageErrorHandler(): void {
+    if (this.storeGetterPageErrorBound) return;
+    const page = (
+      this.client as unknown as { pupPage?: { on?: (event: string, handler: (err: Error) => void) => void } }
+    ).pupPage;
+    if (!page?.on) return;
+    this.storeGetterPageErrorBound = true;
+    page.on('pageerror', (error: Error) => this.handleWhatsAppPageError(error));
   }
 
   private markReadyFromClientInfo(): void {
     if ([EngineStatus.READY, EngineStatus.DISCONNECTED, EngineStatus.FAILED].includes(this.status)) return;
     this.clearReadyReconcile();
+    this.bindWhatsAppPageErrorHandler();
     try {
       const info = this.client?.info;
       this.phoneNumber = info?.wid?.user || null;
@@ -1085,35 +1171,123 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
 
   async getContacts(): Promise<Contact[]> {
     this.ensureReady();
-    const contacts = await this.client!.getContacts();
+    const models = await this.listWwebjsContactModels();
+    const out: Contact[] = [];
+    for (const model of models) {
+      const mapped = mapWwebjsContact(model);
+      if (mapped) out.push(mapped);
+    }
+    return out;
+  }
 
-    return contacts.map(c => {
-      const named = c as { name?: string; shortName?: string; verifiedName?: string };
-      return {
-        id: c.id._serialized,
-        name: named.name || named.shortName || named.verifiedName || undefined,
-        pushName: c.pushname || undefined,
-        number: c.number,
-        isMyContact: c.isMyContact,
-        isBlocked: c.isBlocked,
-      };
-    });
+  /**
+   * List Store contacts without aborting the whole address book when one LID row is incomplete.
+   * wwebjs `Client.getContacts()` maps every model through `getContactModel`; a single missing id
+   * throws WhatsApp's memoize error and returns nothing to the campaign picker.
+   */
+  private async listWwebjsContactModels(): Promise<WwebjsContactLike[]> {
+    const page = (this.client as unknown as { pupPage?: { evaluate: <T>(fn: () => T) => Promise<T> } }).pupPage;
+    if (page) {
+      try {
+        const raw = await page.evaluate(() => {
+          const w = window as unknown as {
+            Store?: { Contact?: { getModelsArray?: () => unknown[] } };
+            WWebJS?: { getContactModel?: (contact: unknown) => unknown };
+          };
+          const models = w.Store?.Contact?.getModelsArray?.() ?? [];
+          const serialize = w.WWebJS?.getContactModel;
+          const out: unknown[] = [];
+          for (const contact of models) {
+            try {
+              if (!contact || typeof contact !== 'object') continue;
+              const id = (contact as { id?: { _serialized?: string; user?: string } | string }).id;
+              const serialized = typeof id === 'string' ? id : id?._serialized;
+              if (!serialized || serialized === 'undefined' || serialized === 'null') continue;
+              if (/:\d+@lid$/i.test(serialized)) continue;
+              if (serialize) {
+                out.push(serialize(contact));
+                continue;
+              }
+              const rec = contact as {
+                name?: string;
+                shortName?: string;
+                verifiedName?: string;
+                pushname?: string;
+                number?: string;
+                isMyContact?: boolean;
+                isContactBlocked?: boolean;
+                isBlocked?: boolean;
+              };
+              const user = typeof id === 'object' && id && 'user' in id ? id.user : undefined;
+              out.push({
+                id: { _serialized: serialized, user },
+                name: rec.name,
+                shortName: rec.shortName,
+                verifiedName: rec.verifiedName,
+                pushname: rec.pushname,
+                number: rec.number,
+                isMyContact: rec.isMyContact,
+                isBlocked: rec.isContactBlocked ?? rec.isBlocked,
+              });
+            } catch {
+              // Incomplete LID / ghost Store rows throw inside WhatsApp getters.
+            }
+          }
+          return out;
+        });
+        if (Array.isArray(raw)) return raw as WwebjsContactLike[];
+      } catch (error) {
+        this.logger.warn('Page contact listing failed; falling back to wwebjs getContacts', {
+          error: formatUnknownError(error),
+        });
+      }
+    }
+
+    try {
+      const contacts = await this.client!.getContacts();
+      return contacts;
+    } catch (error) {
+      this.logger.warn('wwebjs getContacts failed; returning an empty address book', {
+        error: formatUnknownError(error),
+      });
+      return [];
+    }
   }
 
   async getContactById(contactId: string): Promise<Contact | null> {
     this.ensureReady();
+    if (isUnsafeWwebjsContactId(contactId)) return null;
+    const page = (
+      this.client as unknown as {
+        pupPage?: { evaluate: <T>(fn: (id: string) => T, id: string) => Promise<T> };
+      }
+    ).pupPage;
+    if (page) {
+      try {
+        const raw = await page.evaluate((id: string) => {
+          const w = window as unknown as {
+            Store?: { Contact?: { get?: (contactId: string) => unknown } };
+            WWebJS?: { getContactModel?: (contact: unknown) => unknown };
+          };
+          const contact = w.Store?.Contact?.get?.(id);
+          if (!contact) return null;
+          try {
+            return w.WWebJS?.getContactModel ? w.WWebJS.getContactModel(contact) : contact;
+          } catch {
+            return null;
+          }
+        }, contactId);
+        return mapWwebjsContact(raw);
+      } catch (error) {
+        this.logger.warn(`Failed to get contact: ${contactId}`, { error: formatUnknownError(error) });
+        return null;
+      }
+    }
     try {
       const contact = await this.client!.getContactById(contactId);
-      return {
-        id: contact.id._serialized,
-        name: contact.name || undefined,
-        pushName: contact.pushname || undefined,
-        number: contact.number,
-        isMyContact: contact.isMyContact,
-        isBlocked: contact.isBlocked,
-      };
+      return mapWwebjsContact(contact);
     } catch (error) {
-      this.logger.warn(`Failed to get contact: ${contactId}`, { error: String(error) });
+      this.logger.warn(`Failed to get contact: ${contactId}`, { error: formatUnknownError(error) });
       return null;
     }
   }
