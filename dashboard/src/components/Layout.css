@@ -87,29 +87,34 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--bg-white);
+  background-color: var(--bg-light);
   border: 1px solid var(--border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--text-secondary);
-  transition: all 0.2s;
+  color: var(--text-primary);
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
   z-index: 101;
   padding: 0;
 }
 
 .collapse-toggle:hover {
-  background: var(--primary);
+  background-color: var(--primary);
   border-color: var(--primary);
-  color: white;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  color: #fff;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 35%, transparent);
 }
 
 .collapse-toggle svg {
   width: 16px;
   height: 16px;
+  stroke: currentColor;
+  color: inherit;
 }
 
 .sidebar.collapsed .collapse-toggle {

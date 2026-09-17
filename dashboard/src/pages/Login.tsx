@@ -104,12 +104,10 @@ export function Login({ onLogin }: LoginProps) {
             )}
           </div>
 
-          <button type="submit" className="connect-btn" disabled={isLoading}>
+          <button type="submit" className="btn-primary connect-btn" disabled={isLoading}>
             {isLoading ? t('login.connecting') : t('login.connect')}
           </button>
         </form>
-
-        <p className="login-help">{t('login.helpWhere')}</p>
       </div>
     </div>
   );

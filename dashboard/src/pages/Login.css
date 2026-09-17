@@ -166,38 +166,26 @@
   min-height: var(--touch, 44px);
   padding: 0.875rem 1.5rem;
   font-size: 1rem;
-  font-weight: 600;
-  color: white;
-  background: var(--primary);
-  border: none;
+  font-weight: 700;
+  color: #fff;
+  background-color: #047857;
+  border: 2px solid #047857;
   border-radius: var(--radius);
   cursor: pointer;
-  transition: background 0.2s;
+  box-shadow: 0 1px 2px rgb(4 120 87 / 0.35);
 }
 
 .login-container .connect-btn:hover:not(:disabled){
-  background: var(--primary-hover);
+  background-color: #065f46;
+  border-color: #065f46;
+  color: #fff;
 }
 
 .login-container .connect-btn:disabled{
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-.login-container .login-help{
-  margin-top: 1.5rem;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.login-container .login-help a{
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.login-container .login-help a:hover{
-  text-decoration: underline;
+  color: #fff;
+  background-color: #047857;
 }
 
 .login-container .login-footer{
@@ -263,9 +251,5 @@
   .login-container .connect-btn{
     padding: 0.75rem 1.25rem;
     font-size: 0.9375rem;
-  }
-
-  .login-container .login-help{
-    font-size: 0.8125rem;
   }
 }

@@ -444,7 +444,6 @@ export function Campaigns() {
     const chunks = chunkArray(targets, BULK_CHUNK_SIZE);
     let sent = 0;
     let failed = 0;
-    let lastOutcome: ReturnType<typeof resolveCampaignSendOutcome> = 'completed';
 
     try {
       for (const chunk of chunks) {
@@ -478,7 +477,7 @@ export function Campaigns() {
         failed = chunkBaseFailed + chunkCounts.failed;
         setSendProgress({ sent, failed, total: targets.length });
 
-        lastOutcome = resolveCampaignSendOutcome(chunkCounts, status.status);
+        const lastOutcome = resolveCampaignSendOutcome(chunkCounts, status.status);
 
         if (cancelRequestedRef.current || lastOutcome === 'cancelled') {
           setFinalStatus('cancelled');
