@@ -40,7 +40,7 @@ import {
   type CampaignMedia,
   type CampaignMessageType,
 } from '../utils/campaignMessage';
-import { resolveCampaignSendOutcome, tallyBulkBatch } from '../utils/campaignBatch';
+import { firstBatchFailureMessage, resolveCampaignSendOutcome, tallyBulkBatch } from '../utils/campaignBatch';
 import {
   clearCampaignDraft,
   readCampaignDraft,
@@ -444,6 +444,7 @@ export function Campaigns() {
     const chunks = chunkArray(targets, BULK_CHUNK_SIZE);
     let sent = 0;
     let failed = 0;
+    let failureDetail: string | null = null;
 
     try {
       for (const chunk of chunks) {
@@ -476,6 +477,7 @@ export function Campaigns() {
         sent = chunkBaseSent + chunkCounts.sent;
         failed = chunkBaseFailed + chunkCounts.failed;
         setSendProgress({ sent, failed, total: targets.length });
+        failureDetail = firstBatchFailureMessage(status) ?? failureDetail;
 
         const lastOutcome = resolveCampaignSendOutcome(chunkCounts, status.status);
 
@@ -490,6 +492,7 @@ export function Campaigns() {
         setFinalStatus('cancelled');
       } else {
         setFinalStatus(resolveCampaignSendOutcome({ sent, failed }, 'completed'));
+        if (failed > 0 && failureDetail) setError(failureDetail);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : t('campaigns.errors.send'));
@@ -593,7 +596,16 @@ export function Campaigns() {
           )}
 
           <div className="campaigns-progress-bar" aria-hidden="true">
-            <div className="campaigns-progress-fill" style={{ width: `${progressPct}%` }} />
+            <div
+              className={[
+                'campaigns-progress-fill',
+                phase === 'done' && finalStatus === 'failed' ? 'is-failed' : '',
+                phase === 'done' && finalStatus === 'cancelled' ? 'is-cancelled' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              style={{ width: `${progressPct}%` }}
+            />
           </div>
           <p className="campaigns-progress-stats">
             {t('campaigns.sending.stats', {

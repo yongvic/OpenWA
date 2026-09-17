@@ -205,6 +205,33 @@ describe('BulkMessageService.processBatch', () => {
     );
   });
 
+  it('does not count a delivered send as failed when post-send persist throws', async () => {
+    repo.findOne.mockResolvedValue(makeBatch(1));
+    jest
+      .spyOn(service as unknown as { persistSentMessage: () => Promise<void> }, 'persistSentMessage')
+      .mockRejectedValue(new Error('persist boom'));
+
+    await runProcessBatch();
+
+    const saved = repo.save.mock.calls.at(-1)?.[0] as MessageBatch;
+    expect(saved.progress.sent).toBe(1);
+    expect(saved.progress.failed).toBe(0);
+    expect(saved.results[0].status).toBe('sent');
+    expect(hookManager.execute).not.toHaveBeenCalledWith('message:failed', expect.anything(), expect.anything());
+  });
+
+  it('counts an engine-accepted send with a missing message id as sent', async () => {
+    repo.findOne.mockResolvedValue(makeBatch(1));
+    engine.sendTextMessage.mockResolvedValueOnce({ timestamp: 111 });
+
+    await runProcessBatch();
+
+    const saved = repo.save.mock.calls.at(-1)?.[0] as MessageBatch;
+    expect(saved.progress.sent).toBe(1);
+    expect(saved.progress.failed).toBe(0);
+    expect(saved.results[0].status).toBe('sent');
+  });
+
   it('runs the message:sending gate for each bulk message (bulk no longer bypasses moderation)', async () => {
     repo.findOne.mockResolvedValue(makeBatch(1));
 

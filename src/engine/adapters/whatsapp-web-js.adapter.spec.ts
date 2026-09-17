@@ -9,6 +9,7 @@ import {
   loadRemoteMedia,
   resolveAuthTimeoutMs,
   wwebjsAckToDeliveryStatus,
+  toOutboundMessageResult,
   extractWwebjsCall,
 } from './whatsapp-web-js.adapter';
 import { getEffectiveWebVersionInfo, resolveWebVersionPin, __resetWebVersionCache } from '../wa-web-version';
@@ -50,6 +51,31 @@ describe('wwebjsAckToDeliveryStatus (engine ack-int -> neutral DeliveryStatus bo
     [5, 'read'], // any future/higher ack stays read, never crashes
   ])('maps wwebjs ack %i -> %s', (ack, expected) => {
     expect(wwebjsAckToDeliveryStatus(ack)).toBe(expected);
+  });
+});
+
+describe('toOutboundMessageResult (delivered send must not throw on a missing wwebjs id)', () => {
+  it('reads _serialized from a normal wwebjs Message id', () => {
+    expect(toOutboundMessageResult({ id: { _serialized: 'OUT1' }, timestamp: 1700000001 })).toEqual({
+      id: 'OUT1',
+      timestamp: 1700000001,
+    });
+  });
+
+  it('does not throw when sendMessage resolved with no Message (WhatsApp may already have it)', () => {
+    const res = toOutboundMessageResult(undefined);
+    expect(res.id).toBe('');
+    expect(res.timestamp).toBeGreaterThan(0);
+  });
+
+  it('does not throw when Message.id is missing', () => {
+    const res = toOutboundMessageResult({ timestamp: 42 });
+    expect(res.id).toBe('');
+    expect(res.timestamp).toBe(42);
+  });
+
+  it('accepts a string id (some wwebjs builds return id as a string)', () => {
+    expect(toOutboundMessageResult({ id: 'OUT2', timestamp: 9 })).toEqual({ id: 'OUT2', timestamp: 9 });
   });
 });
 
@@ -1388,6 +1414,13 @@ describe('outbound mentions (#530)', () => {
     const sendMessage = jest.fn().mockResolvedValue(sentMessage);
     await ready({ sendMessage }).sendTextMessage('120@g.us', 'plain');
     expect(sendMessage).toHaveBeenCalledWith('120@g.us', 'plain');
+  });
+
+  it('sendTextMessage still returns a result when wwebjs resolves without a Message id', async () => {
+    const sendMessage = jest.fn().mockResolvedValue(undefined);
+    const res = await ready({ sendMessage }).sendTextMessage('120@g.us', 'plain');
+    expect(res.id).toBe('');
+    expect(typeof res.timestamp).toBe('number');
   });
 
   it('sendImageMessage forwards media.mentions alongside the caption', async () => {

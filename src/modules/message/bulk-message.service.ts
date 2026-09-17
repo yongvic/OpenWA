@@ -289,55 +289,71 @@ export class BulkMessageService implements OnApplicationBootstrap {
           blockedByPlugin = true;
           throw new BadRequestException('Message sending blocked by plugin');
         }
-        content = (gate.data as { input: BulkMessageContent }).input;
+        content = (gate.data as { input?: BulkMessageContent } | undefined)?.input ?? content;
 
         // Send message based on type
         const messageResult = await this.sendMessage(engine, msg.chatId, msg.type, content);
 
+        // Engine accepted the send. Mapping/persist after this point must never flip SENT → FAILED:
+        // WhatsApp already has the message (same rule as MessageService.persistSentState).
         result.status = BatchMessageStatus.SENT;
-        result.messageId = messageResult.id;
+        result.messageId = messageResult?.id || undefined;
         result.sentAt = new Date();
+        const prev = batch.progress ?? { total: 0, sent: 0, failed: 0, pending: 0, cancelled: 0 };
         batch.progress = {
-          ...batch.progress,
-          sent: batch.progress.sent + 1,
-          pending: Math.max(0, batch.progress.pending - 1),
+          ...prev,
+          sent: (prev.sent ?? 0) + 1,
+          pending: Math.max(0, (prev.pending ?? 1) - 1),
         };
 
         // Persist like a single send so the message shows in chat history + stats. The engine echo
         // (onMessageCreate) fires the webhook/WS but does NOT write the DB, so without this the
         // bulk-sent message is invisible to the messages table.
-        await this.persistSentMessage(batch.sessionId, msg.chatId, msg.type, content, messageResult);
+        await this.persistSentMessage(
+          batch.sessionId,
+          msg.chatId,
+          msg.type,
+          content,
+          messageResult ?? { id: '', timestamp: Math.floor(Date.now() / 1000) },
+        );
 
         this.logger.debug(`Batch ${batch.batchId}: Sent message ${i + 1}/${batch.messages.length} to ${msg.chatId}`);
       } catch (error) {
-        result.status = BatchMessageStatus.FAILED;
-        // Sanitize: an SSRF block names an internal address — never store/return/log it verbatim.
-        const sanitized = sanitizeBatchError(error);
-        result.error = sanitized;
-        batch.progress = {
-          ...batch.progress,
-          failed: batch.progress.failed + 1,
-          pending: Math.max(0, batch.progress.pending - 1),
-        };
-
-        // Fire message:failed so alerting/analytics plugins observe bulk failures too (previously
-        // none) — but NOT for a plugin gate-block, which is a moderation decision, not a delivery
-        // failure (matches single send, where a block is a 400 with no message:failed).
-        if (!blockedByPlugin) {
-          await this.hookManager.execute(
-            'message:failed',
-            { sessionId: batch.sessionId, error: sanitized.message, input: content, type: msg.type },
-            { sessionId: batch.sessionId, source: 'BulkMessageService' },
+        if (result.status === BatchMessageStatus.SENT) {
+          this.logger.warn(
+            `Batch ${batch.batchId}: post-send bookkeeping failed for ${msg.chatId} (message already sent): ${String(error)}`,
           );
-        }
+        } else {
+          result.status = BatchMessageStatus.FAILED;
+          // Sanitize: an SSRF block names an internal address — never store/return/log it verbatim.
+          const sanitized = sanitizeBatchError(error);
+          result.error = sanitized;
+          const prevFail = batch.progress ?? { total: 0, sent: 0, failed: 0, pending: 0, cancelled: 0 };
+          batch.progress = {
+            ...prevFail,
+            failed: (prevFail.failed ?? 0) + 1,
+            pending: Math.max(0, (prevFail.pending ?? 1) - 1),
+          };
 
-        this.logger.warn(`Batch ${batch.batchId}: Failed message ${i + 1} to ${msg.chatId}: ${sanitized.message}`);
+          // Fire message:failed so alerting/analytics plugins observe bulk failures too (previously
+          // none) — but NOT for a plugin gate-block, which is a moderation decision, not a delivery
+          // failure (matches single send, where a block is a 400 with no message:failed).
+          if (!blockedByPlugin) {
+            await this.hookManager.execute(
+              'message:failed',
+              { sessionId: batch.sessionId, error: sanitized.message, input: content, type: msg.type },
+              { sessionId: batch.sessionId, source: 'BulkMessageService' },
+            );
+          }
 
-        if (batch.options.stopOnError) {
-          batch.status = BatchStatus.FAILED;
-          stoppedOnError = true;
-          results.push(result);
-          break;
+          this.logger.warn(`Batch ${batch.batchId}: Failed message ${i + 1} to ${msg.chatId}: ${sanitized.message}`);
+
+          if (batch.options.stopOnError) {
+            batch.status = BatchStatus.FAILED;
+            stoppedOnError = true;
+            results.push(result);
+            break;
+          }
         }
       }
 

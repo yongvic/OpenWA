@@ -79,6 +79,31 @@ export function wwebjsAckToDeliveryStatus(ack: number): DeliveryStatus {
 }
 
 /**
+ * Map a whatsapp-web.js send() return value to MessageResult without throwing.
+ * `client.sendMessage` can resolve after WhatsApp already accepted the message while `msg` or
+ * `msg.id` is missing — reading `msg.id._serialized` would then mark a delivered send as failed.
+ */
+export function toOutboundMessageResult(msg: unknown): MessageResult {
+  const fallbackTs = Math.floor(Date.now() / 1000);
+  if (!msg || typeof msg !== 'object') {
+    return { id: '', timestamp: fallbackTs };
+  }
+  const rec = msg as { id?: unknown; timestamp?: unknown };
+  const rawId = rec.id;
+  let id = '';
+  if (typeof rawId === 'string') {
+    id = rawId;
+  } else if (rawId && typeof rawId === 'object') {
+    const obj = rawId as { _serialized?: unknown; id?: unknown };
+    if (typeof obj._serialized === 'string') id = obj._serialized;
+    else if (typeof obj.id === 'string') id = obj.id;
+  }
+  const timestamp =
+    typeof rec.timestamp === 'number' && Number.isFinite(rec.timestamp) ? rec.timestamp : fallbackTs;
+  return { id, timestamp };
+}
+
+/**
  * Extract call detail from a whatsapp-web.js `call_log` message, or `undefined` for any other type.
  * The public Message wrapper doesn't expose call fields, so we read them off the raw `_data`. An
  * incoming call (`!fromMe`) with no recorded `callDuration` was never answered → missed; an outgoing
@@ -944,10 +969,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
     const msg = await this.sendResolved(chatId, to =>
       mentions?.length ? this.client!.sendMessage(to, text, { mentions }) : this.client!.sendMessage(to, text),
     );
-    return {
-      id: msg.id._serialized,
-      timestamp: msg.timestamp,
-    };
+    return toOutboundMessageResult(msg);
   }
 
   async sendImageMessage(chatId: string, media: MediaInput): Promise<MessageResult> {
@@ -998,10 +1020,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
       }),
     );
 
-    return {
-      id: msg.id._serialized,
-      timestamp: msg.timestamp,
-    };
+    return toOutboundMessageResult(msg);
   }
 
   async getContacts(): Promise<Contact[]> {
@@ -1102,10 +1121,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
       address: location.address || '',
     });
     const msg = await this.sendResolved(chatId, to => this.client!.sendMessage(to, loc));
-    return {
-      id: msg.id._serialized,
-      timestamp: msg.timestamp,
-    };
+    return toOutboundMessageResult(msg);
   }
 
   async sendContactMessage(chatId: string, contact: ContactCard): Promise<MessageResult> {
@@ -1119,10 +1135,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
         parseVCards: true,
       }),
     );
-    return {
-      id: msg.id._serialized,
-      timestamp: msg.timestamp,
-    };
+    return toOutboundMessageResult(msg);
   }
 
   async sendStickerMessage(chatId: string, media: MediaInput): Promise<MessageResult> {
@@ -1144,10 +1157,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
         sendMediaAsSticker: true,
       }),
     );
-    return {
-      id: msg.id._serialized,
-      timestamp: msg.timestamp,
-    };
+    return toOutboundMessageResult(msg);
   }
 
   async sendPollMessage(chatId: string, poll: PollInput): Promise<MessageResult> {
@@ -1166,10 +1176,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
     const msg = await this.sendResolved(chatId, to =>
       this.client!.sendMessage(to, new Poll(poll.name, poll.options, pollOptions)),
     );
-    return {
-      id: msg.id._serialized,
-      timestamp: msg.timestamp,
-    };
+    return toOutboundMessageResult(msg);
   }
 
   async replyToMessage(chatId: string, quotedMsgId: string, text: string): Promise<MessageResult> {
@@ -1187,10 +1194,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
     // so route it through sendResolved (resolve @c.us->@lid, cache, self-heal). reply(content, chatId)
     // accepts an explicit target (#583 R1).
     const msg = await this.sendResolved(chatId, to => quotedMsg.reply(text, to));
-    return {
-      id: msg.id._serialized,
-      timestamp: msg.timestamp,
-    };
+    return toOutboundMessageResult(msg);
   }
 
   async forwardMessage(fromChatId: string, toChatId: string, messageId: string): Promise<MessageResult> {

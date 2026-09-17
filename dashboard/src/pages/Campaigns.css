@@ -542,6 +542,14 @@
   transition: width 0.3s ease-out;
 }
 
+.campaigns-page .campaigns-progress-fill.is-failed {
+  background: var(--error);
+}
+
+.campaigns-page .campaigns-progress-fill.is-cancelled {
+  background: var(--warning);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .campaigns-page .campaigns-progress-fill {
     transition: none;
