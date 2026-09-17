@@ -78,7 +78,8 @@ export default () => ({
 
   // WhatsApp engine configuration
   engine: {
-    type: process.env.ENGINE_TYPE || 'whatsapp-web.js',
+    // Baileys avoids the Chromium dependency and remains stable when WhatsApp changes its Web UI.
+    type: process.env.ENGINE_TYPE || 'baileys',
     puppeteer: {
       headless: process.env.PUPPETEER_HEADLESS !== 'false',
       // Accept either delimiter: .env/compose use commas, the dashboard Infrastructure form
