@@ -1087,14 +1087,17 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
     this.ensureReady();
     const contacts = await this.client!.getContacts();
 
-    return contacts.map(c => ({
-      id: c.id._serialized,
-      name: c.name || undefined,
-      pushName: c.pushname || undefined,
-      number: c.number,
-      isMyContact: c.isMyContact,
-      isBlocked: c.isBlocked,
-    }));
+    return contacts.map(c => {
+      const named = c as { name?: string; shortName?: string; verifiedName?: string };
+      return {
+        id: c.id._serialized,
+        name: named.name || named.shortName || named.verifiedName || undefined,
+        pushName: c.pushname || undefined,
+        number: c.number,
+        isMyContact: c.isMyContact,
+        isBlocked: c.isBlocked,
+      };
+    });
   }
 
   async getContactById(contactId: string): Promise<Contact | null> {

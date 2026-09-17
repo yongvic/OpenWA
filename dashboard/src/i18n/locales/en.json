@@ -625,8 +625,11 @@
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
       "selected": "{{count}} of {{total}} selected",
-      "searchPlaceholder": "Search contacts…",
-      "noSearchResults": "No contacts match your search"
+      "searchPlaceholder": "Search by name or number…",
+      "noSearchResults": "No contacts match your search",
+      "reload": "Reload",
+      "emptyBook": "No named contacts on this WhatsApp account.",
+      "shown": "{{count}} shown"
     },
     "validating": "Checking numbers… {{done}} / {{total}}",
     "summary": {

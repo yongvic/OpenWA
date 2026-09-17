@@ -46,6 +46,68 @@ export function isPersonalContactId(id: string): boolean {
   return id.endsWith('@c.us') || id.endsWith('@lid');
 }
 
+/** Fold accents and punctuation so "Côte" matches "cote" and "Jean-Pierre" matches "jean pierre". */
+export function normalizeSearchText(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/gi, ' ')
+    .trim();
+}
+
+export function contactDisplayName(contact: {
+  name?: string;
+  pushName?: string;
+  number?: string;
+  id?: string;
+}): string {
+  const name = (contact.name || contact.pushName || '').trim();
+  const number = (contact.number || '').trim();
+  if (name && number && !name.includes(number)) return `${name} · ${number}`;
+  return name || number || contact.id || '';
+}
+
+export function contactMatchesQuery(contact: CampaignRecipient, query: string): boolean {
+  const raw = query.trim();
+  if (!raw) return true;
+  const haystack = normalizeSearchText(`${contact.label} ${contact.chatId}`);
+  const tokens = normalizeSearchText(raw).split(/\s+/).filter(Boolean);
+  if (tokens.length > 0 && tokens.every(token => haystack.includes(token))) return true;
+  const queryDigits = raw.replace(/\D/g, '');
+  if (queryDigits.length >= 3) {
+    const idDigits = contact.chatId.replace(/\D/g, '');
+    if (idDigits.includes(queryDigits)) return true;
+  }
+  return false;
+}
+
+export function pickCampaignContacts(
+  contacts: Array<{
+    id: string;
+    name?: string;
+    pushName?: string;
+    number?: string;
+    isMyContact?: boolean;
+    isBlocked?: boolean;
+  }>,
+): CampaignRecipient[] {
+  const usable = contacts.filter(c => isPersonalContactId(c.id) && !c.isBlocked);
+  const inBook = usable.filter(c => c.isMyContact);
+  const source = inBook.length > 0 ? inBook : usable;
+  const seen = new Set<string>();
+  const out: CampaignRecipient[] = [];
+  for (const c of source) {
+    if (seen.has(c.id)) continue;
+    seen.add(c.id);
+    const hasIdentity = Boolean((c.name || c.pushName || c.number || '').trim());
+    if (!hasIdentity) continue;
+    out.push({ chatId: c.id, label: contactDisplayName(c) });
+  }
+  out.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }));
+  return out;
+}
+
 export function chunkArray<T>(items: T[], size: number): T[][] {
   const chunks: T[][] = [];
   for (let i = 0; i < items.length; i += size) {

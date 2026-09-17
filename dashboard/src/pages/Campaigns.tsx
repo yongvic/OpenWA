@@ -22,10 +22,11 @@ import { PageHeader } from '../components/PageHeader';
 import { ScreenStatus } from '../components/ScreenStatus';
 import {
   chunkArray,
+  contactMatchesQuery,
   estimateCampaignMinutes,
-  isPersonalContactId,
   parseContactsFile,
   parsePhoneNumbers,
+  pickCampaignContacts,
   resolvePhoneNumbers,
   type CampaignRecipient,
 } from '../utils/campaignContacts';
@@ -55,10 +56,6 @@ type Phase = 'compose' | 'sending' | 'done';
 
 const BULK_CHUNK_SIZE = 100;
 const POLL_MS = 2000;
-
-function contactLabel(contact: { name?: string; pushName?: string; number: string }) {
-  return contact.name || contact.pushName || contact.number;
-}
 
 function mediaPreviewIcon(type: CampaignMessageType): string {
   if (type === 'image') return '🖼';
@@ -112,6 +109,7 @@ export function Campaigns() {
   const [selectedWaIds, setSelectedWaIds] = useState<Set<string>>(new Set());
   const [waContacts, setWaContacts] = useState<CampaignRecipient[]>([]);
   const [waContactSearch, setWaContactSearch] = useState('');
+  const [waLoadAttempted, setWaLoadAttempted] = useState(false);
   const [loadingWaContacts, setLoadingWaContacts] = useState(false);
   const [validating, setValidating] = useState(false);
   const [validationProgress, setValidationProgress] = useState({ done: 0, total: 0 });
@@ -159,6 +157,7 @@ export function Campaigns() {
         setSelectedWaIds(new Set(draft.selectedWaIds));
         setWaContacts(draft.waContacts);
         setWaContactSearch(draft.waContactSearch);
+        setWaLoadAttempted(draft.waContacts.length > 0);
       }
       setMessage(draft.message);
       setMessageType(draft.messageType);
@@ -184,6 +183,7 @@ export function Campaigns() {
     setWaContacts([]);
     setSelectedWaIds(new Set());
     setWaContactSearch('');
+    setWaLoadAttempted(false);
     setRecipients([]);
     setInvalidNumbers([]);
     setPasteText('');
@@ -260,17 +260,13 @@ export function Campaigns() {
     setLoadingWaContacts(true);
     setError(null);
     try {
-      const contacts = await contactApi.list(sessionId, { limit: 1000 });
-      const personal = contacts
-        .filter(c => isPersonalContactId(c.id) && !c.isBlocked)
-        .map(c => ({
-          chatId: c.id,
-          label: contactLabel(c),
-        }));
-      setWaContacts(personal);
+      const contacts = await contactApi.listAll(sessionId);
+      setWaContacts(pickCampaignContacts(contacts));
       setSelectedWaIds(new Set());
       setWaContactSearch('');
+      setWaLoadAttempted(true);
     } catch (err) {
+      setWaLoadAttempted(true);
       setError(err instanceof Error ? err.message : t('campaigns.errors.loadContacts'));
     } finally {
       setLoadingWaContacts(false);
@@ -361,6 +357,26 @@ export function Campaigns() {
     setError(null);
   };
 
+  const filteredWaContacts = useMemo(() => {
+    return waContacts.filter(c => contactMatchesQuery(c, waContactSearch));
+  }, [waContacts, waContactSearch]);
+
+  const allVisibleSelected =
+    filteredWaContacts.length > 0 && filteredWaContacts.every(c => selectedWaIds.has(c.chatId));
+
+  const selectVisibleWaContacts = () => {
+    setSelectedWaIds(prev => {
+      const next = new Set(prev);
+      for (const c of filteredWaContacts) next.add(c.chatId);
+      return next;
+    });
+  };
+
+  const deselectVisibleWaContacts = () => {
+    const visible = new Set(filteredWaContacts.map(c => c.chatId));
+    setSelectedWaIds(prev => new Set([...prev].filter(id => !visible.has(id))));
+  };
+
   const toggleWaContact = (chatId: string) => {
     setSelectedWaIds(prev => {
       const next = new Set(prev);
@@ -369,20 +385,6 @@ export function Campaigns() {
       return next;
     });
   };
-
-  const selectAllWaContacts = () => {
-    setSelectedWaIds(new Set(waContacts.map(c => c.chatId)));
-  };
-
-  const deselectAllWaContacts = () => {
-    setSelectedWaIds(new Set());
-  };
-
-  const filteredWaContacts = useMemo(() => {
-    const q = waContactSearch.trim().toLowerCase();
-    if (!q) return waContacts;
-    return waContacts.filter(c => c.label.toLowerCase().includes(q) || c.chatId.toLowerCase().includes(q));
-  }, [waContacts, waContactSearch]);
 
   const getActiveRecipients = useCallback((): CampaignRecipient[] => {
     if (source === 'whatsapp') {
@@ -531,6 +533,7 @@ export function Campaigns() {
     setWaContacts([]);
     setSelectedWaIds(new Set());
     setWaContactSearch('');
+    setWaLoadAttempted(false);
     setSendProgress({ sent: 0, failed: 0, total: 0 });
     setFinalStatus(null);
     setError(null);
@@ -758,20 +761,27 @@ export function Campaigns() {
             {source === 'whatsapp' && (
               <div className="campaigns-wa-list">
                 {waContacts.length === 0 ? (
-                  <button
-                    type="button"
-                    className="btn-primary"
-                    onClick={() => void loadWhatsAppContacts()}
-                    disabled={loadingWaContacts}
-                  >
-                    {loadingWaContacts ? (
-                      <>
-                        <Loader2 className="animate-spin" size={16} /> {t('campaigns.wa.loading')}
-                      </>
-                    ) : (
-                      t('campaigns.wa.load')
+                  <div className="campaigns-wa-empty-load">
+                    {waLoadAttempted && !loadingWaContacts && (
+                      <p className="campaigns-wa-empty">{t('campaigns.wa.emptyBook')}</p>
                     )}
-                  </button>
+                    <button
+                      type="button"
+                      className="btn-primary"
+                      onClick={() => void loadWhatsAppContacts()}
+                      disabled={loadingWaContacts}
+                    >
+                      {loadingWaContacts ? (
+                        <>
+                          <Loader2 className="animate-spin" size={16} /> {t('campaigns.wa.loading')}
+                        </>
+                      ) : waLoadAttempted ? (
+                        t('campaigns.wa.reload')
+                      ) : (
+                        t('campaigns.wa.load')
+                      )}
+                    </button>
+                  </div>
                 ) : (
                   <>
                     <div className="campaigns-wa-toolbar">
@@ -779,8 +789,8 @@ export function Campaigns() {
                         <button
                           type="button"
                           className="btn-link"
-                          onClick={selectAllWaContacts}
-                          disabled={waContacts.length === 0 || selectedWaIds.size === waContacts.length}
+                          onClick={selectVisibleWaContacts}
+                          disabled={filteredWaContacts.length === 0 || allVisibleSelected}
                         >
                           {t('campaigns.wa.selectAll')}
                         </button>
@@ -790,15 +800,30 @@ export function Campaigns() {
                         <button
                           type="button"
                           className="btn-link"
-                          onClick={deselectAllWaContacts}
-                          disabled={selectedWaIds.size === 0}
+                          onClick={deselectVisibleWaContacts}
+                          disabled={!filteredWaContacts.some(c => selectedWaIds.has(c.chatId))}
                         >
                           {t('campaigns.wa.deselectAll')}
                         </button>
+                        <span className="campaigns-wa-toolbar-sep" aria-hidden="true">
+                          ·
+                        </span>
+                        <button
+                          type="button"
+                          className="btn-link"
+                          onClick={() => void loadWhatsAppContacts()}
+                          disabled={loadingWaContacts}
+                        >
+                          {t('campaigns.wa.reload')}
+                        </button>
                       </div>
-                      <span>{t('campaigns.wa.selected', { count: selectedWaIds.size, total: waContacts.length })}</span>
+                      <span>
+                        {t('campaigns.wa.selected', { count: selectedWaIds.size, total: waContacts.length })}
+                        {waContactSearch.trim()
+                          ? ` · ${t('campaigns.wa.shown', { count: filteredWaContacts.length })}`
+                          : ''}
+                      </span>
                     </div>
-                    {waContacts.length >= 20 && (
                     <input
                       type="search"
                       className="campaigns-wa-search"
@@ -807,7 +832,6 @@ export function Campaigns() {
                       placeholder={t('campaigns.wa.searchPlaceholder')}
                       aria-label={t('campaigns.wa.searchPlaceholder')}
                     />
-                    )}
                     <ul className="campaigns-wa-contacts">
                       {filteredWaContacts.length === 0 ? (
                         <li className="campaigns-wa-empty">{t('campaigns.wa.noSearchResults')}</li>

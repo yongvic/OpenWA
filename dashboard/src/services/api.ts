@@ -507,6 +507,18 @@ export const contactApi = {
     const qs = query.toString();
     return request<WhatsAppContact[]>(`/sessions/${sessionId}/contacts${qs ? `?${qs}` : ''}`);
   },
+  listAll: async (sessionId: string): Promise<WhatsAppContact[]> => {
+    const pageSize = 1000;
+    const all: WhatsAppContact[] = [];
+    let offset = 0;
+    for (;;) {
+      const page = await contactApi.list(sessionId, { limit: pageSize, offset });
+      all.push(...page);
+      if (page.length < pageSize) break;
+      offset += pageSize;
+    }
+    return all;
+  },
   checkNumber: (sessionId: string, number: string) =>
     request<CheckNumberResponse>(`/sessions/${sessionId}/contacts/check/${encodeURIComponent(number)}`),
 };

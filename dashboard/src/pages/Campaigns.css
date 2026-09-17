@@ -299,6 +299,13 @@
   border-color: var(--primary);
 }
 
+.campaigns-page .campaigns-wa-empty-load {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
 .campaigns-page .campaigns-wa-empty {
   padding: 1rem;
   text-align: center;
