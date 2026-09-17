@@ -1,5 +1,19 @@
 import configuration from './configuration';
 
+describe('configuration — WhatsApp engine', () => {
+  const orig = process.env.ENGINE_TYPE;
+
+  afterEach(() => {
+    if (orig === undefined) delete process.env.ENGINE_TYPE;
+    else process.env.ENGINE_TYPE = orig;
+  });
+
+  it('defaults to Baileys when ENGINE_TYPE is unset', () => {
+    delete process.env.ENGINE_TYPE;
+    expect(configuration().engine.type).toBe('baileys');
+  });
+});
+
 describe('configuration — main DB synchronize', () => {
   const orig = process.env.MAIN_DATABASE_SYNCHRONIZE;
 
