@@ -98,8 +98,7 @@ export function toOutboundMessageResult(msg: unknown): MessageResult {
     if (typeof obj._serialized === 'string') id = obj._serialized;
     else if (typeof obj.id === 'string') id = obj.id;
   }
-  const timestamp =
-    typeof rec.timestamp === 'number' && Number.isFinite(rec.timestamp) ? rec.timestamp : fallbackTs;
+  const timestamp = typeof rec.timestamp === 'number' && Number.isFinite(rec.timestamp) ? rec.timestamp : fallbackTs;
   return { id, timestamp };
 }
 

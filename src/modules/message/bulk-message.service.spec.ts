@@ -213,10 +213,10 @@ describe('BulkMessageService.processBatch', () => {
 
     await runProcessBatch();
 
-    const saved = repo.save.mock.calls.at(-1)?.[0] as MessageBatch;
-    expect(saved.progress.sent).toBe(1);
-    expect(saved.progress.failed).toBe(0);
-    expect(saved.results[0].status).toBe('sent');
+    const saved = (repo.save.mock.calls.at(-1) as unknown as [MessageBatch] | undefined)?.[0];
+    expect(saved?.progress.sent).toBe(1);
+    expect(saved?.progress.failed).toBe(0);
+    expect(saved?.results?.[0]?.status).toBe('sent');
     expect(hookManager.execute).not.toHaveBeenCalledWith('message:failed', expect.anything(), expect.anything());
   });
 
@@ -226,10 +226,10 @@ describe('BulkMessageService.processBatch', () => {
 
     await runProcessBatch();
 
-    const saved = repo.save.mock.calls.at(-1)?.[0] as MessageBatch;
-    expect(saved.progress.sent).toBe(1);
-    expect(saved.progress.failed).toBe(0);
-    expect(saved.results[0].status).toBe('sent');
+    const saved = (repo.save.mock.calls.at(-1) as unknown as [MessageBatch] | undefined)?.[0];
+    expect(saved?.progress.sent).toBe(1);
+    expect(saved?.progress.failed).toBe(0);
+    expect(saved?.results?.[0]?.status).toBe('sent');
   });
 
   it('runs the message:sending gate for each bulk message (bulk no longer bypasses moderation)', async () => {
