@@ -73,10 +73,11 @@
 }
 
 .login-container .login-title{
-  font-size: 1.75rem;
-  font-weight: 600;
+  font-size: 1.375rem;
+  font-weight: 700;
   color: var(--text-primary);
-  margin: 0 0 0.5rem;
+  margin: 0.25rem 0 0.35rem;
+  letter-spacing: -0.02em;
 }
 
 .login-container .login-subtitle{
@@ -132,14 +133,21 @@
 
 .login-container .toggle-visibility{
   position: absolute;
-  right: 0.75rem;
+  right: 0.35rem;
   top: 50%;
   transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0;
+}
+
+[dir='rtl'] .login-container .toggle-visibility{
+  right: auto;
+  left: 0.35rem;
 }
 
 .login-container .toggle-visibility:hover{
@@ -155,6 +163,7 @@
 
 .login-container .connect-btn{
   width: 100%;
+  min-height: var(--touch, 44px);
   padding: 0.875rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;

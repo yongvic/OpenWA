@@ -53,7 +53,7 @@
 }
 
 /* Mobile Responsive: stack as title -> subtitle -> actions */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .page-header {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -61,10 +61,24 @@
       'subtitle'
       'actions';
     column-gap: 0;
+    margin-bottom: 1rem;
   }
 
+  /* The chrome already names the screen. Keep the heading for assistive tech, not a second title. */
   .page-header__title-group h1 {
-    font-size: 1.5rem;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .page-header__subtitle {
+    margin-top: 0;
   }
 
   .page-header__actions {

@@ -7,7 +7,7 @@
   },
   "common": {
     "appName": "OpenWA",
-    "appSubtitle": "WhatsApp API",
+    "appSubtitle": "Campagne WhatsApp",
     "loading": "Caricamento...",
     "save": "Salva",
     "cancel": "Annulla",
@@ -54,7 +54,12 @@
     "refresh": "Aggiorna",
     "errorGeneric": "Si è verificato un errore",
     "unknownError": "Errore sconosciuto",
-    "retry": "Riprova"
+    "retry": "Riprova",
+    "continue": "Continua",
+    "accountMenu": "Account",
+    "offlineBanner": "No internet. Sending is paused until you are back online.",
+    "showAccessCode": "Show access code",
+    "hideAccessCode": "Hide access code"
   },
   "theme": {
     "light": "Chiaro",
@@ -67,7 +72,7 @@
   },
   "nav": {
     "dashboard": "Dashboard",
-    "sessions": "Sessioni",
+    "sessions": "Numeri",
     "chats": "Chat",
     "webhooks": "Webhook",
     "templates": "Modelli",
@@ -76,7 +81,7 @@
     "infrastructure": "Infrastruttura",
     "plugins": "Plugin",
     "logs": "Log",
-    "campaigns": "Campaigns"
+    "campaigns": "Campagne"
   },
   "chats": {
     "media": {
@@ -132,22 +137,28 @@
     "loadMessagesError": "Impossibile caricare i messaggi. Controlla i log del server."
   },
   "errorBoundary": {
-    "title": "Qualcosa è andato storto",
-    "description": "La dashboard ha riscontrato un errore imprevisto.",
-    "reload": "Ricarica Dashboard"
+    "title": "This screen could not be shown",
+    "description": "Reload to go back to your campaigns. Nothing was sent from this error.",
+    "reload": "Reload"
   },
   "login": {
     "apiKey": "Chiave API",
     "apiKeyPlaceholder": "Inserisci la tua chiave API",
     "apiKeyRequired": "La chiave API è richiesta",
-    "connect": "Connetti",
-    "connecting": "Connessione in corso...",
-    "invalidKey": "Chiave API non valida",
-    "connectionError": "Impossibile connettersi al server. Riprova.",
+    "connect": "Entra",
+    "connecting": "Checking…",
+    "invalidKey": "This code is not recognized. Check it and try again.",
+    "connectionError": "Cannot reach the server. Check that it is running, then try again.",
     "help": "Serve aiuto?",
     "viewDocs": "Visualizza la documentazione",
     "footer": "Fatto con il ❤️ da Yudhi Armyndharis e dalla Community di OpenWA",
-    "version": "v{{version}} · {{date}}"
+    "version": "v{{version}} · {{date}}",
+    "title": "Apri lo spazio campagne",
+    "subtitle": "Enter the access code given to your team.",
+    "accessCode": "Codice di accesso",
+    "accessCodePlaceholder": "Paste the code here",
+    "accessCodeRequired": "Enter the access code to continue.",
+    "helpWhere": "The code is in the data/.api-key file on the computer that runs OpenWA. Ask the person who installed it."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -200,9 +211,9 @@
     "disconnected": "Disconnesso"
   },
   "sessions": {
-    "title": "Sessioni",
-    "subtitle": "Gestisci le tue sessioni WhatsApp e le connessioni tramite codice QR",
-    "newSession": "Nuova Sessione",
+    "title": "Numeri WhatsApp",
+    "subtitle": "Connect the phones that will send the messages.",
+    "newSession": "Aggiungi un numero",
     "searchPlaceholder": "Cerca sessioni...",
     "filter": {
       "all": "Tutti gli stati",
@@ -211,14 +222,14 @@
       "connecting": "In connessione"
     },
     "empty": {
-      "title": "Nessuna sessione trovata",
-      "description": "Crea una nuova sessione per iniziare"
+      "title": "No WhatsApp number yet",
+      "description": "Add a number, then scan the QR code with the phone that should send."
     },
     "create": {
-      "title": "Crea Nuova Sessione",
-      "label": "Nome Sessione",
-      "placeholder": "es., marketing-bot",
-      "hint": "Usa solo lettere minuscole, numeri e trattini. Esempio: <code>supporto-clienti</code>, <code>bot-1</code>",
+      "title": "Add a WhatsApp number",
+      "label": "Name of this number",
+      "placeholder": "e.g. shop-paris",
+      "hint": "Use lowercase letters, numbers and hyphens only. Example: <code>shop-paris</code>",
       "invalidChars": "Caratteri non validi. Sono ammessi solo lettere minuscole, numeri e trattini.",
       "tooLong": "Il nome deve contenere al massimo 50 caratteri ({{length}}/50).",
       "duplicate": "Esiste già una sessione con questo nome.",
@@ -238,17 +249,17 @@
       "errorDefault": "Impossibile eliminare la sessione"
     },
     "qr": {
-      "title": "Scansiona il Codice QR",
+      "title": "Scan with your phone",
       "step1": "<strong>1.</strong> Apri WhatsApp sul tuo telefono",
       "step2": "<strong>2.</strong> Tocca <strong>Menu</strong> → <strong>Dispositivi collegati</strong>",
       "step3": "<strong>3.</strong> Tocca <strong>Collega un dispositivo</strong> e scansiona questo QR",
       "autoRefresh": "Il codice QR si aggiorna automaticamente ogni 5 secondi",
-      "generating": "Generazione del codice QR in corso...",
+      "generating": "Preparing the code…",
       "unavailable": "Codice QR non ancora disponibile. Riprova tra un momento.",
       "preparing": "Preparazione del codice QR...",
-      "showQr": "Mostra QR",
+      "showQr": "Show QR code",
       "loading": "Caricamento...",
-      "scanToConnect": "Scansiona il codice QR per connetterti"
+      "scanToConnect": "Scan this code with WhatsApp on the phone"
     },
     "details": {
       "title": "Dettagli Sessione",
@@ -262,10 +273,10 @@
     },
     "actions": {
       "view": "Visualizza",
-      "start": "Avvia",
-      "stop": "Ferma",
-      "reconnect": "Riconnetti",
-      "delete": "Elimina",
+      "start": "Connect",
+      "stop": "Disconnect",
+      "reconnect": "Reconnect",
+      "delete": "Remove",
       "killStuck": "Termina sessione bloccata"
     },
     "toasts": {
@@ -391,28 +402,28 @@
     }
   },
   "templates": {
-    "title": "Modelli",
-    "subtitle": "Crea modelli di messaggio riutilizzabili per ogni sessione WhatsApp",
-    "createTitle": "Crea Modello",
-    "editTitle": "Modifica Modello",
-    "newTemplate": "Nuovo Modello",
-    "createTemplate": "Crea Modello",
+    "title": "Modelli di messaggio",
+    "subtitle": "Write a message once, reuse it in every campaign.",
+    "createTitle": "New template",
+    "editTitle": "Edit template",
+    "newTemplate": "New template",
+    "createTemplate": "Save template",
     "saveChanges": "Salva modifiche",
     "viewOnly": "Visualizza soltanto",
     "noSessions": "Nessuna sessione",
     "sessionHint": "Salvato sotto {{name}}",
-    "namePlaceholder": "ad es., conferma-ordine",
-    "header": "Intestazione",
-    "headerPlaceholder": "Linea introduttiva facoltativa",
-    "body": "Corpo",
-    "bodyPlaceholder": "Ciao {{customer}}, il tuo ordine {{orderId}} è pronto.",
-    "footer": "Piè di pagina",
-    "footerPlaceholder": "Linea di chiusura facoltativa",
-    "previewTitle": "Anteprima",
+    "namePlaceholder": "e.g. Opening hours",
+    "header": "Title (optional)",
+    "headerPlaceholder": "First line, above the message",
+    "body": "Message",
+    "bodyPlaceholder": "Hello {{name}}, we are open until 8pm.",
+    "footer": "Sign-off (optional)",
+    "footerPlaceholder": "Last line, under the message",
+    "previewTitle": "How it will look",
     "previewValuePlaceholder": "Valore campione",
-    "previewEmpty": "Inizia a scrivere un modello per visualizzarne l'anteprima qui.",
-    "noPlaceholders": "Usa {{name}} segnaposto per testare le sostituzioni.",
-    "savedTitle": "Modelli salvati",
+    "previewEmpty": "The message will appear here as you type.",
+    "noPlaceholders": "Write {{name}} in the message to insert each contact’s name.",
+    "savedTitle": "Saved templates",
     "count": "{{count}} totale",
     "deleteTitle": "Elimina modello",
     "deleteConfirm": "Eliminare il modello \"{{name}}\"? Questa azione non può essere annullata.",
@@ -420,10 +431,10 @@
       "copyName": "Copia il nome del modello"
     },
     "empty": {
-      "title": "Nessun modello salvato",
-      "description": "Crea un modello riutilizzabile per velocizzare le risposte e le notifiche più comuni..",
-      "noSessionsTitle": "Nessuna sessione disponibile",
-      "noSessionsDesc": "Crea una sessione WhatsApp prima di aggiungere i modelli."
+      "title": "No template yet",
+      "description": "Save a message you send often, then pick it when you start a campaign.",
+      "noSessionsTitle": "Connect a WhatsApp number first",
+      "noSessionsDesc": "Templates are saved on a connected number."
     },
     "toasts": {
       "created": "Modello creato con successo",
@@ -696,17 +707,17 @@
     }
   },
   "campaigns": {
-    "title": "Campaigns",
-    "subtitle": "Send the same message to many contacts in a few clicks",
+    "title": "Campagne",
+    "subtitle": "Choose who receives the message, write it, then send.",
     "stepsLabel": "Campaign steps",
     "steps": {
-      "1": "Contacts",
-      "2": "Message",
-      "3": "Send"
+      "1": "Chi",
+      "2": "Messaggio",
+      "3": "Verifica"
     },
     "noSessionTitle": "No WhatsApp account connected",
-    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
-    "goToSessions": "Connect a session",
+    "noSessionDesc": "Connect a WhatsApp number first. Sending starts from there.",
+    "goToSessions": "Connect a number",
     "messageTypes": {
       "text": "Text",
       "image": "Image",
@@ -722,14 +733,14 @@
       "message": "Your message",
       "messagePlaceholder": "Write the message everyone will receive...",
       "messageHint": "{{count}} / 4096 characters",
-      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "nameHint": "Tip: write {{var}} to insert each contact’s name.",
       "caption": "Caption (optional)",
       "mediaUrl": "Image or file URL",
       "mediaUrlHint": "Paste a public link, or upload a file below.",
       "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
       "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
       "template": "Choose a template",
-      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "noTemplates": "No template yet — create one in Templates.",
       "uploadImage": "Upload an image",
       "uploadVideo": "Upload a video",
       "uploadDocument": "Upload a document",
@@ -742,14 +753,17 @@
     },
     "file": {
       "dropHint": "Import a CSV or TXT file with one phone number per line",
-      "choose": "Choose a file"
+      "choose": "Choose a file",
+      "dropReady": "Drop the file to import the numbers"
     },
     "wa": {
       "load": "Load my contacts",
       "loading": "Loading contacts...",
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
-      "selected": "{{count}} of {{total}} selected"
+      "selected": "{{count}} of {{total}} selected",
+      "searchPlaceholder": "Search contacts…",
+      "noSearchResults": "No contacts match your search"
     },
     "validating": "Checking numbers… {{done}} / {{total}}",
     "summary": {
@@ -766,8 +780,10 @@
       "duration": "Estimated duration",
       "durationValue": "About {{minutes}} min",
       "message": "Message to send",
-      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
-      "send": "Send campaign"
+      "warning": "Only send to people who asked to hear from you. Sending too fast can get the WhatsApp number restricted. This send cannot be undone.",
+      "send": "Send now",
+      "status": "Status",
+      "notYetSent": "Not sent yet — you can still go back"
     },
     "sending": {
       "title": "Sending in progress…",
@@ -792,7 +808,9 @@
     "mediaSource": {
       "upload": "Upload a file",
       "url": "Use a URL"
-    }
+    },
+    "context": "{{count}} recipients · {{session}} · step {{step}} of {{total}}",
+    "changeNumberConfirm": "Change the sending number? The recipient list for this campaign will be cleared. The message is kept."
   },
   "infrastructure": {
     "title": "Infrastruttura",
@@ -939,5 +957,11 @@
       "importTooLarge": "Il backup supera il limite della richiesta. Aumenta BODY_SIZE_LIMIT sul server e riprova."
     },
     "statusLoadError": "Impossibile caricare lo stato attuale dell'infrastruttura. Aggiorna per riprovare."
+  },
+  "role": {
+    "admin": "Administrator",
+    "operator": "Team member",
+    "viewer": "View only",
+    "readOnlyBanner": "You can look, but this access cannot send messages or change settings."
   }
 }

@@ -7,7 +7,7 @@
   },
   "common": {
     "appName": "OpenWA",
-    "appSubtitle": "WhatsApp API",
+    "appSubtitle": "WhatsApp campaigns",
     "loading": "లోడ్ అవుతోంది...",
     "save": "సేవ్ చేయి",
     "cancel": "రద్దు చేయి",
@@ -54,7 +54,12 @@
     "refresh": "రిఫ్రెష్",
     "errorGeneric": "ఒక లోపం సంభవించింది",
     "unknownError": "తెలియని లోపం",
-    "retry": "మళ్లీ ప్రయత్నించండి"
+    "retry": "మళ్లీ ప్రయత్నించండి",
+    "continue": "Continue",
+    "accountMenu": "Account",
+    "offlineBanner": "No internet. Sending is paused until you are back online.",
+    "showAccessCode": "Show access code",
+    "hideAccessCode": "Hide access code"
   },
   "theme": {
     "light": "లైట్",
@@ -67,7 +72,7 @@
   },
   "nav": {
     "dashboard": "డ్యాష్‌బోర్డ్",
-    "sessions": "సెషన్స్",
+    "sessions": "Numbers",
     "chats": "చాట్‌లు",
     "webhooks": "వెబ్‌హుక్స్",
     "templates": "Templates",
@@ -132,22 +137,28 @@
     "loadMessagesError": "సందేశాలను లోడ్ చేయడం సాధ్యం కాలేదు. సర్వర్ లాగ్‌లను తనిఖీ చేయండి."
   },
   "errorBoundary": {
-    "title": "ఏదో తప్పు జరిగింది",
-    "description": "డ్యాష్‌బోర్డ్‌లో ఊహించని లోపం ఎదురైంది.",
-    "reload": "డ్యాష్‌బోర్డ్‌ను రీలోడ్ చేయి"
+    "title": "This screen could not be shown",
+    "description": "Reload to go back to your campaigns. Nothing was sent from this error.",
+    "reload": "Reload"
   },
   "login": {
     "apiKey": "API కీ",
     "apiKeyPlaceholder": "మీ API కీని ఎంటర్ చేయండి",
     "apiKeyRequired": "API కీ అవసరం",
-    "connect": "కనెక్ట్ చేయి",
-    "connecting": "కనెక్ట్ అవుతోంది...",
-    "invalidKey": "చెల్లని API కీ",
-    "connectionError": "సర్వర్‌కు కనెక్ట్ కాలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.",
+    "connect": "Enter",
+    "connecting": "Checking…",
+    "invalidKey": "This code is not recognized. Check it and try again.",
+    "connectionError": "Cannot reach the server. Check that it is running, then try again.",
     "help": "సహాయం కావాలా?",
     "viewDocs": "డాక్యుమెంటేషన్ చూడండి",
     "footer": "Yudhi Armyndharis మరియు OpenWA కమ్యూనిటీ ద్వారా ❤️ తో తయారు చేయబడింది",
-    "version": "v{{version}} · {{date}}"
+    "version": "v{{version}} · {{date}}",
+    "title": "Open the campaign workspace",
+    "subtitle": "Enter the access code given to your team.",
+    "accessCode": "Access code",
+    "accessCodePlaceholder": "Paste the code here",
+    "accessCodeRequired": "Enter the access code to continue.",
+    "helpWhere": "The code is in the data/.api-key file on the computer that runs OpenWA. Ask the person who installed it."
   },
   "dashboard": {
     "title": "డ్యాష్‌బోర్డ్",
@@ -200,9 +211,9 @@
     "disconnected": "డిస్‌కనెక్ట్ అయింది"
   },
   "sessions": {
-    "title": "సెషన్స్",
-    "subtitle": "మీ వాట్సాప్ సెషన్లు మరియు QR కోడ్ కనెక్షన్లను నిర్వహించండి",
-    "newSession": "కొత్త సెషన్",
+    "title": "WhatsApp numbers",
+    "subtitle": "Connect the phones that will send the messages.",
+    "newSession": "Add a number",
     "searchPlaceholder": "సెషన్ల కోసం వెతకండి...",
     "filter": {
       "all": "అన్ని స్థితులు",
@@ -211,14 +222,14 @@
       "connecting": "కనెక్ట్ అవుతోంది"
     },
     "empty": {
-      "title": "ఎలాంటి సెషన్లు కనుగొనబడలేదు",
-      "description": "ప్రారంభించడానికి ఒక కొత్త సెషన్‌ను సృష్టించండి"
+      "title": "No WhatsApp number yet",
+      "description": "Add a number, then scan the QR code with the phone that should send."
     },
     "create": {
-      "title": "కొత్త సెషన్‌ను సృష్టించండి",
-      "label": "సెషన్ పేరు",
-      "placeholder": "ఉదాహరణకు, marketing-bot",
-      "hint": "చిన్న అక్షరాలు (lowercase), సంఖ్యలు, మరియు హైఫన్‌లు మాత్రమే ఉపయోగించండి. ఉదాహరణ: <code>customer-support</code>, <code>bot-1</code>",
+      "title": "Add a WhatsApp number",
+      "label": "Name of this number",
+      "placeholder": "e.g. shop-paris",
+      "hint": "Use lowercase letters, numbers and hyphens only. Example: <code>shop-paris</code>",
       "invalidChars": "చెల్లని అక్షరాలు. చిన్న అక్షరాలు, సంఖ్యలు, మరియు హైఫన్‌లు మాత్రమే అనుమతించబడతాయి.",
       "tooLong": "పేరు 50 అక్షరాలు లేదా అంతకంటే తక్కువ ఉండాలి ({{length}}/50).",
       "duplicate": "ఈ పేరుతో సెషన్ ఇప్పటికే ఉంది.",
@@ -238,17 +249,17 @@
       "errorDefault": "సెషన్‌ను తొలగించడం విఫలమైంది"
     },
     "qr": {
-      "title": "QR కోడ్‌ను స్కాన్ చేయండి",
+      "title": "Scan with your phone",
       "step1": "<strong>1.</strong> మీ ఫోన్‌లో వాట్సాప్ తెరవండి",
       "step2": "<strong>2.</strong> <strong>మెనూ</strong> → <strong>Linked Devices</strong> పై నొక్కండి",
       "step3": "<strong>3.</strong> <strong>Link a Device</strong> పై నొక్కి, ఈ QR కోడ్‌ను స్కాన్ చేయండి",
       "autoRefresh": "QR ప్రతి 5 సెకన్లకు స్వయంచాలకంగా అప్‌డేట్ అవుతుంది",
-      "generating": "QR కోడ్‌ను రూపొందిస్తోంది...",
+      "generating": "Preparing the code…",
       "unavailable": "QR కోడ్ ఇంకా అందుబాటులో లేదు. కాసేపటి తర్వాత మళ్లీ ప్రయత్నించండి.",
       "preparing": "QR కోడ్‌ను సిద్ధం చేస్తోంది...",
-      "showQr": "QR చూపించు",
+      "showQr": "Show QR code",
       "loading": "లోడ్ అవుతోంది...",
-      "scanToConnect": "కనెక్ట్ కావడానికి QR కోడ్‌ను స్కాన్ చేయండి"
+      "scanToConnect": "Scan this code with WhatsApp on the phone"
     },
     "details": {
       "title": "సెషన్ వివరాలు",
@@ -262,10 +273,10 @@
     },
     "actions": {
       "view": "చూడు",
-      "start": "ప్రారంభించు",
-      "stop": "ఆపివేయి",
-      "reconnect": "మళ్లీ కనెక్ట్ చేయి",
-      "delete": "తొలగించు",
+      "start": "Connect",
+      "stop": "Disconnect",
+      "reconnect": "Reconnect",
+      "delete": "Remove",
       "killStuck": "నిలిచిపోయినదాన్ని ఆపండి"
     },
     "toasts": {
@@ -391,28 +402,28 @@
     }
   },
   "templates": {
-    "title": "టెంప్లేట్‌లు",
-    "subtitle": "ప్రతి WhatsApp సెషన్‌కు పునర్వినియోగ మెసేజ్ టెంప్లేట్‌లను సృష్టించండి",
-    "createTitle": "టెంప్లేట్ సృష్టించండి",
-    "editTitle": "టెంప్లేట్‌ను సవరించండి",
-    "newTemplate": "కొత్త టెంప్లేట్",
-    "createTemplate": "టెంప్లేట్ సృష్టించండి",
+    "title": "Message templates",
+    "subtitle": "Write a message once, reuse it in every campaign.",
+    "createTitle": "New template",
+    "editTitle": "Edit template",
+    "newTemplate": "New template",
+    "createTemplate": "Save template",
     "saveChanges": "మార్పులను సేవ్ చేయండి",
     "viewOnly": "వీక్షణ మాత్రమే",
     "noSessions": "సెషన్‌లు లేవు",
     "sessionHint": "{{name}} కింద సేవ్ చేయబడింది",
-    "namePlaceholder": "ఉదా., order-confirmation",
-    "header": "హెడర్",
-    "headerPlaceholder": "ఐచ్ఛిక పరిచయ లైన్",
-    "body": "బాడీ",
-    "bodyPlaceholder": "హాయ్ {{customer}}, మీ ఆర్డర్ {{orderId}} సిద్ధంగా ఉంది.",
-    "footer": "ఫుటర్",
-    "footerPlaceholder": "ఐచ్ఛిక ముగింపు లైన్",
-    "previewTitle": "ప్రివ్యూ",
+    "namePlaceholder": "e.g. Opening hours",
+    "header": "Title (optional)",
+    "headerPlaceholder": "First line, above the message",
+    "body": "Message",
+    "bodyPlaceholder": "Hello {{name}}, we are open until 8pm.",
+    "footer": "Sign-off (optional)",
+    "footerPlaceholder": "Last line, under the message",
+    "previewTitle": "How it will look",
     "previewValuePlaceholder": "నమూనా విలువ",
-    "previewEmpty": "ఇక్కడ ప్రివ్యూ చూడటానికి టెంప్లేట్ రాయడం ప్రారంభించండి.",
-    "noPlaceholders": "సబ్‌స్టిట్యూషన్‌లను పరీక్షించడానికి {{name}} ప్లేస్‌హోల్డర్‌లను ఉపయోగించండి.",
-    "savedTitle": "సేవ్ చేసిన టెంప్లేట్‌లు",
+    "previewEmpty": "The message will appear here as you type.",
+    "noPlaceholders": "Write {{name}} in the message to insert each contact’s name.",
+    "savedTitle": "Saved templates",
     "count": "మొత్తం {{count}}",
     "deleteTitle": "టెంప్లేట్‌ను తొలగించండి",
     "deleteConfirm": "\"{{name}}\" టెంప్లేట్‌ను తొలగించాలా? ఈ చర్యను రద్దు చేయలేరు.",
@@ -420,10 +431,10 @@
       "copyName": "టెంప్లేట్ పేరును కాపీ చేయండి"
     },
     "empty": {
-      "title": "టెంప్లేట్‌లు ఏవీ సేవ్ కాలేదు",
-      "description": "సాధారణ ప్రత్యుత్తరాలు మరియు నోటిఫికేషన్‌లను వేగవంతం చేయడానికి పునర్వినియోగ టెంప్లేట్‌ను సృష్టించండి.",
-      "noSessionsTitle": "సెషన్‌లు అందుబాటులో లేవు",
-      "noSessionsDesc": "టెంప్లేట్‌లను జోడించే ముందు WhatsApp సెషన్‌ను సృష్టించండి."
+      "title": "No template yet",
+      "description": "Save a message you send often, then pick it when you start a campaign.",
+      "noSessionsTitle": "Connect a WhatsApp number first",
+      "noSessionsDesc": "Templates are saved on a connected number."
     },
     "toasts": {
       "created": "టెంప్లేట్ విజయవంతంగా సృష్టించబడింది",
@@ -697,16 +708,16 @@
   },
   "campaigns": {
     "title": "Campaigns",
-    "subtitle": "Send the same message to many contacts in a few clicks",
+    "subtitle": "Choose who receives the message, write it, then send.",
     "stepsLabel": "Campaign steps",
     "steps": {
-      "1": "Contacts",
+      "1": "Who",
       "2": "Message",
-      "3": "Send"
+      "3": "Check"
     },
     "noSessionTitle": "No WhatsApp account connected",
-    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
-    "goToSessions": "Connect a session",
+    "noSessionDesc": "Connect a WhatsApp number first. Sending starts from there.",
+    "goToSessions": "Connect a number",
     "messageTypes": {
       "text": "Text",
       "image": "Image",
@@ -722,14 +733,14 @@
       "message": "Your message",
       "messagePlaceholder": "Write the message everyone will receive...",
       "messageHint": "{{count}} / 4096 characters",
-      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "nameHint": "Tip: write {{var}} to insert each contact’s name.",
       "caption": "Caption (optional)",
       "mediaUrl": "Image or file URL",
       "mediaUrlHint": "Paste a public link, or upload a file below.",
       "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
       "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
       "template": "Choose a template",
-      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "noTemplates": "No template yet — create one in Templates.",
       "uploadImage": "Upload an image",
       "uploadVideo": "Upload a video",
       "uploadDocument": "Upload a document",
@@ -742,14 +753,17 @@
     },
     "file": {
       "dropHint": "Import a CSV or TXT file with one phone number per line",
-      "choose": "Choose a file"
+      "choose": "Choose a file",
+      "dropReady": "Drop the file to import the numbers"
     },
     "wa": {
       "load": "Load my contacts",
       "loading": "Loading contacts...",
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
-      "selected": "{{count}} of {{total}} selected"
+      "selected": "{{count}} of {{total}} selected",
+      "searchPlaceholder": "Search contacts…",
+      "noSearchResults": "No contacts match your search"
     },
     "validating": "Checking numbers… {{done}} / {{total}}",
     "summary": {
@@ -766,8 +780,10 @@
       "duration": "Estimated duration",
       "durationValue": "About {{minutes}} min",
       "message": "Message to send",
-      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
-      "send": "Send campaign"
+      "warning": "Only send to people who asked to hear from you. Sending too fast can get the WhatsApp number restricted. This send cannot be undone.",
+      "send": "Send now",
+      "status": "Status",
+      "notYetSent": "Not sent yet — you can still go back"
     },
     "sending": {
       "title": "Sending in progress…",
@@ -792,7 +808,9 @@
     "mediaSource": {
       "upload": "Upload a file",
       "url": "Use a URL"
-    }
+    },
+    "context": "{{count}} recipients · {{session}} · step {{step}} of {{total}}",
+    "changeNumberConfirm": "Change the sending number? The recipient list for this campaign will be cleared. The message is kept."
   },
   "infrastructure": {
     "title": "ఇన్‌ఫ్రాస్ట్రక్చర్",
@@ -939,5 +957,11 @@
       "importTooLarge": "బ్యాకప్ అభ్యర్థన పరిమితి కంటే పెద్దది. సర్వర్‌లో BODY_SIZE_LIMIT పెంచి మళ్లీ ప్రయత్నించండి."
     },
     "statusLoadError": "ప్రస్తుత ఇన్‌ఫ్రాస్ట్రక్చర్ స్థితిని లోడ్ చేయడం సాధ్యం కాలేదు. మళ్లీ ప్రయత్నించడానికి రిఫ్రెష్ చేయండి."
+  },
+  "role": {
+    "admin": "Administrator",
+    "operator": "Team member",
+    "viewer": "View only",
+    "readOnlyBanner": "You can look, but this access cannot send messages or change settings."
   }
 }

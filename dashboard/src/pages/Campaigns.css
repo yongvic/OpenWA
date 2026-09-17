@@ -61,15 +61,25 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  width: 100%;
+  min-height: var(--touch, 44px);
   padding: 0.875rem 1rem;
   border: 2px solid var(--border);
   border-radius: 12px;
   background: var(--bg-white);
   color: var(--text-muted);
+  text-align: start;
+  cursor: pointer;
+  font: inherit;
   transition:
     border-color 0.2s ease,
     background-color 0.2s ease,
     color 0.2s ease;
+}
+
+.campaigns-page .campaigns-step:disabled {
+  cursor: default;
+  opacity: 0.7;
 }
 
 .campaigns-page .campaigns-step.active {
@@ -223,8 +233,28 @@
   color: var(--primary);
 }
 
-.campaigns-page .campaigns-file-input {
-  display: none;
+.campaigns-page .campaigns-file-zone.dragover {
+  border-style: solid;
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 10%, var(--bg-light));
+}
+
+.campaigns-page .campaigns-context {
+  margin: -0.5rem 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.campaigns-page .campaigns-readonly {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--warning) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .campaigns-page .campaigns-wa-list {
@@ -233,11 +263,47 @@
 
 .campaigns-page .campaigns-wa-toolbar {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem 1rem;
   margin-bottom: 0.75rem;
   font-size: 0.875rem;
   color: var(--text-secondary);
+}
+
+.campaigns-page .campaigns-wa-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.campaigns-page .campaigns-wa-toolbar-sep {
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.campaigns-page .campaigns-wa-search {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-white);
+  box-sizing: border-box;
+}
+
+.campaigns-page .campaigns-wa-search:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.campaigns-page .campaigns-wa-empty {
+  padding: 1rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
 }
 
 .campaigns-page .campaigns-wa-contacts {
@@ -536,11 +602,21 @@
   }
 
   .campaigns-page .campaigns-steps {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.375rem;
+  }
+
+  .campaigns-page .campaigns-step {
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.5rem 0.35rem;
+    min-height: 3.5rem;
   }
 
   .campaigns-page .campaigns-step-label {
-    font-size: 0.875rem;
+    font-size: 0.6875rem;
+    text-align: center;
+    line-height: 1.2;
   }
 
   .campaigns-page .campaigns-card {

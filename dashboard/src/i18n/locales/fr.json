@@ -7,7 +7,7 @@
   },
   "common": {
     "appName": "OpenWA",
-    "appSubtitle": "WhatsApp API",
+    "appSubtitle": "Campagnes WhatsApp",
     "loading": "Chargement...",
     "save": "Enregistrer",
     "cancel": "Annuler",
@@ -54,7 +54,12 @@
     "refresh": "Actualiser",
     "errorGeneric": "Une erreur est survenue",
     "unknownError": "Erreur inconnue",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "continue": "Continuer",
+    "accountMenu": "Compte",
+    "offlineBanner": "Pas de connexion. L’envoi reprendra quand le réseau reviendra.",
+    "showAccessCode": "Afficher le code d’accès",
+    "hideAccessCode": "Masquer le code d’accès"
   },
   "theme": {
     "light": "Clair",
@@ -67,11 +72,10 @@
   },
   "nav": {
     "dashboard": "Tableau de bord",
-    "sessions": "Sessions",
+    "sessions": "Numéros",
     "chats": "Discussions",
     "webhooks": "Webhooks",
-    "templates": "Templates",
-    "campaigns": "Campagnes",
+    "templates": "Modèles",
     "campaigns": "Campagnes",
     "apiKeys": "Clés API",
     "messageTester": "Testeur de messages",
@@ -133,22 +137,28 @@
     "loadMessagesError": "Impossible de charger les messages. Vérifiez les journaux du serveur."
   },
   "errorBoundary": {
-    "title": "Une erreur est survenue",
-    "description": "Le tableau de bord a rencontré une erreur inattendue.",
-    "reload": "Recharger le tableau de bord"
+    "title": "Cet écran n’a pas pu s’afficher",
+    "description": "Rechargez pour revenir aux campagnes. Rien n’a été envoyé à cause de cette erreur.",
+    "reload": "Recharger"
   },
   "login": {
     "apiKey": "Clé API",
     "apiKeyPlaceholder": "Entrez votre clé API",
     "apiKeyRequired": "La clé API est requise",
-    "connect": "Connecter",
-    "connecting": "Connexion...",
-    "invalidKey": "Clé API invalide",
-    "connectionError": "Impossible de se connecter au serveur. Veuillez réessayer.",
+    "connect": "Entrer",
+    "connecting": "Vérification…",
+    "invalidKey": "Ce code n’est pas reconnu. Vérifiez-le et réessayez.",
+    "connectionError": "Impossible de joindre le serveur. Vérifiez qu’il tourne, puis réessayez.",
     "help": "Besoin d'aide ?",
     "viewDocs": "Voir la documentation",
     "footer": "Fait avec ❤️ par Yudhi Armyndharis et la communauté OpenWA",
-    "version": "v{{version}} · {{date}}"
+    "version": "v{{version}} · {{date}}",
+    "title": "Ouvrir l’espace campagnes",
+    "subtitle": "Entrez le code d’accès de l’équipe.",
+    "accessCode": "Code d’accès",
+    "accessCodePlaceholder": "Collez le code ici",
+    "accessCodeRequired": "Entrez le code d’accès pour continuer.",
+    "helpWhere": "Le code se trouve dans le fichier data/.api-key sur l’ordinateur qui fait tourner OpenWA. Demandez-le à la personne qui a installé l’outil."
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -201,9 +211,9 @@
     "disconnected": "Déconnecté"
   },
   "sessions": {
-    "title": "Sessions",
-    "subtitle": "Gérez vos sessions WhatsApp et vos connexions par code QR",
-    "newSession": "Nouvelle session",
+    "title": "Numéros WhatsApp",
+    "subtitle": "Connectez les téléphones qui enverront les messages.",
+    "newSession": "Ajouter un numéro",
     "searchPlaceholder": "Rechercher des sessions...",
     "filter": {
       "all": "Tous les statuts",
@@ -212,14 +222,14 @@
       "connecting": "Connexion en cours"
     },
     "empty": {
-      "title": "Aucune session trouvée",
-      "description": "Créez une nouvelle session pour commencer"
+      "title": "Aucun numéro WhatsApp",
+      "description": "Ajoutez un numéro, puis scannez le QR avec le téléphone qui doit envoyer."
     },
     "create": {
-      "title": "Créer une nouvelle session",
-      "label": "Nom de la session",
-      "placeholder": "ex : marketing-bot",
-      "hint": "Utilisez uniquement des lettres minuscules, des chiffres et des tirets. Exemple : <code>customer-support</code>, <code>bot-1</code>",
+      "title": "Ajouter un numéro WhatsApp",
+      "label": "Nom de ce numéro",
+      "placeholder": "ex. boutique-paris",
+      "hint": "Lettres minuscules, chiffres et tirets uniquement. Exemple : <code>boutique-paris</code>",
       "invalidChars": "Caractères invalides. Seuls les lettres minuscules, les chiffres et les tirets sont autorisés.",
       "tooLong": "Le nom doit contenir 50 caractères ou moins ({{length}}/50).",
       "duplicate": "Une session avec ce nom existe déjà.",
@@ -239,17 +249,17 @@
       "errorDefault": "Impossible de supprimer la session"
     },
     "qr": {
-      "title": "Scanner le code QR",
+      "title": "Scanner avec le téléphone",
       "step1": "<strong>1.</strong> Ouvrez WhatsApp sur votre téléphone",
       "step2": "<strong>2.</strong> Appuyez sur <strong>Menu</strong> → <strong>Appareils connectés</strong>",
       "step3": "<strong>3.</strong> Appuyez sur <strong>Connecter un appareil</strong> et scannez ce QR",
       "autoRefresh": "Le QR code s'actualise automatiquement toutes les 5 secondes",
-      "generating": "Génération du code QR...",
+      "generating": "Préparation du code…",
       "unavailable": "Code QR non disponible pour le moment. Réessayez dans un instant.",
       "preparing": "Préparation du code QR...",
       "showQr": "Afficher le QR",
       "loading": "Chargement...",
-      "scanToConnect": "Scannez le code QR pour vous connecter"
+      "scanToConnect": "Scannez ce code avec WhatsApp sur le téléphone"
     },
     "details": {
       "title": "Détails de la session",
@@ -263,10 +273,10 @@
     },
     "actions": {
       "view": "Voir",
-      "start": "Démarrer",
-      "stop": "Arrêter",
+      "start": "Connecter",
+      "stop": "Déconnecter",
       "reconnect": "Reconnecter",
-      "delete": "Supprimer",
+      "delete": "Retirer",
       "killStuck": "Arrêter (bloquée)"
     },
     "toasts": {
@@ -392,28 +402,28 @@
     }
   },
   "templates": {
-    "title": "Templates",
-    "subtitle": "Créez des templates de message réutilisables pour chaque session WhatsApp",
-    "createTitle": "Créer un template",
-    "editTitle": "Modifier le template",
-    "newTemplate": "Nouveau template",
-    "createTemplate": "Créer le template",
+    "title": "Modèles de message",
+    "subtitle": "Écrivez un message une fois, réutilisez-le à chaque campagne.",
+    "createTitle": "Nouveau modèle",
+    "editTitle": "Modifier le modèle",
+    "newTemplate": "Nouveau modèle",
+    "createTemplate": "Enregistrer le modèle",
     "saveChanges": "Enregistrer les modifications",
     "viewOnly": "Lecture seule",
     "noSessions": "Aucune session",
     "sessionHint": "Enregistré dans {{name}}",
-    "namePlaceholder": "ex. : confirmation-commande",
-    "header": "En-tête",
-    "headerPlaceholder": "Ligne d'introduction (facultatif)",
-    "body": "Corps",
-    "bodyPlaceholder": "Bonjour {{customer}}, votre commande {{orderId}} est prête.",
-    "footer": "Pied de page",
-    "footerPlaceholder": "Ligne de conclusion (facultatif)",
+    "namePlaceholder": "ex. Horaires d’ouverture",
+    "header": "Titre (optionnel)",
+    "headerPlaceholder": "Première ligne, au-dessus du message",
+    "body": "Message",
+    "bodyPlaceholder": "Bonjour {{name}}, nous fermons à 20h.",
+    "footer": "Signature (optionnel)",
+    "footerPlaceholder": "Dernière ligne, sous le message",
     "previewTitle": "Aperçu",
     "previewValuePlaceholder": "Exemple de valeur",
-    "previewEmpty": "Commencez à rédiger un template pour l'afficher ici.",
-    "noPlaceholders": "Utilisez des variables {{name}} pour tester les substitutions.",
-    "savedTitle": "Templates enregistrés",
+    "previewEmpty": "Le message s’affiche ici pendant que vous écrivez.",
+    "noPlaceholders": "Écrivez {{name}} dans le message pour insérer le nom de chaque contact.",
+    "savedTitle": "Modèles enregistrés",
     "count": "{{count}} au total",
     "deleteTitle": "Supprimer le template",
     "deleteConfirm": "Supprimer le template « {{name}} » ? Cette action est irréversible.",
@@ -421,10 +431,10 @@
       "copyName": "Copier le nom du template"
     },
     "empty": {
-      "title": "Aucun template enregistré",
-      "description": "Créez un template réutilisable pour accélérer vos réponses et notifications courantes.",
-      "noSessionsTitle": "Aucune session disponible",
-      "noSessionsDesc": "Créez une session WhatsApp avant d'ajouter des templates."
+      "title": "Aucun modèle",
+      "description": "Enregistrez un message que vous envoyez souvent, puis choisissez-le dans une campagne.",
+      "noSessionsTitle": "Connectez d’abord un numéro WhatsApp",
+      "noSessionsDesc": "Les modèles sont enregistrés sur un numéro connecté."
     },
     "toasts": {
       "created": "Template créé avec succès",
@@ -557,16 +567,16 @@
   },
   "campaigns": {
     "title": "Campagnes",
-    "subtitle": "Envoyez le même message à plusieurs contacts en quelques clics",
+    "subtitle": "Choisissez les destinataires, écrivez le message, puis envoyez.",
     "stepsLabel": "Étapes de la campagne",
     "steps": {
-      "1": "Contacts",
+      "1": "Qui",
       "2": "Message",
-      "3": "Envoi"
+      "3": "Vérifier"
     },
     "noSessionTitle": "Aucun compte WhatsApp connecté",
-    "noSessionDesc": "Connectez d'abord une session WhatsApp depuis le menu Sessions.",
-    "goToSessions": "Connecter une session",
+    "noSessionDesc": "Connectez d’abord un numéro WhatsApp. L’envoi part de ce numéro.",
+    "goToSessions": "Connecter un numéro",
     "messageTypes": {
       "text": "Texte",
       "image": "Image",
@@ -586,14 +596,14 @@
       "message": "Votre message",
       "messagePlaceholder": "Écrivez le message que tout le monde recevra…",
       "messageHint": "{{count}} / 4096 caractères",
-      "nameHint": "Astuce : utilisez {{name}} pour personnaliser avec le nom de chaque contact.",
+      "nameHint": "Astuce : écrivez {{var}} pour insérer le nom de chaque contact.",
       "caption": "Légende (optionnelle)",
       "mediaUrl": "Lien public",
       "mediaUrlHint": "Collez un lien public, ou importez un fichier ci-dessous.",
       "mediaUrlOnlyHint": "Collez un lien public vers votre image, vidéo ou document.",
       "uploadOnlyHint": "Choisissez un fichier sur votre ordinateur (max 50 Mo).",
       "template": "Choisir un modèle",
-      "noTemplates": "Aucun modèle — créez-en un dans le menu Templates.",
+      "noTemplates": "Aucun modèle — créez-en un dans Modèles.",
       "uploadImage": "Importer une image",
       "uploadVideo": "Importer une vidéo",
       "uploadDocument": "Importer un document",
@@ -606,14 +616,17 @@
     },
     "file": {
       "dropHint": "Importez un fichier CSV ou TXT avec un numéro par ligne",
-      "choose": "Choisir un fichier"
+      "choose": "Choisir un fichier",
+      "dropReady": "Déposez le fichier pour importer les numéros"
     },
     "wa": {
       "load": "Charger mes contacts",
       "loading": "Chargement des contacts…",
       "selectAll": "Tout sélectionner",
       "deselectAll": "Tout désélectionner",
-      "selected": "{{count}} sur {{total}} sélectionné(s)"
+      "selected": "{{count}} sur {{total}} sélectionné(s)",
+      "searchPlaceholder": "Rechercher un contact…",
+      "noSearchResults": "Aucun contact ne correspond à la recherche"
     },
     "validating": "Vérification des numéros… {{done}} / {{total}}",
     "summary": {
@@ -630,8 +643,10 @@
       "duration": "Durée estimée",
       "durationValue": "Environ {{minutes}} min",
       "message": "Message à envoyer",
-      "warning": "N'envoyez qu'aux personnes qui ont accepté de recevoir vos messages. Trop de messages trop vite peut entraîner une restriction de votre compte WhatsApp.",
-      "send": "Envoyer la campagne"
+      "warning": "N’envoyez qu’aux personnes qui ont demandé vos messages. Un envoi trop rapide peut restreindre le numéro WhatsApp. Cet envoi ne peut pas être annulé.",
+      "send": "Envoyer maintenant",
+      "status": "État",
+      "notYetSent": "Pas encore envoyé — vous pouvez encore revenir en arrière"
     },
     "sending": {
       "title": "Envoi en cours…",
@@ -652,7 +667,9 @@
       "fileRead": "Impossible de lire le fichier",
       "fileTooLarge": "Fichier trop volumineux (max 50 Mo)",
       "send": "Impossible d'envoyer la campagne"
-    }
+    },
+    "context": "{{count}} destinataires · {{session}} · étape {{step}} sur {{total}}",
+    "changeNumberConfirm": "Changer de numéro d’envoi ? La liste des destinataires de cette campagne sera vidée. Le message est conservé."
   },
   "infrastructure": {
     "title": "Infrastructure",
@@ -910,7 +927,9 @@
         "confirm": "Régénérer le secret de signature pour {{id}} ? Le secret actuel arrêtera de fonctionner immédiatement.",
         "action": "Régénérer"
       },
-      "edit": { "title": "Modifier {{id}}" },
+      "edit": {
+        "title": "Modifier {{id}}"
+      },
       "delete": {
         "title": "Supprimer l'instance",
         "confirm": "Supprimer l'instance {{id}} ? Son URL d'entrée et son secret arrêteront de fonctionner immédiatement.",
@@ -938,5 +957,11 @@
         "actionFailed": "L'action a échoué"
       }
     }
+  },
+  "role": {
+    "admin": "Administrateur",
+    "operator": "Équipe",
+    "viewer": "Lecture seule",
+    "readOnlyBanner": "Vous pouvez regarder, mais cet accès ne peut ni envoyer ni modifier."
   }
 }

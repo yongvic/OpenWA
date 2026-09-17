@@ -7,7 +7,7 @@
   },
   "common": {
     "appName": "OpenWA",
-    "appSubtitle": "WhatsApp API",
+    "appSubtitle": "WhatsApp campaigns",
     "loading": "正在載入...",
     "save": "儲存",
     "cancel": "取消",
@@ -54,7 +54,12 @@
     "refresh": "重新整理",
     "errorGeneric": "發生錯誤",
     "unknownError": "未知錯誤",
-    "retry": "重試"
+    "retry": "重試",
+    "continue": "Continue",
+    "accountMenu": "Account",
+    "offlineBanner": "No internet. Sending is paused until you are back online.",
+    "showAccessCode": "Show access code",
+    "hideAccessCode": "Hide access code"
   },
   "theme": {
     "light": "淺色",
@@ -67,7 +72,7 @@
   },
   "nav": {
     "dashboard": "控制面板",
-    "sessions": "工作階段",
+    "sessions": "Numbers",
     "chats": "聊天",
     "webhooks": "Webhooks",
     "templates": "Templates",
@@ -132,22 +137,28 @@
     "loadMessagesError": "無法載入訊息。請檢查伺服器日誌。"
   },
   "errorBoundary": {
-    "title": "發生問題",
-    "description": "控制面板遇到未預期的錯誤。",
-    "reload": "重新載入控制面板"
+    "title": "This screen could not be shown",
+    "description": "Reload to go back to your campaigns. Nothing was sent from this error.",
+    "reload": "Reload"
   },
   "login": {
     "apiKey": "API 金鑰",
     "apiKeyPlaceholder": "輸入你的 API 金鑰",
     "apiKeyRequired": "必須輸入 API 金鑰",
-    "connect": "連線",
-    "connecting": "正在連線...",
-    "invalidKey": "API 金鑰無效",
-    "connectionError": "無法連線到伺服器。請再試一次。",
+    "connect": "Enter",
+    "connecting": "Checking…",
+    "invalidKey": "This code is not recognized. Check it and try again.",
+    "connectionError": "Cannot reach the server. Check that it is running, then try again.",
     "help": "需要協助？",
     "viewDocs": "查看文件",
     "footer": "由 Yudhi Armyndharis 及 OpenWA 社群用 ❤️ 打造",
-    "version": "v{{version}} · {{date}}"
+    "version": "v{{version}} · {{date}}",
+    "title": "Open the campaign workspace",
+    "subtitle": "Enter the access code given to your team.",
+    "accessCode": "Access code",
+    "accessCodePlaceholder": "Paste the code here",
+    "accessCodeRequired": "Enter the access code to continue.",
+    "helpWhere": "The code is in the data/.api-key file on the computer that runs OpenWA. Ask the person who installed it."
   },
   "dashboard": {
     "title": "控制面板",
@@ -200,9 +211,9 @@
     "disconnected": "已中斷連線"
   },
   "sessions": {
-    "title": "工作階段",
-    "subtitle": "管理你的 WhatsApp 工作階段及 QR 碼連線",
-    "newSession": "新增工作階段",
+    "title": "WhatsApp numbers",
+    "subtitle": "Connect the phones that will send the messages.",
+    "newSession": "Add a number",
     "searchPlaceholder": "搜尋工作階段...",
     "filter": {
       "all": "所有狀態",
@@ -211,14 +222,14 @@
       "connecting": "正在連線"
     },
     "empty": {
-      "title": "找不到工作階段",
-      "description": "建立新工作階段即可開始"
+      "title": "No WhatsApp number yet",
+      "description": "Add a number, then scan the QR code with the phone that should send."
     },
     "create": {
-      "title": "建立新工作階段",
-      "label": "工作階段名稱",
-      "placeholder": "例如：marketing-bot",
-      "hint": "只可使用小寫字母、數字及連字號。例如：<code>customer-support</code>、<code>bot-1</code>",
+      "title": "Add a WhatsApp number",
+      "label": "Name of this number",
+      "placeholder": "e.g. shop-paris",
+      "hint": "Use lowercase letters, numbers and hyphens only. Example: <code>shop-paris</code>",
       "invalidChars": "字元無效。只可使用小寫字母、數字及連字號。",
       "tooLong": "名稱不可超過 50 個字元（{{length}}/50）。",
       "duplicate": "已存在同名工作階段。",
@@ -238,17 +249,17 @@
       "errorDefault": "刪除工作階段失敗"
     },
     "qr": {
-      "title": "掃描 QR 碼",
+      "title": "Scan with your phone",
       "step1": "<strong>1.</strong> 在手機上開啟 WhatsApp",
       "step2": "<strong>2.</strong> 點按<strong>選單</strong> → <strong>已連結裝置</strong>",
       "step3": "<strong>3.</strong> 點按<strong>連結裝置</strong>並掃描此 QR",
       "autoRefresh": "QR 每 5 秒自動更新一次",
-      "generating": "正在產生 QR 碼...",
+      "generating": "Preparing the code…",
       "unavailable": "QR 碼暫時未能使用。請稍後再試。",
       "preparing": "正在準備 QR 碼...",
-      "showQr": "顯示 QR",
+      "showQr": "Show QR code",
       "loading": "正在載入...",
-      "scanToConnect": "掃描 QR 碼以連線"
+      "scanToConnect": "Scan this code with WhatsApp on the phone"
     },
     "details": {
       "title": "工作階段詳情",
@@ -262,10 +273,10 @@
     },
     "actions": {
       "view": "查看",
-      "start": "啟動",
-      "stop": "停止",
-      "reconnect": "重新連線",
-      "delete": "刪除",
+      "start": "Connect",
+      "stop": "Disconnect",
+      "reconnect": "Reconnect",
+      "delete": "Remove",
       "killStuck": "強制終止"
     },
     "toasts": {
@@ -391,28 +402,28 @@
     }
   },
   "templates": {
-    "title": "範本",
-    "subtitle": "為每個 WhatsApp 工作階段建立可重用的訊息範本",
-    "createTitle": "建立範本",
-    "editTitle": "編輯範本",
-    "newTemplate": "新範本",
-    "createTemplate": "建立範本",
+    "title": "Message templates",
+    "subtitle": "Write a message once, reuse it in every campaign.",
+    "createTitle": "New template",
+    "editTitle": "Edit template",
+    "newTemplate": "New template",
+    "createTemplate": "Save template",
     "saveChanges": "儲存變更",
     "viewOnly": "僅供檢視",
     "noSessions": "沒有工作階段",
     "sessionHint": "儲存於 {{name}}",
-    "namePlaceholder": "例如：order-confirmation",
-    "header": "標題",
-    "headerPlaceholder": "可選的開首句",
-    "body": "內文",
-    "bodyPlaceholder": "你好 {{customer}}，你的訂單 {{orderId}} 已經準備好。",
-    "footer": "頁尾",
-    "footerPlaceholder": "可選的結尾句",
-    "previewTitle": "預覽",
+    "namePlaceholder": "e.g. Opening hours",
+    "header": "Title (optional)",
+    "headerPlaceholder": "First line, above the message",
+    "body": "Message",
+    "bodyPlaceholder": "Hello {{name}}, we are open until 8pm.",
+    "footer": "Sign-off (optional)",
+    "footerPlaceholder": "Last line, under the message",
+    "previewTitle": "How it will look",
     "previewValuePlaceholder": "範例值",
-    "previewEmpty": "開始撰寫範本，即可在此預覽。",
-    "noPlaceholders": "使用 {{name}} 佔位符測試替換效果。",
-    "savedTitle": "已儲存的範本",
+    "previewEmpty": "The message will appear here as you type.",
+    "noPlaceholders": "Write {{name}} in the message to insert each contact’s name.",
+    "savedTitle": "Saved templates",
     "count": "共 {{count}} 個",
     "deleteTitle": "刪除範本",
     "deleteConfirm": "確定刪除範本「{{name}}」？此操作無法復原。",
@@ -420,10 +431,10 @@
       "copyName": "複製範本名稱"
     },
     "empty": {
-      "title": "未儲存任何範本",
-      "description": "建立可重用的範本，加快常用回覆和通知的速度。",
-      "noSessionsTitle": "沒有可用的工作階段",
-      "noSessionsDesc": "請先建立 WhatsApp 工作階段，才能新增範本。"
+      "title": "No template yet",
+      "description": "Save a message you send often, then pick it when you start a campaign.",
+      "noSessionsTitle": "Connect a WhatsApp number first",
+      "noSessionsDesc": "Templates are saved on a connected number."
     },
     "toasts": {
       "created": "範本建立成功",
@@ -697,16 +708,16 @@
   },
   "campaigns": {
     "title": "Campaigns",
-    "subtitle": "Send the same message to many contacts in a few clicks",
+    "subtitle": "Choose who receives the message, write it, then send.",
     "stepsLabel": "Campaign steps",
     "steps": {
-      "1": "Contacts",
+      "1": "Who",
       "2": "Message",
-      "3": "Send"
+      "3": "Check"
     },
     "noSessionTitle": "No WhatsApp account connected",
-    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
-    "goToSessions": "Connect a session",
+    "noSessionDesc": "Connect a WhatsApp number first. Sending starts from there.",
+    "goToSessions": "Connect a number",
     "messageTypes": {
       "text": "Text",
       "image": "Image",
@@ -722,14 +733,14 @@
       "message": "Your message",
       "messagePlaceholder": "Write the message everyone will receive...",
       "messageHint": "{{count}} / 4096 characters",
-      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "nameHint": "Tip: write {{var}} to insert each contact’s name.",
       "caption": "Caption (optional)",
       "mediaUrl": "Image or file URL",
       "mediaUrlHint": "Paste a public link, or upload a file below.",
       "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
       "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
       "template": "Choose a template",
-      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "noTemplates": "No template yet — create one in Templates.",
       "uploadImage": "Upload an image",
       "uploadVideo": "Upload a video",
       "uploadDocument": "Upload a document",
@@ -742,14 +753,17 @@
     },
     "file": {
       "dropHint": "Import a CSV or TXT file with one phone number per line",
-      "choose": "Choose a file"
+      "choose": "Choose a file",
+      "dropReady": "Drop the file to import the numbers"
     },
     "wa": {
       "load": "Load my contacts",
       "loading": "Loading contacts...",
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
-      "selected": "{{count}} of {{total}} selected"
+      "selected": "{{count}} of {{total}} selected",
+      "searchPlaceholder": "Search contacts…",
+      "noSearchResults": "No contacts match your search"
     },
     "validating": "Checking numbers… {{done}} / {{total}}",
     "summary": {
@@ -766,8 +780,10 @@
       "duration": "Estimated duration",
       "durationValue": "About {{minutes}} min",
       "message": "Message to send",
-      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
-      "send": "Send campaign"
+      "warning": "Only send to people who asked to hear from you. Sending too fast can get the WhatsApp number restricted. This send cannot be undone.",
+      "send": "Send now",
+      "status": "Status",
+      "notYetSent": "Not sent yet — you can still go back"
     },
     "sending": {
       "title": "Sending in progress…",
@@ -792,7 +808,9 @@
     "mediaSource": {
       "upload": "Upload a file",
       "url": "Use a URL"
-    }
+    },
+    "context": "{{count}} recipients · {{session}} · step {{step}} of {{total}}",
+    "changeNumberConfirm": "Change the sending number? The recipient list for this campaign will be cleared. The message is kept."
   },
   "infrastructure": {
     "title": "基礎架構",
@@ -939,5 +957,11 @@
       "importTooLarge": "備份超出請求大小限制。請在伺服器上調高 BODY_SIZE_LIMIT 後重試。"
     },
     "statusLoadError": "無法載入目前的基礎設施狀態。請重新整理以重試。"
+  },
+  "role": {
+    "admin": "Administrator",
+    "operator": "Team member",
+    "viewer": "View only",
+    "readOnlyBanner": "You can look, but this access cannot send messages or change settings."
   }
 }

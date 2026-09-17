@@ -590,12 +590,137 @@
     margin-left: 0;
     width: 100%;
     padding-top: 56px;
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
     height: 100vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
   .collapse-toggle {
+    display: none;
+  }
+
+  .mobile-page-title {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .mobile-brand .brand-name {
+    display: none;
+  }
+
+  .sidebar.mobile .sidebar-header,
+  .sidebar.mobile .sidebar-nav,
+  .sidebar.mobile .collapse-toggle {
+    display: none;
+  }
+
+  .sidebar.mobile {
+    width: min(320px, 92vw);
+  }
+
+  .account-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.25rem 1.25rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .account-drawer-header strong {
+    font-size: 1rem;
+  }
+
+  .sidebar.mobile .sidebar-footer {
+    flex: 1;
+    justify-content: flex-start;
+    padding-top: 1rem;
+  }
+
+  .bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    min-height: 64px;
+    padding: 0.25rem 0.25rem calc(0.25rem + env(safe-area-inset-bottom, 0px));
+    background: var(--bg-white);
+    border-top: 1px solid var(--border);
+  }
+
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    min-height: 52px;
+    padding: 0.35rem 0.25rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    border-radius: var(--radius);
+  }
+
+  .bottom-nav-item.active {
+    color: var(--primary);
+    background: var(--primary-soft);
+  }
+
+  .bottom-nav-item:hover {
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+}
+
+.role-chip {
+  margin: 0 0 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.role-chip.viewer {
+  background: color-mix(in srgb, var(--warning) 18%, transparent);
+}
+
+.account-version {
+  margin: 0.5rem 0 0;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.offline-banner {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 0.625rem 1rem;
+  background: color-mix(in srgb, var(--warning) 18%, var(--bg-white));
+  border-bottom: 1px solid color-mix(in srgb, var(--warning) 40%, var(--border));
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .bottom-nav,
+  .account-drawer-header {
     display: none;
   }
 }

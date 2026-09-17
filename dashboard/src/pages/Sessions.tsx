@@ -10,6 +10,7 @@ import { useToast } from '../components/Toast';
 import { useWebSocket } from '../hooks/useWebSocket';
 import { useRole } from '../hooks/useRole';
 import { PageHeader } from '../components/PageHeader';
+import { ScreenStatus } from '../components/ScreenStatus';
 import { CustomSelect } from '../components/CustomSelect';
 import './Sessions.css';
 
@@ -33,7 +34,6 @@ export function Sessions() {
   const [pairingError, setPairingError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [killConfirmId, setKillConfirmId] = useState<string | null>(null);
 
@@ -305,27 +305,26 @@ export function Sessions() {
 
   const formatStatus = (status: string) => t(`sessionStatus.${status}`, { defaultValue: status });
 
-  const filteredSessions = sessions.filter(s => {
-    const matchesSearch =
-      s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.id.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus =
-      statusFilter === 'all' ||
-      (statusFilter === 'active' && s.status === 'ready') ||
-      (statusFilter === 'inactive' && ['created', 'idle', 'disconnected'].includes(s.status)) ||
-      (statusFilter === 'connecting' && ['initializing', 'connecting', 'qr_ready'].includes(s.status));
-    return matchesSearch && matchesStatus;
-  });
+  const filteredSessions = CAMPAIGN_FOCUSED_UI
+    ? sessions
+    : sessions.filter(s => {
+        const matchesSearch =
+          s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          s.id.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStatus =
+          statusFilter === 'all' ||
+          (statusFilter === 'active' && s.status === 'ready') ||
+          (statusFilter === 'inactive' && ['created', 'idle', 'disconnected'].includes(s.status)) ||
+          (statusFilter === 'connecting' && ['initializing', 'connecting', 'qr_ready'].includes(s.status));
+        return matchesSearch && matchesStatus;
+      });
 
   const pageClass = CAMPAIGN_FOCUSED_UI ? 'sessions-page product-page' : 'sessions-page';
 
   if (loading) {
     return (
-      <div
-        className={pageClass}
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}
-      >
-        <Loader2 className="animate-spin" size={32} />
+      <div className={pageClass}>
+        <ScreenStatus kind="loading" title={t('common.loading')} />
       </div>
     );
   }
@@ -345,39 +344,7 @@ export function Sessions() {
         }
       />
 
-      {CAMPAIGN_FOCUSED_UI ? (
-        <>
-          <div className="product-source-tabs" role="tablist">
-            {(
-              [
-                ['all', t('sessions.filter.all')],
-                ['active', t('sessions.filter.active')],
-                ['connecting', t('sessions.filter.connecting')],
-                ['inactive', t('sessions.filter.inactive')],
-              ] as const
-            ).map(([value, label]) => (
-              <button
-                key={value}
-                type="button"
-                role="tab"
-                className={`product-source-tab ${statusFilter === value ? 'active' : ''}`}
-                onClick={() => setStatusFilter(value)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          <div className="product-search">
-            <Search size={18} />
-            <input
-              type="search"
-              placeholder={t('sessions.searchPlaceholder')}
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-            />
-          </div>
-        </>
-      ) : (
+      {CAMPAIGN_FOCUSED_UI ? null : (
         <div className="filters-bar">
           <div className="search-input">
             <Search size={18} />
@@ -466,11 +433,11 @@ export function Sessions() {
       )}
 
       {qrData && (
-        <div className="modal-overlay" onClick={handleCloseQRModal}>
-          <div className="modal qr-modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay">
+          <div className="modal qr-modal" onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
             <div className="modal-header">
               <div className="modal-title">
-                <h2>{pairingMode ? t('sessions.pairing.tabPhone') : t('sessions.qr.title')}</h2>
+                <h2 id="qr-modal-title">{pairingMode ? t('sessions.pairing.tabPhone') : t('sessions.qr.title')}</h2>
                 <span className="session-name">{qrData.sessionName}</span>
               </div>
               <button className="btn-close" onClick={handleCloseQRModal} aria-label={t('common.close')}>
@@ -621,58 +588,6 @@ export function Sessions() {
         </div>
       )}
 
-      {selectedSession && (
-        <div className="modal-overlay" onClick={() => setSelectedSession(null)}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>{t('sessions.details.title')}</h2>
-              <button className="btn-icon" onClick={() => setSelectedSession(null)}>
-                <X size={20} />
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="detail-grid">
-                <div className="detail-item">
-                  <span className="detail-label">{t('sessions.details.name')}</span>
-                  <span className="detail-value">{selectedSession.name}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">{t('sessions.details.status')}</span>
-                  <span className={`status-badge ${selectedSession.status}`}>
-                    {formatStatus(selectedSession.status)}
-                  </span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">{t('sessions.details.sessionId')}</span>
-                  <span className="detail-value mono">{selectedSession.id}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">{t('sessions.details.phone')}</span>
-                  <span className="detail-value">{selectedSession.phone || t('sessions.details.phoneNone')}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">{t('sessions.details.created')}</span>
-                  <span className="detail-value">{new Date(selectedSession.createdAt).toLocaleString()}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">{t('sessions.details.lastActive')}</span>
-                  <span className="detail-value">
-                    {selectedSession.lastActive
-                      ? new Date(selectedSession.lastActive).toLocaleString()
-                      : t('common.never')}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button className="btn-secondary" onClick={() => setSelectedSession(null)}>
-                {t('common.close')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {deleteConfirmId && (
         <div className="modal-overlay" onClick={() => setDeleteConfirmId(null)}>
           <div className="modal confirm-modal" onClick={e => e.stopPropagation()}>
@@ -737,11 +652,20 @@ export function Sessions() {
 
       <div className="sessions-grid">
         {filteredSessions.length === 0 ? (
-          <div className="empty-state">
-            <QrCode size={48} />
-            <h3>{t('sessions.empty.title')}</h3>
-            <p>{t('sessions.empty.description')}</p>
-          </div>
+          <ScreenStatus
+            kind="empty"
+            icon={<QrCode size={48} aria-hidden="true" />}
+            title={t('sessions.empty.title')}
+            description={t('sessions.empty.description')}
+            action={
+              canWrite ? (
+                <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
+                  <Plus size={18} />
+                  {t('sessions.newSession')}
+                </button>
+              ) : undefined
+            }
+          />
         ) : (
           filteredSessions.map(session => (
             <div key={session.id} className="session-card">
@@ -769,10 +693,12 @@ export function Sessions() {
                     <span className="info-label">{t('sessions.card.phone')}</span>
                     <span className="info-value">{session.phone || '—'}</span>
                   </div>
-                  <div className="info-row">
-                    <span className="info-label">{t('sessions.card.sessionId')}</span>
-                    <span className="info-value mono">{session.id.substring(0, 12)}</span>
-                  </div>
+                  {!CAMPAIGN_FOCUSED_UI && (
+                    <div className="info-row">
+                      <span className="info-label">{t('sessions.card.sessionId')}</span>
+                      <span className="info-value mono">{session.id.substring(0, 12)}</span>
+                    </div>
+                  )}
                   <div className="info-row">
                     <span className="info-label">{t('sessions.card.lastActive')}</span>
                     <span className="info-value">{formatLastActive(session.lastActive)}</span>

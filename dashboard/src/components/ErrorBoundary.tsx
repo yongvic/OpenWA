@@ -1,6 +1,7 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import i18n from '../i18n';
+import './ScreenStatus.css';
 
 interface Props {
   children: ReactNode;
@@ -32,26 +33,14 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          justifyContent: 'center', minHeight: '100vh', padding: '2rem',
-          fontFamily: 'system-ui, sans-serif', color: 'var(--text-primary)',
-        }}>
-          <AlertCircle size={48} style={{ color: 'var(--error)', marginBottom: '1rem' }} />
-          <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{i18n.t('errorBoundary.title')}</h1>
-          <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', textAlign: 'center' }}>
+        <div className="screen-status screen-status--error" style={{ margin: '2rem auto', maxWidth: 480 }}>
+          <AlertCircle size={48} style={{ color: 'var(--error)' }} aria-hidden="true" />
+          <h1 style={{ fontSize: '1.25rem', margin: 0 }}>{i18n.t('errorBoundary.title')}</h1>
+          <p style={{ color: 'var(--text-secondary)', margin: 0, maxWidth: '42ch', textAlign: 'center' }}>
             {i18n.t('errorBoundary.description')}
           </p>
-          <button
-            onClick={this.handleReload}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '0.5rem',
-              padding: '0.75rem 1.5rem', backgroundColor: 'var(--primary)',
-              color: 'white', border: 'none', borderRadius: '0.5rem',
-              cursor: 'pointer', fontSize: '1rem',
-            }}
-          >
-            <RefreshCw size={18} />
+          <button type="button" className="btn-primary" onClick={this.handleReload}>
+            <RefreshCw size={18} aria-hidden="true" />
             {i18n.t('errorBoundary.reload')}
           </button>
         </div>

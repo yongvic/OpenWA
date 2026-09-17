@@ -9,16 +9,27 @@
   --bg-card: #ffffff;
   --text-primary: #0f172a; /* Slate 900 */
   --text-secondary: #475569; /* Slate 600 */
-  --text-muted: #94a3b8; /* Slate 400 */
+  --text-muted: #64748b; /* Slate 500 — 4.6:1 on white, usable as body secondary */
   --border: #e2e8f0; /* Slate 200 */
-  --error: #ef4444;
-  --success: #22c55e;
-  --warning: #f59e0b;
+  --error: #dc2626;
+  --success: #15803d;
+  --warning: #b45309;
   --info: #2563eb; /* Blue 600 — info/permission/log badges + qr-ready pill; no palette blue token */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --radius: 10px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --touch: 44px;
 }
 
 [data-palette='blue'] {
@@ -68,7 +79,7 @@
   --bg-card: #1e293b;
   --text-primary: #f1f5f9; /* Slate 100 */
   --text-secondary: #cbd5e1; /* Slate 300 */
-  --text-muted: #64748b; /* Slate 500 */
+  --text-muted: #94a3b8; /* Slate 400 — readable secondary on slate 800 */
   --border: #334155; /* Slate 700 */
   --info: #60a5fa; /* Blue 400 — lighter so it reads over the dark translucent-blue tints */
   --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent);
@@ -94,7 +105,7 @@
     --bg-card: #1e293b;
     --text-primary: #f1f5f9;
     --text-secondary: #cbd5e1;
-    --text-muted: #64748b;
+    --text-muted: #94a3b8;
     --border: #334155;
     --info: #60a5fa;
     --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent);
@@ -182,6 +193,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  min-height: var(--touch);
   padding: 0.75rem 1.25rem;
   border-radius: var(--radius);
   font-size: 0.9375rem;

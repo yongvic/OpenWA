@@ -204,8 +204,11 @@ export class BulkMessageService implements OnApplicationBootstrap {
 
     // Update status
     batch.status = BatchStatus.CANCELLED;
-    batch.progress.cancelled = batch.progress.pending;
-    batch.progress.pending = 0;
+    batch.progress = {
+      ...batch.progress,
+      cancelled: batch.progress.pending,
+      pending: 0,
+    };
     batch.completedAt = new Date();
 
     await this.batchRepository.save(batch);
@@ -247,11 +250,13 @@ export class BulkMessageService implements OnApplicationBootstrap {
     const results: BatchMessageResult[] = batch.results || [];
     let stoppedOnError = false;
     let cancelledByDb = false;
+    let stoppedByCancelSignal = false;
 
     for (let i = batch.currentIndex; i < batch.messages.length; i++) {
       // Check for cancellation
       if (!this.processingBatches.get(batch.id)) {
         this.logger.log(`Batch ${batch.batchId} cancelled at index ${i}`);
+        stoppedByCancelSignal = true;
         break;
       }
 
@@ -292,8 +297,11 @@ export class BulkMessageService implements OnApplicationBootstrap {
         result.status = BatchMessageStatus.SENT;
         result.messageId = messageResult.id;
         result.sentAt = new Date();
-        batch.progress.sent++;
-        batch.progress.pending--;
+        batch.progress = {
+          ...batch.progress,
+          sent: batch.progress.sent + 1,
+          pending: Math.max(0, batch.progress.pending - 1),
+        };
 
         // Persist like a single send so the message shows in chat history + stats. The engine echo
         // (onMessageCreate) fires the webhook/WS but does NOT write the DB, so without this the
@@ -306,8 +314,11 @@ export class BulkMessageService implements OnApplicationBootstrap {
         // Sanitize: an SSRF block names an internal address — never store/return/log it verbatim.
         const sanitized = sanitizeBatchError(error);
         result.error = sanitized;
-        batch.progress.failed++;
-        batch.progress.pending--;
+        batch.progress = {
+          ...batch.progress,
+          failed: batch.progress.failed + 1,
+          pending: Math.max(0, batch.progress.pending - 1),
+        };
 
         // Fire message:failed so alerting/analytics plugins observe bulk failures too (previously
         // none) — but NOT for a plugin gate-block, which is a moderation decision, not a delivery
@@ -366,12 +377,15 @@ export class BulkMessageService implements OnApplicationBootstrap {
         cancelledByDb = true;
       }
     }
-    const cancelled = cancelledByDb || !this.processingBatches.get(batch.id);
+    const cancelled = cancelledByDb || stoppedByCancelSignal;
     batch.status = resolveFinalBatchStatus(cancelled, stoppedOnError, batch.progress);
     if (cancelled) {
       // Reconcile the counters the same way cancelBatch does, so the persisted state is consistent.
-      batch.progress.cancelled = batch.progress.pending;
-      batch.progress.pending = 0;
+      batch.progress = {
+        ...batch.progress,
+        cancelled: batch.progress.pending,
+        pending: 0,
+      };
     }
     batch.completedAt = new Date();
     batch.results = results;

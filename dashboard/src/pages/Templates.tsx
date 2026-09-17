@@ -13,6 +13,7 @@ import {
   useUpdateTemplateMutation,
 } from '../hooks/queries';
 import { PageHeader } from '../components/PageHeader';
+import { ScreenStatus } from '../components/ScreenStatus';
 import { CAMPAIGN_FOCUSED_UI } from '../config/uiMode';
 import { copyToClipboard } from '../utils/clipboard';
 import './Templates.css';
@@ -179,8 +180,8 @@ export function Templates() {
 
   if (loadingSessions) {
     return (
-      <div className={`${pageClass} templates-loading`}>
-        <Loader2 className="animate-spin" size={32} />
+      <div className={pageClass}>
+        <ScreenStatus kind="loading" title={t('common.loading')} />
       </div>
     );
   }
@@ -220,14 +221,17 @@ export function Templates() {
       />
 
       {sessions.length === 0 ? (
-        <div className="templates-empty-page product-empty">
-          <FileText size={48} strokeWidth={1} />
-          <h3>{t('templates.empty.noSessionsTitle')}</h3>
-          <p>{t('templates.empty.noSessionsDesc')}</p>
-          <Link to="/sessions" className="btn-primary">
-            {t('campaigns.goToSessions')}
-          </Link>
-        </div>
+        <ScreenStatus
+          kind="empty"
+          icon={<FileText size={48} strokeWidth={1} aria-hidden="true" />}
+          title={t('templates.empty.noSessionsTitle')}
+          description={t('templates.empty.noSessionsDesc')}
+          action={
+            <Link to="/sessions" className="btn-primary">
+              {t('campaigns.goToSessions')}
+            </Link>
+          }
+        />
       ) : (
         <div className="templates-workspace">
           <aside className="templates-library">
@@ -236,12 +240,15 @@ export function Templates() {
                 <h2>{t('templates.savedTitle')}</h2>
                 <span>{t('templates.count', { count: templates.length })}</span>
               </div>
-              <button className="btn-primary templates-new-btn" onClick={resetForm} disabled={!canWrite}>
-                <Plus size={16} />
-                {t('templates.newTemplate')}
-              </button>
+              {canWrite && (
+                <button className="btn-primary templates-new-btn" onClick={resetForm} type="button">
+                  <Plus size={16} />
+                  {t('templates.newTemplate')}
+                </button>
+              )}
             </div>
 
+            {templates.length >= 8 && (
             <div className="templates-search">
               <Search size={16} />
               <input
@@ -250,6 +257,7 @@ export function Templates() {
                 placeholder={t('common.search')}
               />
             </div>
+            )}
 
             {loadingTemplates ? (
               <div className="templates-loading-inline">
@@ -283,7 +291,7 @@ export function Templates() {
                       <span className="template-list-meta">
                         {templatePlaceholders.length > 0
                           ? templatePlaceholders.map(key => `{{${key}}}`).join(' ')
-                          : t('templates.noPlaceholders')}
+                          : t('templates.noPlaceholders', { name: '{{name}}' })}
                       </span>
                     </button>
                   );
@@ -299,7 +307,7 @@ export function Templates() {
                 <p>{selectedSession ? t('templates.sessionHint', { name: selectedSession.name }) : ''}</p>
               </div>
               <div className="template-header-actions">
-                {editingTemplate && (
+                {editingTemplate && !CAMPAIGN_FOCUSED_UI && (
                   <button
                     className="icon-btn"
                     title={t('templates.actions.copyName')}
@@ -386,7 +394,6 @@ export function Templates() {
           <aside className="template-preview">
             <div className="template-preview-header">
               <h2>{t('templates.previewTitle')}</h2>
-              <span>{placeholders.length}</span>
             </div>
             <div className="template-preview-message">
               <pre>{preview || t('templates.previewEmpty')}</pre>
@@ -406,7 +413,7 @@ export function Templates() {
                   ))}
                 </div>
               ) : (
-                <p className="template-muted">{t('templates.noPlaceholders')}</p>
+                <p className="template-muted">{t('templates.noPlaceholders', { name: '{{name}}' })}</p>
               )}
             </div>
           </aside>

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, Languages } from 'lucide-react';
-import { GithubIcon } from '../components/GithubIcon';
 import { CustomSelect } from '../components/CustomSelect';
 import { languageOptions, resolveSupportedLanguage, type SupportedLanguage } from '../i18n';
 import { API_BASE_URL } from '../services/api';
@@ -26,7 +25,7 @@ export function Login({ onLogin }: LoginProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!apiKey.trim()) {
-      setError(t('login.apiKeyRequired'));
+      setError(t('login.accessCodeRequired'));
       return;
     }
     setIsLoading(true);
@@ -43,9 +42,10 @@ export function Login({ onLogin }: LoginProps) {
 
       if (response.ok) {
         onLogin(apiKey);
+      } else if (response.status === 401 || response.status === 403) {
+        setError(t('login.invalidKey'));
       } else {
-        const errorData = await response.json().catch(() => ({}));
-        setError(errorData.message || t('login.invalidKey'));
+        setError(t('login.connectionError'));
       }
     } catch {
       setError(t('login.connectionError'));
@@ -59,16 +59,12 @@ export function Login({ onLogin }: LoginProps) {
       <div className="login-card">
         <div className="login-logo">
           <img src="/openwa_logo.webp" alt="OpenWA" className="logo-icon" />
-          <span className="version-info">
-            {t('login.version', {
-              version: __APP_VERSION__,
-              date: new Date(__BUILD_TIME__).toLocaleDateString(),
-            })}
-          </span>
+          <h1 className="login-title">{t('login.title')}</h1>
+          <p className="login-subtitle">{t('login.subtitle')}</p>
         </div>
 
         <div className="login-language">
-          <Languages size={18} />
+          <Languages size={18} aria-hidden="true" />
           <CustomSelect
             value={currentLang}
             onChange={value => changeLanguage(value as SupportedLanguage)}
@@ -79,26 +75,33 @@ export function Login({ onLogin }: LoginProps) {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="input-group">
-            <label htmlFor="apiKey">{t('login.apiKey')}</label>
+            <label htmlFor="apiKey">{t('login.accessCode')}</label>
             <div className="input-wrapper">
               <input
                 id="apiKey"
                 type={showKey ? 'text' : 'password'}
                 value={apiKey}
                 onChange={e => setApiKey(e.target.value)}
-                placeholder={t('login.apiKeyPlaceholder')}
+                placeholder={t('login.accessCodePlaceholder')}
                 className={error ? 'error' : ''}
+                autoComplete="current-password"
+                autoCapitalize="off"
+                spellCheck={false}
               />
               <button
                 type="button"
                 className="toggle-visibility"
                 onClick={() => setShowKey(!showKey)}
-                aria-label={showKey ? t('common.hideApiKey') : t('common.showApiKey')}
+                aria-label={showKey ? t('common.hideAccessCode') : t('common.showAccessCode')}
               >
                 {showKey ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            {error && <span className="error-message">{error}</span>}
+            {error && (
+              <span className="error-message" role="alert">
+                {error}
+              </span>
+            )}
           </div>
 
           <button type="submit" className="connect-btn" disabled={isLoading}>
@@ -106,30 +109,8 @@ export function Login({ onLogin }: LoginProps) {
           </button>
         </form>
 
-        <p className="login-help">
-          {t('login.help')}{' '}
-          <a
-            href="https://github.com/rmyndharis/OpenWA/blob/main/docs/01-project-overview.md"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t('login.viewDocs')}
-          </a>
-        </p>
+        <p className="login-help">{t('login.helpWhere')}</p>
       </div>
-
-      <footer className="login-footer">
-        <span>{t('login.footer')}</span>
-        <a
-          href="https://github.com/rmyndharis/OpenWA"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="github-link"
-          aria-label="GitHub"
-        >
-          <GithubIcon size={18} />
-        </a>
-      </footer>
     </div>
   );
 }

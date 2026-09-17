@@ -19,6 +19,7 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useRole } from '../hooks/useRole';
 import { useSessionsQuery, useTemplatesQuery } from '../hooks/queries';
 import { PageHeader } from '../components/PageHeader';
+import { ScreenStatus } from '../components/ScreenStatus';
 import {
   chunkArray,
   estimateCampaignMinutes,
@@ -39,11 +40,17 @@ import {
   type CampaignMedia,
   type CampaignMessageType,
 } from '../utils/campaignMessage';
+import { resolveCampaignSendOutcome, tallyBulkBatch } from '../utils/campaignBatch';
+import {
+  clearCampaignDraft,
+  readCampaignDraft,
+  writeCampaignDraft,
+  type ContactSource,
+  type MediaSource,
+} from '../utils/campaignDraft';
 import './Campaigns.css';
 
 type Step = 1 | 2 | 3;
-type ContactSource = 'paste' | 'file' | 'whatsapp';
-type MediaSource = 'upload' | 'url';
 type Phase = 'compose' | 'sending' | 'done';
 
 const BULK_CHUNK_SIZE = 100;
@@ -66,9 +73,14 @@ function uploadLabelKey(type: CampaignMessageType): 'uploadImage' | 'uploadVideo
   return 'uploadImage';
 }
 
-async function waitForBatch(sessionId: string, batchId: string): Promise<BulkBatchStatus> {
+async function waitForBatch(
+  sessionId: string,
+  batchId: string,
+  onProgress?: (counts: { sent: number; failed: number }) => void,
+): Promise<BulkBatchStatus> {
   for (;;) {
     const status = await messageApi.getBatchStatus(sessionId, batchId);
+    onProgress?.(tallyBulkBatch(status));
     if (['completed', 'cancelled', 'failed'].includes(status.status)) {
       return status;
     }
@@ -99,6 +111,7 @@ export function Campaigns() {
   const { data: templates = [] } = useTemplatesQuery(sessionId, !!sessionId);
   const [selectedWaIds, setSelectedWaIds] = useState<Set<string>>(new Set());
   const [waContacts, setWaContacts] = useState<CampaignRecipient[]>([]);
+  const [waContactSearch, setWaContactSearch] = useState('');
   const [loadingWaContacts, setLoadingWaContacts] = useState(false);
   const [validating, setValidating] = useState(false);
   const [validationProgress, setValidationProgress] = useState({ done: 0, total: 0 });
@@ -110,6 +123,9 @@ export function Campaigns() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mediaInputRef = useRef<HTMLInputElement>(null);
   const cancelRequestedRef = useRef(false);
+  const skipSessionResetRef = useRef(true);
+  const draftReadyRef = useRef(false);
+  const [fileDragOver, setFileDragOver] = useState(false);
 
   const selectedTemplate = useMemo(
     () => templates.find(template => template.id === selectedTemplateId) ?? null,
@@ -129,23 +145,99 @@ export function Campaigns() {
   );
 
   useEffect(() => {
+    if (draftReadyRef.current || loadingSessions) return;
+    const draft = readCampaignDraft();
+    if (draft) {
+      const sessionStillReady = readySessions.some(session => session.id === draft.sessionId);
+      if (sessionStillReady) {
+        setSessionId(draft.sessionId);
+        setStep(draft.step);
+        setSource(draft.source);
+        setPasteText(draft.pasteText);
+        setRecipients(draft.recipients);
+        setInvalidNumbers(draft.invalidNumbers);
+        setSelectedWaIds(new Set(draft.selectedWaIds));
+        setWaContacts(draft.waContacts);
+        setWaContactSearch(draft.waContactSearch);
+      }
+      setMessage(draft.message);
+      setMessageType(draft.messageType);
+      setSelectedTemplateId(draft.selectedTemplateId);
+      setMediaUrl(draft.mediaUrl);
+      setMediaSource(draft.mediaSource);
+      skipSessionResetRef.current = true;
+    }
+    draftReadyRef.current = true;
+  }, [loadingSessions, readySessions]);
+
+  useEffect(() => {
     if (!sessionId && readySessions.length > 0) {
       setSessionId(readySessions[0].id);
     }
   }, [sessionId, readySessions]);
 
   useEffect(() => {
+    if (skipSessionResetRef.current) {
+      skipSessionResetRef.current = false;
+      return;
+    }
     setWaContacts([]);
     setSelectedWaIds(new Set());
+    setWaContactSearch('');
     setRecipients([]);
     setInvalidNumbers([]);
     setPasteText('');
-    setMessageType('text');
-    setSelectedTemplateId('');
     setMediaUrl('');
     setMediaFile(null);
     setMediaFileName('');
   }, [sessionId]);
+
+  useEffect(() => {
+    if (!draftReadyRef.current || phase !== 'compose') return;
+    writeCampaignDraft({
+      v: 1,
+      step,
+      sessionId,
+      source,
+      pasteText,
+      recipients,
+      invalidNumbers,
+      message,
+      messageType,
+      selectedTemplateId,
+      mediaUrl,
+      mediaSource,
+      selectedWaIds: [...selectedWaIds],
+      waContacts,
+      waContactSearch,
+    });
+  }, [
+    phase,
+    step,
+    sessionId,
+    source,
+    pasteText,
+    recipients,
+    invalidNumbers,
+    message,
+    messageType,
+    selectedTemplateId,
+    mediaUrl,
+    mediaSource,
+    selectedWaIds,
+    waContacts,
+    waContactSearch,
+  ]);
+
+  useEffect(() => {
+    if (phase !== 'sending') return;
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [phase]);
 
   useEffect(() => {
     if (templates.length > 0 && !selectedTemplateId) {
@@ -176,7 +268,8 @@ export function Campaigns() {
           label: contactLabel(c),
         }));
       setWaContacts(personal);
-      setSelectedWaIds(new Set(personal.map(c => c.chatId)));
+      setSelectedWaIds(new Set());
+      setWaContactSearch('');
     } catch (err) {
       setError(err instanceof Error ? err.message : t('campaigns.errors.loadContacts'));
     } finally {
@@ -216,6 +309,11 @@ export function Campaigns() {
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    await ingestContactsFile(file);
+    event.target.value = '';
+  };
+
+  const ingestContactsFile = async (file: File) => {
     setError(null);
     try {
       const numbers = await parseContactsFile(file);
@@ -223,8 +321,6 @@ export function Campaigns() {
       await validatePastedOrFileNumbers(numbers);
     } catch {
       setError(t('campaigns.errors.fileRead'));
-    } finally {
-      event.target.value = '';
     }
   };
 
@@ -274,13 +370,19 @@ export function Campaigns() {
     });
   };
 
-  const toggleAllWaContacts = () => {
-    if (selectedWaIds.size === waContacts.length) {
-      setSelectedWaIds(new Set());
-    } else {
-      setSelectedWaIds(new Set(waContacts.map(c => c.chatId)));
-    }
+  const selectAllWaContacts = () => {
+    setSelectedWaIds(new Set(waContacts.map(c => c.chatId)));
   };
+
+  const deselectAllWaContacts = () => {
+    setSelectedWaIds(new Set());
+  };
+
+  const filteredWaContacts = useMemo(() => {
+    const q = waContactSearch.trim().toLowerCase();
+    if (!q) return waContacts;
+    return waContacts.filter(c => c.label.toLowerCase().includes(q) || c.chatId.toLowerCase().includes(q));
+  }, [waContacts, waContactSearch]);
 
   const getActiveRecipients = useCallback((): CampaignRecipient[] => {
     if (source === 'whatsapp') {
@@ -296,6 +398,27 @@ export function Campaigns() {
     mediaFile ?? (mediaUrl.trim() ? { url: mediaUrl.trim() } : null),
     selectedTemplateId,
   );
+
+  const goToStep = (next: Step) => {
+    if (next === step) return;
+    if (next < step) {
+      setStep(next);
+      return;
+    }
+    if (next === 2 && canGoNextStep1) setStep(2);
+    if (next === 3 && canGoNextStep1 && canGoNextStep2) setStep(3);
+  };
+
+  const handleSessionChange = (nextId: string) => {
+    if (nextId === sessionId) return;
+    if (selectedCount > 0 && !window.confirm(t('campaigns.changeNumberConfirm'))) {
+      return;
+    }
+    skipSessionResetRef.current = false;
+    setSessionId(nextId);
+  };
+
+  const activeSessionName = readySessions.find(session => session.id === sessionId)?.name ?? sessionId;
 
   const resolveMedia = (): CampaignMedia | undefined => {
     if (mediaFile) return mediaFile;
@@ -321,10 +444,14 @@ export function Campaigns() {
     const chunks = chunkArray(targets, BULK_CHUNK_SIZE);
     let sent = 0;
     let failed = 0;
+    let lastOutcome: ReturnType<typeof resolveCampaignSendOutcome> = 'completed';
 
     try {
       for (const chunk of chunks) {
         if (cancelRequestedRef.current) break;
+
+        const chunkBaseSent = sent;
+        const chunkBaseFailed = failed;
 
         const response = await messageApi.sendBulk(sessionId, {
           messages: chunk.map(recipient =>
@@ -338,26 +465,36 @@ export function Campaigns() {
         });
 
         setCurrentBatchId(response.batchId);
-        const status = await waitForBatch(sessionId, response.batchId);
+        const status = await waitForBatch(sessionId, response.batchId, counts => {
+          setSendProgress({
+            sent: chunkBaseSent + counts.sent,
+            failed: chunkBaseFailed + counts.failed,
+            total: targets.length,
+          });
+        });
 
-        if (cancelRequestedRef.current || status.status === 'cancelled') {
-          sent += status.progress.sent;
-          failed += status.progress.failed;
-          setSendProgress({ sent, failed, total: targets.length });
+        const chunkCounts = tallyBulkBatch(status);
+        sent = chunkBaseSent + chunkCounts.sent;
+        failed = chunkBaseFailed + chunkCounts.failed;
+        setSendProgress({ sent, failed, total: targets.length });
+
+        lastOutcome = resolveCampaignSendOutcome(chunkCounts, status.status);
+
+        if (cancelRequestedRef.current || lastOutcome === 'cancelled') {
           setFinalStatus('cancelled');
           setPhase('done');
           return;
         }
-
-        sent += status.progress.sent;
-        failed += status.progress.failed;
-        setSendProgress({ sent, failed, total: targets.length });
       }
 
-      setFinalStatus(failed > 0 && sent === 0 ? 'failed' : 'completed');
+      if (cancelRequestedRef.current) {
+        setFinalStatus('cancelled');
+      } else {
+        setFinalStatus(resolveCampaignSendOutcome({ sent, failed }, 'completed'));
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : t('campaigns.errors.send'));
-      setFinalStatus('failed');
+      setFinalStatus(sent > 0 ? 'completed' : 'failed');
     } finally {
       setCurrentBatchId(null);
       setPhase('done');
@@ -376,6 +513,7 @@ export function Campaigns() {
   };
 
   const resetCampaign = () => {
+    clearCampaignDraft();
     setStep(1);
     setPhase('compose');
     setMessage('');
@@ -390,6 +528,7 @@ export function Campaigns() {
     setPasteText('');
     setWaContacts([]);
     setSelectedWaIds(new Set());
+    setWaContactSearch('');
     setSendProgress({ sent: 0, failed: 0, total: 0 });
     setFinalStatus(null);
     setError(null);
@@ -397,8 +536,8 @@ export function Campaigns() {
 
   if (loadingSessions) {
     return (
-      <div className="campaigns-page product-page campaigns-loading">
-        <Loader2 className="animate-spin" size={32} />
+      <div className="campaigns-page product-page">
+        <ScreenStatus kind="loading" title={t('common.loading')} />
       </div>
     );
   }
@@ -407,14 +546,16 @@ export function Campaigns() {
     return (
       <div className="campaigns-page product-page">
         <PageHeader title={t('campaigns.title')} subtitle={t('campaigns.subtitle')} />
-        <div className="campaigns-empty">
-          <Smartphone size={48} />
-          <h2>{t('campaigns.noSessionTitle')}</h2>
-          <p>{t('campaigns.noSessionDesc')}</p>
-          <Link to="/sessions" className="btn-primary">
-            {t('campaigns.goToSessions')}
-          </Link>
-        </div>
+        <ScreenStatus
+          kind="empty"
+          title={t('campaigns.noSessionTitle')}
+          description={t('campaigns.noSessionDesc')}
+          action={
+            <Link to="/sessions" className="btn-primary">
+              {t('campaigns.goToSessions')}
+            </Link>
+          }
+        />
       </div>
     );
   }
@@ -486,14 +627,35 @@ export function Campaigns() {
     <div className="campaigns-page product-page">
       <PageHeader title={t('campaigns.title')} subtitle={t('campaigns.subtitle')} />
 
+      {!canWrite && (
+        <div className="campaigns-readonly" role="status">
+          {t('role.readOnlyBanner')}
+        </div>
+      )}
+
       <div className="campaigns-steps" aria-label={t('campaigns.stepsLabel')}>
-        {[1, 2, 3].map(n => (
-          <div key={n} className={`campaigns-step ${step === n ? 'active' : ''} ${step > n ? 'done' : ''}`}>
-            <span className="campaigns-step-number">{n}</span>
-            <span className="campaigns-step-label">{t(`campaigns.steps.${n}`)}</span>
-          </div>
-        ))}
+        {([1, 2, 3] as Step[]).map(n => {
+          const reachable =
+            n <= step || (n === 2 && Boolean(canGoNextStep1)) || (n === 3 && Boolean(canGoNextStep1 && canGoNextStep2));
+          return (
+            <button
+              key={n}
+              type="button"
+              className={`campaigns-step ${step === n ? 'active' : ''} ${step > n ? 'done' : ''}`}
+              onClick={() => goToStep(n)}
+              disabled={!reachable}
+              aria-current={step === n ? 'step' : undefined}
+            >
+              <span className="campaigns-step-number">{n}</span>
+              <span className="campaigns-step-label">{t(`campaigns.steps.${n}`)}</span>
+            </button>
+          );
+        })}
       </div>
+
+      <p className="campaigns-context" aria-live="polite">
+        {t('campaigns.context', { count: selectedCount, session: activeSessionName, step, total: 3 })}
+      </p>
 
       {error && (
         <div className="campaigns-alert" role="alert">
@@ -510,7 +672,7 @@ export function Campaigns() {
               <select
                 id="campaign-session"
                 value={sessionId}
-                onChange={e => setSessionId(e.target.value)}
+                onChange={e => handleSessionChange(e.target.value)}
               >
                 {readySessions.map(session => (
                   <option key={session.id} value={session.id}>
@@ -553,7 +715,20 @@ export function Campaigns() {
             )}
 
             {source === 'file' && (
-              <div className="campaigns-file-zone">
+              <div
+                className={`campaigns-file-zone ${fileDragOver ? 'dragover' : ''}`}
+                onDragOver={event => {
+                  event.preventDefault();
+                  setFileDragOver(true);
+                }}
+                onDragLeave={() => setFileDragOver(false)}
+                onDrop={event => {
+                  event.preventDefault();
+                  setFileDragOver(false);
+                  const file = event.dataTransfer.files[0];
+                  if (file) void ingestContactsFile(file);
+                }}
+              >
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -562,7 +737,7 @@ export function Campaigns() {
                   onChange={e => void handleFileChange(e)}
                 />
                 <Upload size={32} />
-                <p>{t('campaigns.file.dropHint')}</p>
+                <p>{fileDragOver ? t('campaigns.file.dropReady') : t('campaigns.file.dropHint')}</p>
                 <button type="button" className="btn-primary" onClick={() => fileInputRef.current?.click()}>
                   {t('campaigns.file.choose')}
                 </button>
@@ -589,26 +764,56 @@ export function Campaigns() {
                 ) : (
                   <>
                     <div className="campaigns-wa-toolbar">
-                      <button type="button" className="btn-link" onClick={toggleAllWaContacts}>
-                        {selectedWaIds.size === waContacts.length
-                          ? t('campaigns.wa.deselectAll')
-                          : t('campaigns.wa.selectAll')}
-                      </button>
+                      <div className="campaigns-wa-toolbar-actions">
+                        <button
+                          type="button"
+                          className="btn-link"
+                          onClick={selectAllWaContacts}
+                          disabled={waContacts.length === 0 || selectedWaIds.size === waContacts.length}
+                        >
+                          {t('campaigns.wa.selectAll')}
+                        </button>
+                        <span className="campaigns-wa-toolbar-sep" aria-hidden="true">
+                          ·
+                        </span>
+                        <button
+                          type="button"
+                          className="btn-link"
+                          onClick={deselectAllWaContacts}
+                          disabled={selectedWaIds.size === 0}
+                        >
+                          {t('campaigns.wa.deselectAll')}
+                        </button>
+                      </div>
                       <span>{t('campaigns.wa.selected', { count: selectedWaIds.size, total: waContacts.length })}</span>
                     </div>
+                    {waContacts.length >= 20 && (
+                    <input
+                      type="search"
+                      className="campaigns-wa-search"
+                      value={waContactSearch}
+                      onChange={e => setWaContactSearch(e.target.value)}
+                      placeholder={t('campaigns.wa.searchPlaceholder')}
+                      aria-label={t('campaigns.wa.searchPlaceholder')}
+                    />
+                    )}
                     <ul className="campaigns-wa-contacts">
-                      {waContacts.map(contact => (
-                        <li key={contact.chatId}>
-                          <label>
-                            <input
-                              type="checkbox"
-                              checked={selectedWaIds.has(contact.chatId)}
-                              onChange={() => toggleWaContact(contact.chatId)}
-                            />
-                            <span>{contact.label}</span>
-                          </label>
-                        </li>
-                      ))}
+                      {filteredWaContacts.length === 0 ? (
+                        <li className="campaigns-wa-empty">{t('campaigns.wa.noSearchResults')}</li>
+                      ) : (
+                        filteredWaContacts.map(contact => (
+                          <li key={contact.chatId}>
+                            <label>
+                              <input
+                                type="checkbox"
+                                checked={selectedWaIds.has(contact.chatId)}
+                                onChange={() => toggleWaContact(contact.chatId)}
+                              />
+                              <span>{contact.label}</span>
+                            </label>
+                          </li>
+                        ))
+                      )}
                     </ul>
                   </>
                 )}
@@ -756,7 +961,7 @@ export function Campaigns() {
                   disabled={!canWrite}
                 />
                 <p className="form-hint">{t('campaigns.fields.messageHint', { count: message.length })}</p>
-                <p className="form-hint">{t('campaigns.fields.nameHint')}</p>
+                <p className="form-hint">{t('campaigns.fields.nameHint', { var: '{{name}}' })}</p>
               </div>
             )}
 
@@ -786,9 +991,13 @@ export function Campaigns() {
               <span>{t('campaigns.review.duration')}</span>
               <strong>{t('campaigns.review.durationValue', { minutes: estimatedMinutes })}</strong>
             </div>
+            <div className="campaigns-review-row">
+              <span>{t('campaigns.review.status')}</span>
+              <strong>{t('campaigns.review.notYetSent')}</strong>
+            </div>
             <div className="campaigns-review-message">
               <span>{t('campaigns.review.message')}</span>
-              {(isMediaMessageType(messageType)) && (mediaFileName || mediaUrl) && (
+              {isMediaMessageType(messageType) && (mediaFileName || mediaUrl) && (
                 <p className="campaigns-preview-media">
                   {mediaPreviewIcon(messageType)} {mediaFileName || mediaUrl}
                 </p>
@@ -817,7 +1026,7 @@ export function Campaigns() {
               disabled={(step === 1 && !canGoNextStep1) || (step === 2 && !canGoNextStep2)}
               onClick={() => setStep((step + 1) as Step)}
             >
-              {t('common.next')}
+              {t('common.continue')}
               <ChevronRight size={16} />
             </button>
           )}

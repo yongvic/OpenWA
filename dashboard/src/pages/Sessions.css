@@ -32,6 +32,7 @@
   border: 2px solid var(--border);
   border-radius: 10px;
   font-weight: 600;
+  min-height: var(--touch, 44px);
 }
 
 .sessions-page.product-page .card-actions .btn-action:not(.danger):hover {

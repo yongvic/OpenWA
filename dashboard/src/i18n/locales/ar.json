@@ -7,7 +7,7 @@
   },
   "common": {
     "appName": "OpenWA",
-    "appSubtitle": "واجهة برمجة واتساب",
+    "appSubtitle": "WhatsApp campaigns",
     "loading": "جارٍ التحميل...",
     "save": "حفظ",
     "cancel": "إلغاء",
@@ -54,7 +54,12 @@
     "refresh": "تحديث",
     "errorGeneric": "حدث خطأ",
     "unknownError": "خطأ غير معروف",
-    "retry": "إعادة المحاولة"
+    "retry": "إعادة المحاولة",
+    "continue": "Continue",
+    "accountMenu": "Account",
+    "offlineBanner": "No internet. Sending is paused until you are back online.",
+    "showAccessCode": "Show access code",
+    "hideAccessCode": "Hide access code"
   },
   "theme": {
     "light": "فاتح",
@@ -67,7 +72,7 @@
   },
   "nav": {
     "dashboard": "لوحة التحكم",
-    "sessions": "الجلسات",
+    "sessions": "Numbers",
     "chats": "المحادثات",
     "webhooks": "الويب هوك",
     "templates": "Templates",
@@ -132,22 +137,28 @@
     "loadMessagesError": "تعذّر تحميل الرسائل. تحقّق من سجلّات الخادم."
   },
   "errorBoundary": {
-    "title": "حدث خطأ ما",
-    "description": "واجهت لوحة التحكم خطأً غير متوقع.",
-    "reload": "إعادة تحميل لوحة التحكم"
+    "title": "This screen could not be shown",
+    "description": "Reload to go back to your campaigns. Nothing was sent from this error.",
+    "reload": "Reload"
   },
   "login": {
     "apiKey": "مفتاح API",
     "apiKeyPlaceholder": "أدخل مفتاح API الخاص بك",
     "apiKeyRequired": "مفتاح API مطلوب",
-    "connect": "اتصال",
-    "connecting": "جارٍ الاتصال...",
-    "invalidKey": "مفتاح API غير صالح",
-    "connectionError": "تعذّر الاتصال بالخادم. يرجى المحاولة مرة أخرى.",
+    "connect": "Enter",
+    "connecting": "Checking…",
+    "invalidKey": "This code is not recognized. Check it and try again.",
+    "connectionError": "Cannot reach the server. Check that it is running, then try again.",
     "help": "هل تحتاج مساعدة؟",
     "viewDocs": "عرض التوثيق",
     "footer": "صُنع بـ ❤️ بواسطة Yudhi Armyndharis ومجتمع OpenWA",
-    "version": "v{{version}} · {{date}}"
+    "version": "v{{version}} · {{date}}",
+    "title": "Open the campaign workspace",
+    "subtitle": "Enter the access code given to your team.",
+    "accessCode": "Access code",
+    "accessCodePlaceholder": "Paste the code here",
+    "accessCodeRequired": "Enter the access code to continue.",
+    "helpWhere": "The code is in the data/.api-key file on the computer that runs OpenWA. Ask the person who installed it."
   },
   "dashboard": {
     "title": "لوحة التحكم",
@@ -200,9 +211,9 @@
     "disconnected": "غير متصل"
   },
   "sessions": {
-    "title": "الجلسات",
-    "subtitle": "إدارة جلسات واتساب واتصالات رمز QR",
-    "newSession": "جلسة جديدة",
+    "title": "WhatsApp numbers",
+    "subtitle": "Connect the phones that will send the messages.",
+    "newSession": "Add a number",
     "searchPlaceholder": "بحث في الجلسات...",
     "filter": {
       "all": "كل الحالات",
@@ -211,14 +222,14 @@
       "connecting": "جارٍ الاتصال"
     },
     "empty": {
-      "title": "لم يتم العثور على جلسات",
-      "description": "أنشئ جلسة جديدة للبدء"
+      "title": "No WhatsApp number yet",
+      "description": "Add a number, then scan the QR code with the phone that should send."
     },
     "create": {
-      "title": "إنشاء جلسة جديدة",
-      "label": "اسم الجلسة",
-      "placeholder": "مثال: marketing-bot",
-      "hint": "استخدم الأحرف الصغيرة والأرقام والشرطات فقط. مثال: <code>customer-support</code>، <code>bot-1</code>",
+      "title": "Add a WhatsApp number",
+      "label": "Name of this number",
+      "placeholder": "e.g. shop-paris",
+      "hint": "Use lowercase letters, numbers and hyphens only. Example: <code>shop-paris</code>",
       "invalidChars": "أحرف غير صالحة. يُسمح فقط بالأحرف الصغيرة والأرقام والشرطات.",
       "tooLong": "يجب ألا يتجاوز الاسم 50 حرفاً ({{length}}/50).",
       "duplicate": "جلسة بهذا الاسم موجودة بالفعل.",
@@ -238,17 +249,17 @@
       "errorDefault": "فشل حذف الجلسة"
     },
     "qr": {
-      "title": "مسح رمز QR",
+      "title": "Scan with your phone",
       "step1": "<strong>1.</strong> افتح واتساب على هاتفك",
       "step2": "<strong>2.</strong> اضغط على <strong>القائمة</strong> ← <strong>الأجهزة المرتبطة</strong>",
       "step3": "<strong>3.</strong> اضغط على <strong>ربط جهاز</strong> وامسح رمز QR هذا",
       "autoRefresh": "يتجدد رمز QR تلقائياً كل 5 ثوانٍ",
-      "generating": "جارٍ إنشاء رمز QR...",
+      "generating": "Preparing the code…",
       "unavailable": "رمز QR غير متاح بعد. حاول مرة أخرى بعد لحظة.",
       "preparing": "جارٍ تحضير رمز QR...",
-      "showQr": "عرض رمز QR",
+      "showQr": "Show QR code",
       "loading": "جارٍ التحميل...",
-      "scanToConnect": "امسح رمز QR للاتصال"
+      "scanToConnect": "Scan this code with WhatsApp on the phone"
     },
     "details": {
       "title": "تفاصيل الجلسة",
@@ -262,10 +273,10 @@
     },
     "actions": {
       "view": "عرض",
-      "start": "بدء",
-      "stop": "إيقاف",
-      "reconnect": "إعادة الاتصال",
-      "delete": "حذف",
+      "start": "Connect",
+      "stop": "Disconnect",
+      "reconnect": "Reconnect",
+      "delete": "Remove",
       "killStuck": "إنهاء العالقة"
     },
     "toasts": {
@@ -395,28 +406,28 @@
     }
   },
   "templates": {
-    "title": "القوالب",
-    "subtitle": "أنشئ قوالب رسائل قابلة لإعادة الاستخدام لكل جلسة WhatsApp",
-    "createTitle": "إنشاء قالب",
-    "editTitle": "تعديل القالب",
-    "newTemplate": "قالب جديد",
-    "createTemplate": "إنشاء قالب",
+    "title": "Message templates",
+    "subtitle": "Write a message once, reuse it in every campaign.",
+    "createTitle": "New template",
+    "editTitle": "Edit template",
+    "newTemplate": "New template",
+    "createTemplate": "Save template",
     "saveChanges": "حفظ التغييرات",
     "viewOnly": "عرض فقط",
     "noSessions": "لا توجد جلسات",
     "sessionHint": "محفوظ ضمن {{name}}",
-    "namePlaceholder": "مثال: order-confirmation",
-    "header": "الترويسة",
-    "headerPlaceholder": "سطر افتتاحي اختياري",
-    "body": "المتن",
-    "bodyPlaceholder": "مرحبًا {{customer}}، طلبك {{orderId}} جاهز.",
-    "footer": "التذييل",
-    "footerPlaceholder": "سطر ختامي اختياري",
-    "previewTitle": "معاينة",
+    "namePlaceholder": "e.g. Opening hours",
+    "header": "Title (optional)",
+    "headerPlaceholder": "First line, above the message",
+    "body": "Message",
+    "bodyPlaceholder": "Hello {{name}}, we are open until 8pm.",
+    "footer": "Sign-off (optional)",
+    "footerPlaceholder": "Last line, under the message",
+    "previewTitle": "How it will look",
     "previewValuePlaceholder": "قيمة تجريبية",
-    "previewEmpty": "ابدأ بكتابة قالب لمعاينته هنا.",
-    "noPlaceholders": "استخدم العناصر النائبة {{name}} لاختبار الاستبدالات.",
-    "savedTitle": "القوالب المحفوظة",
+    "previewEmpty": "The message will appear here as you type.",
+    "noPlaceholders": "Write {{name}} in the message to insert each contact’s name.",
+    "savedTitle": "Saved templates",
     "count": "{{count}} إجمالًا",
     "deleteTitle": "حذف القالب",
     "deleteConfirm": "هل تريد حذف القالب \"{{name}}\"؟ لا يمكن التراجع عن هذا الإجراء.",
@@ -424,10 +435,10 @@
       "copyName": "نسخ اسم القالب"
     },
     "empty": {
-      "title": "لا توجد قوالب محفوظة",
-      "description": "أنشئ قالبًا قابلًا لإعادة الاستخدام لتسريع الردود والإشعارات الشائعة.",
-      "noSessionsTitle": "لا توجد جلسات متاحة",
-      "noSessionsDesc": "أنشئ جلسة WhatsApp قبل إضافة القوالب."
+      "title": "No template yet",
+      "description": "Save a message you send often, then pick it when you start a campaign.",
+      "noSessionsTitle": "Connect a WhatsApp number first",
+      "noSessionsDesc": "Templates are saved on a connected number."
     },
     "toasts": {
       "created": "تم إنشاء القالب بنجاح",
@@ -701,16 +712,16 @@
   },
   "campaigns": {
     "title": "Campaigns",
-    "subtitle": "Send the same message to many contacts in a few clicks",
+    "subtitle": "Choose who receives the message, write it, then send.",
     "stepsLabel": "Campaign steps",
     "steps": {
-      "1": "Contacts",
+      "1": "Who",
       "2": "Message",
-      "3": "Send"
+      "3": "Check"
     },
     "noSessionTitle": "No WhatsApp account connected",
-    "noSessionDesc": "Connect a WhatsApp session from the Sessions menu before sending a campaign.",
-    "goToSessions": "Connect a session",
+    "noSessionDesc": "Connect a WhatsApp number first. Sending starts from there.",
+    "goToSessions": "Connect a number",
     "messageTypes": {
       "text": "Text",
       "image": "Image",
@@ -726,14 +737,14 @@
       "message": "Your message",
       "messagePlaceholder": "Write the message everyone will receive...",
       "messageHint": "{{count}} / 4096 characters",
-      "nameHint": "Tip: use {{name}} to personalize with each contact's name.",
+      "nameHint": "Tip: write {{var}} to insert each contact’s name.",
       "caption": "Caption (optional)",
       "mediaUrl": "Image or file URL",
       "mediaUrlHint": "Paste a public link, or upload a file below.",
       "mediaUrlOnlyHint": "Paste a public link to your image, video or document.",
       "uploadOnlyHint": "Choose a file from your computer (max 50 MB).",
       "template": "Choose a template",
-      "noTemplates": "No templates yet — create one in the Templates menu.",
+      "noTemplates": "No template yet — create one in Templates.",
       "uploadImage": "Upload an image",
       "uploadVideo": "Upload a video",
       "uploadDocument": "Upload a document",
@@ -746,14 +757,17 @@
     },
     "file": {
       "dropHint": "Import a CSV or TXT file with one phone number per line",
-      "choose": "Choose a file"
+      "choose": "Choose a file",
+      "dropReady": "Drop the file to import the numbers"
     },
     "wa": {
       "load": "Load my contacts",
       "loading": "Loading contacts...",
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
-      "selected": "{{count}} of {{total}} selected"
+      "selected": "{{count}} of {{total}} selected",
+      "searchPlaceholder": "Search contacts…",
+      "noSearchResults": "No contacts match your search"
     },
     "validating": "Checking numbers… {{done}} / {{total}}",
     "summary": {
@@ -770,8 +784,10 @@
       "duration": "Estimated duration",
       "durationValue": "About {{minutes}} min",
       "message": "Message to send",
-      "warning": "Send only to people who agreed to receive messages. Too many messages too quickly can get your WhatsApp account restricted.",
-      "send": "Send campaign"
+      "warning": "Only send to people who asked to hear from you. Sending too fast can get the WhatsApp number restricted. This send cannot be undone.",
+      "send": "Send now",
+      "status": "Status",
+      "notYetSent": "Not sent yet — you can still go back"
     },
     "sending": {
       "title": "Sending in progress…",
@@ -796,7 +812,9 @@
     "mediaSource": {
       "upload": "Upload a file",
       "url": "Use a URL"
-    }
+    },
+    "context": "{{count}} recipients · {{session}} · step {{step}} of {{total}}",
+    "changeNumberConfirm": "Change the sending number? The recipient list for this campaign will be cleared. The message is kept."
   },
   "infrastructure": {
     "title": "البنية التحتية",
@@ -943,5 +961,11 @@
       "importTooLarge": "النسخة الاحتياطية أكبر من حدّ الطلب. زِد قيمة BODY_SIZE_LIMIT على الخادم ثم أعد المحاولة."
     },
     "statusLoadError": "تعذّر تحميل حالة البنية التحتية الحالية. حدّث الصفحة لإعادة المحاولة."
+  },
+  "role": {
+    "admin": "Administrator",
+    "operator": "Team member",
+    "viewer": "View only",
+    "readOnlyBanner": "You can look, but this access cannot send messages or change settings."
   }
 }
