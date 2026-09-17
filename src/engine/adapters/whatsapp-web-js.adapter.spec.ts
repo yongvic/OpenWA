@@ -10,6 +10,8 @@ import {
   resolveAuthTimeoutMs,
   wwebjsAckToDeliveryStatus,
   toOutboundMessageResult,
+  formatUnknownError,
+  isStatusOrChannelMessage,
   extractWwebjsCall,
 } from './whatsapp-web-js.adapter';
 import { getEffectiveWebVersionInfo, resolveWebVersionPin, __resetWebVersionCache } from '../wa-web-version';
@@ -76,6 +78,26 @@ describe('toOutboundMessageResult (delivered send must not throw on a missing ww
 
   it('accepts a string id (some wwebjs builds return id as a string)', () => {
     expect(toOutboundMessageResult({ id: 'OUT2', timestamp: 9 })).toEqual({ id: 'OUT2', timestamp: 9 });
+  });
+});
+
+describe('formatUnknownError', () => {
+  it('formats a minified puppeteer/wwebjs Error as name: message', () => {
+    const err = new Error('r');
+    err.name = 'r';
+    expect(formatUnknownError(err)).toBe('r: r');
+  });
+
+  it('stringifies a plain thrown object', () => {
+    expect(formatUnknownError({ name: 'r', message: 'r' })).toBe('{"name":"r","message":"r"}');
+  });
+});
+
+describe('isStatusOrChannelMessage', () => {
+  it('detects status broadcasts and newsletters', () => {
+    expect(isStatusOrChannelMessage({ from: 'status@broadcast', fromMe: false })).toBe(true);
+    expect(isStatusOrChannelMessage({ from: '123@newsletter', fromMe: false })).toBe(true);
+    expect(isStatusOrChannelMessage({ from: '628111@c.us', fromMe: false })).toBe(false);
   });
 });
 
@@ -1294,6 +1316,54 @@ describe('WhatsAppWebJsAdapter inbound media (MEDIA_DOWNLOAD_ENABLED=false)', ()
     expect(msg.media?.sizeBytes).toBe(5000);
   });
 
+  it('still emits the message when downloadMedia rejects (no ERROR flood)', async () => {
+    process.env[ENV] = 'true';
+
+    const adapter = new WhatsAppWebJsAdapter({
+      sessionId: 'sess-media-fail',
+      sessionDataPath: './data/sessions',
+      puppeteer: {},
+    });
+    const client = Object.assign(new EventEmitter(), {
+      info: { wid: { user: '628123' }, pushname: 'Tester' },
+      getState: jest.fn().mockResolvedValue(WAState.CONNECTED),
+      pupPage: { evaluate: jest.fn().mockResolvedValue(true) },
+    });
+    (adapter as unknown as { client: unknown }).client = client;
+    const onMessage = jest.fn();
+    (adapter as unknown as { callbacks: unknown }).callbacks = { onMessage };
+    const errorSpy = jest.spyOn(
+      (adapter as unknown as { logger: { error: (...args: unknown[]) => void } }).logger,
+      'error',
+    );
+    (adapter as unknown as { setupEventHandlers: () => void }).setupEventHandlers();
+
+    const mockMsg = {
+      id: { _serialized: 'MEDIA_FAIL_1' },
+      from: '628111@c.us',
+      to: '628111@c.us',
+      body: '',
+      type: 'image',
+      timestamp: 1700000050,
+      fromMe: false,
+      hasMedia: true,
+      _data: { mimetype: 'image/png', size: 5000 },
+      getContact: jest.fn().mockResolvedValue(null),
+      hasQuotedMsg: false,
+      downloadMedia: jest.fn().mockRejectedValue(Object.assign(new Error('r'), { name: 'r' })),
+    };
+
+    client.emit('message', mockMsg);
+    await new Promise(r => setImmediate(r));
+    await new Promise(r => setImmediate(r));
+
+    expect(onMessage).toHaveBeenCalledTimes(1);
+    expect(errorSpy).not.toHaveBeenCalled();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const msg = onMessage.mock.calls[0][0] as { media?: { omitted?: boolean } };
+    expect(msg.media?.omitted).toBe(true);
+  });
+
   it('surfaces call detail on a live incoming call_log message (#494)', async () => {
     const adapter = new WhatsAppWebJsAdapter({
       sessionId: 'sess-call-test',
@@ -1801,7 +1871,7 @@ describe('WhatsAppWebJsAdapter inbound media concurrency (slot held until the re
     expect(maxInFlight).toBe(1);
   });
 
-  it('propagates a rejecting download to the caller and releases the slot for the next download', async () => {
+  it('swallows a rejecting download, returns an omitted envelope, and releases the slot for the next download', async () => {
     process.env.INBOUND_MEDIA_CONCURRENCY = '1';
     process.env.MEDIA_DOWNLOAD_TIMEOUT_MS = '10000'; // long: we want the reject, not the timeout
     process.env.MEDIA_DOWNLOAD_MAX_BYTES = String(10 * 1024 * 1024);
@@ -1812,6 +1882,7 @@ describe('WhatsAppWebJsAdapter inbound media concurrency (slot held until the re
     const calls: string[] = [];
     const makeMsg = (id: string, behavior: 'reject' | 'resolve'): unknown => ({
       id: { _serialized: id },
+      from: '628111@c.us',
       _data: { size: 100, mimetype: 'image/png' },
       downloadMedia: jest.fn(() => {
         calls.push(id);
@@ -1823,10 +1894,29 @@ describe('WhatsAppWebJsAdapter inbound media concurrency (slot held until the re
     const cap = (m: unknown): Promise<unknown> =>
       (adapter as unknown as { capInboundMediaFor: (msg: unknown) => Promise<unknown> }).capInboundMediaFor(m);
 
-    await expect(cap(makeMsg('bad', 'reject'))).rejects.toThrow('download blew up');
+    await expect(cap(makeMsg('bad', 'reject'))).resolves.toEqual(
+      expect.objectContaining({ omitted: true, mimetype: 'image/png' }),
+    );
     // Slot must have been released despite the rejection — the next download proceeds and resolves.
     const media = (await cap(makeMsg('good', 'resolve'))) as { mimetype: string; data: string };
     expect(media.data).toBe(Buffer.from('ok').toString('base64'));
     expect(calls).toEqual(['bad', 'good']);
+  });
+
+  it('does not call downloadMedia for status broadcasts', async () => {
+    process.env.MEDIA_DOWNLOAD_ENABLED = 'true';
+    const adapter = newAdapter();
+    const downloadMedia = jest.fn();
+    const media = await (
+      adapter as unknown as { capInboundMediaFor: (msg: unknown) => Promise<{ omitted?: boolean }> }
+    ).capInboundMediaFor({
+      id: { _serialized: 'st1' },
+      from: 'status@broadcast',
+      fromMe: false,
+      _data: { mimetype: 'image/jpeg', size: 10 },
+      downloadMedia,
+    });
+    expect(downloadMedia).not.toHaveBeenCalled();
+    expect(media?.omitted).toBe(true);
   });
 });

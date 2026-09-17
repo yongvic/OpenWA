@@ -102,6 +102,43 @@ export function toOutboundMessageResult(msg: unknown): MessageResult {
   return { id, timestamp };
 }
 
+/** Readable log line for a thrown value (wwebjs/puppeteer often throws a minified `{name:'r', message:'r'}`). */
+export function formatUnknownError(error: unknown): string {
+  if (error instanceof Error) {
+    const name = error.name && error.name !== 'Error' ? error.name : '';
+    const msg = (error.message ?? '').trim();
+    if (name && msg) return `${name}: ${msg}`;
+    return msg || name || 'Error';
+  }
+  if (typeof error === 'string' && error.trim()) return error.trim();
+  if (error && typeof error === 'object') {
+    try {
+      const json = JSON.stringify(error);
+      if (json && json !== '{}') return json.slice(0, 300);
+    } catch {
+      // circular
+    }
+  }
+  const asString = String(error);
+  return asString === '[object Object]' ? 'unknown error' : asString;
+}
+
+function chatIdOf(msg: { from?: string; to?: string; fromMe?: boolean }): string {
+  return String(msg.fromMe ? msg.to : msg.from);
+}
+
+/** Status posts and channels replay dozens of media blobs on connect; downloading them only floods the log. */
+export function isStatusOrChannelMessage(msg: {
+  from?: string;
+  to?: string;
+  fromMe?: boolean;
+  isStatus?: boolean;
+}): boolean {
+  if (msg.isStatus) return true;
+  const chatId = chatIdOf(msg);
+  return chatId === 'status@broadcast' || isChannelJid(chatId);
+}
+
 /**
  * Extract call detail from a whatsapp-web.js `call_log` message, or `undefined` for any other type.
  * The public Message wrapper doesn't expose call fields, so we read them off the raw `_data`. An
@@ -280,21 +317,43 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
   // Bound concurrent inbound media downloads: downloadMedia() materialises the full base64 blob, so an
   // unbounded burst could stack many multi-MB allocations.
   private readonly inboundLimiter = new ConcurrencyLimiter(inboundMediaConcurrency());
+  private inboundMediaFailLogAt = 0;
+  private inboundMediaFailSuppressed = 0;
 
   /**
    * Download inbound media safely. downloadMedia() can't be size-bounded at the source, so (1) pre-gate
    * on the sender-declared size and skip the download entirely when it exceeds the cap, and (2) run the
    * download through the concurrency limiter for backpressure. Returns undefined when there's no media.
    */
+  private omittedMediaEnvelope(msg: Message): IncomingMessage['media'] {
+    const data = (msg as unknown as { _data?: { size?: number; mimetype?: string; filename?: string } })._data;
+    return {
+      mimetype: data?.mimetype ?? '',
+      filename: data?.filename || undefined,
+      omitted: true,
+      sizeBytes: coerceDeclaredSize(data?.size),
+    };
+  }
+
+  private logInboundMediaDownloadFailure(msg: Message, error: unknown): void {
+    const now = Date.now();
+    if (now - this.inboundMediaFailLogAt < 10_000) {
+      this.inboundMediaFailSuppressed += 1;
+      return;
+    }
+    const similarSuppressed = this.inboundMediaFailSuppressed;
+    this.inboundMediaFailLogAt = now;
+    this.inboundMediaFailSuppressed = 0;
+    this.logger.warn('Failed to download inbound media; emitting message without media', {
+      msgId: msg.id?._serialized,
+      error: formatUnknownError(error),
+      ...(similarSuppressed > 0 ? { similarSuppressed } : {}),
+    });
+  }
+
   private async capInboundMediaFor(msg: Message): Promise<IncomingMessage['media'] | undefined> {
-    if (!isMediaDownloadEnabled()) {
-      const data = (msg as unknown as { _data?: { size?: number; mimetype?: string; filename?: string } })._data;
-      return {
-        mimetype: data?.mimetype ?? '',
-        filename: data?.filename || undefined,
-        omitted: true,
-        sizeBytes: coerceDeclaredSize(data?.size),
-      };
+    if (!isMediaDownloadEnabled() || isStatusOrChannelMessage(msg)) {
+      return this.omittedMediaEnvelope(msg);
     }
     const maxBytes = inboundMediaMaxBytes();
     const data = (msg as unknown as { _data?: { size?: number; mimetype?: string; filename?: string } })._data;
@@ -304,12 +363,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
         msgId: msg.id._serialized,
         sizeBytes: declared,
       });
-      return {
-        mimetype: data?.mimetype ?? '',
-        filename: data?.filename || undefined,
-        omitted: true,
-        sizeBytes: declared,
-      };
+      return this.omittedMediaEnvelope(msg);
     }
     // msg.downloadMedia() can't be aborted, so freeing the slot the moment the wall-clock deadline fires
     // would admit a fresh download while the abandoned one is still materialising in heap — letting the
@@ -318,6 +372,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
     // boundedReady adopts the timeout-bounded race (a Promise resolving a Promise flattens), so awaiting it
     // unblocks the caller once the task is admitted AND the deadline-or-download settles — yielding the
     // media or null on timeout.
+    let downloadFailed = false;
     let resolveBounded: (value: MessageMedia | null | PromiseLike<MessageMedia | null>) => void = () => undefined;
     const boundedReady = new Promise<MessageMedia | null>(resolve => {
       resolveBounded = resolve;
@@ -332,7 +387,11 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
               msgId: msg.id._serialized,
             },
           ),
-        ),
+        ).catch((error: unknown) => {
+          downloadFailed = true;
+          this.logInboundMediaDownloadFailure(msg, error);
+          return null;
+        }),
       );
       // Keep the slot occupied until the underlying download truly settles, not the timeout race.
       return download.then(
@@ -343,7 +402,9 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
     // The slot-holder runs in the background; never let it surface as an unhandled rejection.
     void slotHeld.catch(() => undefined);
     const media = await boundedReady;
-    if (!media) return undefined;
+    if (!media) {
+      return downloadFailed ? this.omittedMediaEnvelope(msg) : undefined;
+    }
     const capped = capInboundMedia({
       mimetype: media.mimetype,
       filename: media.filename || undefined,
@@ -530,7 +591,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
             const capped = await this.capInboundMediaFor(msg);
             if (capped) incomingMessage.media = capped;
           } catch (error) {
-            this.logger.error('Error downloading media', String(error));
+            this.logger.warn('Error downloading media', { error: formatUnknownError(error) });
           }
         }
 
