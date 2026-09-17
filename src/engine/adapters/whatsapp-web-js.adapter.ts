@@ -1277,7 +1277,7 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
             return null;
           }
         }, contactId);
-        return mapWwebjsContact(raw);
+        return mapWwebjsContact(raw as WwebjsContactLike | null | undefined);
       } catch (error) {
         this.logger.warn(`Failed to get contact: ${contactId}`, { error: formatUnknownError(error) });
         return null;
