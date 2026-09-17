@@ -119,7 +119,7 @@ export interface PluginI18nLocale {
   /** Keyed by a TOP-LEVEL configSchema.properties key; only title/description are localized. */
   config?: Record<string, PluginI18nText>;
 }
-/** Keyed by a dashboard locale code (e.g. "es", "zh-CN"). Untranslated entries fall back to English. */
+/** Keyed by a dashboard locale code (e.g. "fr"). Untranslated entries fall back to English. */
 export type PluginI18n = Record<string, PluginI18nLocale>;
 
 /**
