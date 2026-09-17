@@ -24,7 +24,7 @@ Ce document fixe ce qui est **nécessaire** pour ton usage et ce que tu peux **i
 | Plugins / MCP / Intégrations CRM | Inutile | Pas dans ton scope |
 | Groupes, labels, channels, catalog | Inutile (UI) | Pas de campagnes groupes pour l’instant |
 | SDK Java / PHP / Python / JS | Inutile | Tu passes par le dashboard, pas par du code |
-| Moteur Baileys (si tu restes sur wwebjs) | Inutile | Un seul moteur suffit |
+| Moteur whatsapp-web.js (Chrome) | Inutile | Baileys est le défaut et envoie mieux les médias |
 | Files d’attente Redis / Bull | Inutile (minimal) | `QUEUE_ENABLED=false` |
 
 ## Ce qu’il faut **garder** (strict minimum)
@@ -43,7 +43,7 @@ dashboard/               # UI (pages réduites)
 
 | Module | Rôle |
 |--------|------|
-| `engine/` | Connexion WhatsApp (whatsapp-web.js) |
+| `engine/` | Connexion WhatsApp (baileys par défaut) |
 | `modules/session/` | QR, sessions, 2–3 numéros |
 | `modules/message/` | Envoi texte / média / **bulk** |
 | `modules/contact/` | Liste WA, validation numéros |
@@ -86,7 +86,7 @@ Ne **commit jamais** : `data/`, `.env`, secrets.
 
 ## Config recommandée (`.env`)
 
-Voir `.env.minimal` : SQLite, `ENGINE_TYPE=whatsapp-web.js`, pas de Redis/queue, pas de MCP.
+Voir `.env.minimal` : SQLite, `ENGINE_TYPE=baileys`, pas de Redis/queue, pas de MCP.
 
 ```env
 CAMPAIGN_MINIMAL_BACKEND=true
