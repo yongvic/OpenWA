@@ -84,13 +84,14 @@ Fichier `.env` (voir `.env.minimal`) :
 
 | Variable | Rôle |
 |----------|------|
-| `ENGINE_TYPE=whatsapp-web.js` | Moteur WhatsApp (recommandé) |
+| `ENGINE_TYPE=baileys` | Moteur WhatsApp recommandé (sans Chrome, envoi de médias plus fiable) |
 | `DATABASE_TYPE=sqlite` | Base locale, sans Postgres |
 | `CAMPAIGN_MINIMAL_BACKEND=true` | API allégée (sans plugins, infra, stats…) |
 | `QUEUE_ENABLED=false` | Pas de Redis requis |
-| `PUPPETEER_HEADLESS=true` | Navigateur invisible pour WhatsApp Web |
+| `BAILEYS_AUTH_DIR=./data/baileys` | Stockage local de la connexion WhatsApp |
 
-Sur Windows, si la connexion QR est lente, ajoutez :
+Si vous choisissez manuellement l’ancien moteur `whatsapp-web.js` sous Windows et que la connexion
+QR est lente, ajoutez :
 
 ```env
 WWEBJS_AUTH_TIMEOUT_MS=120000
@@ -135,7 +136,7 @@ npm run dev
 
 - Tout reste sur **votre machine** (`data/`, SQLite).
 - Ne commitez **jamais** `.env` ni `data/` (déjà dans `.gitignore`).
-- WhatsApp peut afficher l’appareil lié comme « Mac / Chrome » : c’est normal (identité technique de la bibliothèque, pas un vrai Mac).
+- Le nom de l’appareil lié affiché par WhatsApp est une identité technique de la bibliothèque.
 
 ---
 
